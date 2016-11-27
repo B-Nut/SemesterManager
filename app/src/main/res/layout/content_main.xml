@@ -13,8 +13,56 @@
     tools:context="de.hsmw.semestermanager.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/editName"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+    <TextView
+        android:text="Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/viewName"
+        android:textSize="24sp"
+        android:layout_below="@+id/editName"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Add Data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonAdd"
+        android:layout_below="@+id/editName"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="55dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/editZeitraum"
+        android:layout_below="@+id/editName"
+        android:layout_alignParentEnd="true" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/mainList"
+        android:layout_below="@+id/buttonAdd"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="GetYourMom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/buttonAdd"
+        android:layout_toEndOf="@+id/buttonAdd"
+        android:id="@+id/buttonViewAll" />
+
 </RelativeLayout>

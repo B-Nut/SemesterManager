@@ -1,8 +1,11 @@
 package de.hsmw.semestermanager;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,9 +15,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    DatabaseHandler dh;
+    DatabaseInterface di;
+    EditText editName, editTime;
+    String[] exampleList = {"one", "two","three"};
+    Button btnAddData,btnGetData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +55,60 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        dh = new DatabaseHandler(this);
+        di = new DatabaseInterface(dh.getWritableDatabase());
+
+        editName = (EditText)findViewById(R.id.editName);
+        editTime = (EditText)findViewById(R.id.editZeitraum);
+        btnAddData = (Button)findViewById(R.id.buttonAdd);
+        btnGetData = (Button)findViewById(R.id.buttonViewAll);
+        addData();
+        viewAll();
+
+        ArrayAdapter adapter =  new ArrayAdapter(this, R.layout.listview_element,exampleList);
+        ListView mListView = (ListView) findViewById(R.id.mainList);
+        mListView.setAdapter(adapter);
+
+    }
+
+    public void  addData(){
+        btnAddData.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this, Long.toString(di.insertData(editName.getText().toString(), editTime.getText().toString())),Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+    }
+    public void viewAll(){
+        btnGetData.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Cursor c = di.getAllData();
+                    if(c.getCount() == 0){
+                        // BITCH YOU ARE STUPID
+                        showMessage("BITCH YOU ARE STUPID","Ter is Noting");
+                        return;
+                    }
+                    StringBuffer buffer = new StringBuffer();
+                    while (c.moveToNext()){
+                        buffer.append("ID : " + c.getString(0) + "\n");
+                        buffer.append("Name : " + c.getString(1) + "\n");
+                        buffer.append("Zeitraum : " + c.getString(2) + "\n\n");
+                    }
+                    showMessage("Data",buffer.toString());
+                }
+            }
+        );
+    }
+    public void showMessage(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
     }
 
     @Override
