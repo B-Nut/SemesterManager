@@ -19,17 +19,22 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     DatabaseHandler dh;
     DatabaseInterface di;
-    EditText editName, editTime;
-    String[] exampleList = {"one", "two","three"};
+    EditText editName, editTime, editID;
     Button btnAddData,btnGetData;
+    ListView listView;
+    TextView result;
+    private ArrayAdapter<String> adapter;
+    ArrayList<String> values;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +65,20 @@ public class MainActivity extends AppCompatActivity
         di = new DatabaseInterface(dh.getWritableDatabase());
 
         editName = (EditText)findViewById(R.id.editName);
-        editTime = (EditText)findViewById(R.id.editZeitraum);
+        editTime = (EditText) findViewById(R.id.editZeitraum);
         btnAddData = (Button)findViewById(R.id.buttonAdd);
         btnGetData = (Button)findViewById(R.id.buttonViewAll);
-        addData();
-        viewAll();
 
-        ArrayAdapter adapter =  new ArrayAdapter(this, R.layout.listview_element,exampleList);
-        ListView mListView = (ListView) findViewById(R.id.mainList);
-        mListView.setAdapter(adapter);
+        editID = (EditText) findViewById(R.id.editID);
+        result = (TextView) findViewById(R.id.outputResult);
+        listView = (ListView) findViewById(R.id.mainList);
+
+        //addData();
+        //viewAll();
+        viewID();
+        viewList();
+        updateList();
+
 
     }
 
@@ -109,6 +119,37 @@ public class MainActivity extends AppCompatActivity
         builder.setTitle(title);
         builder.setMessage(message);
         builder.show();
+    }
+    public void viewID(){
+        btnGetData.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                int id = Integer.parseInt(editID.getText().toString());
+                Cursor c = di.getDataByID(id);
+                c.moveToNext(); //Cursor zeigt Anfangs auf nichts (−1).
+                result.setText(c.getString(1));
+            }
+        });
+    }
+
+    public void viewList(){
+        values = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this,R.layout.listview_element,values);
+        listView.setAdapter(adapter);
+        btnAddData.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                di.insertData(editName.getText().toString(), editTime.getText().toString());
+                updateList();
+            }
+        });
+    }
+    public void updateList(){
+        Cursor c = di.getAllData();
+        values.clear();
+        while (c.moveToNext()){
+            values.add(c.getString(1));
+        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override

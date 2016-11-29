@@ -38,4 +38,10 @@ public class DatabaseInterface {
     public Cursor getAllData(){
         return db.rawQuery("select * from plans",null);
     }
+    public Cursor getDataByID(int id){
+        String[] columns = {"*"};
+        String query = SQLiteQueryBuilder.buildQueryString(false,"plans",columns,"ID = " + id,"","","","");
+        Log.d("database", query);
+        return db.rawQuery(query,null);
+    }
 }

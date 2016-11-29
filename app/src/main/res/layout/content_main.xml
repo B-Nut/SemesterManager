@@ -17,52 +17,67 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
         android:ems="10"
         android:id="@+id/editName"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
-    <TextView
-        android:text="Name"
+        android:layout_alignParentEnd="true"
+        android:hint="Name" />
+
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/viewName"
-        android:textSize="24sp"
+        android:inputType="textPersonName"
+        android:ems="0"
+        android:id="@+id/editZeitraum"
         android:layout_below="@+id/editName"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentEnd="true"
+        android:hint="Zeitraum"
+        android:layout_alignStart="@+id/editName" />
 
     <Button
         android:text="Add Data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonAdd"
-        android:layout_below="@+id/editName"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="55dp" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:ems="10"
-        android:id="@+id/editZeitraum"
-        android:layout_below="@+id/editName"
-        android:layout_alignParentEnd="true" />
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/mainList"
-        android:layout_below="@+id/buttonAdd"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
     <Button
         android:text="GetYourMom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/buttonAdd"
-        android:layout_toEndOf="@+id/buttonAdd"
-        android:id="@+id/buttonViewAll" />
+        android:id="@+id/buttonViewAll"
+        android:layout_below="@+id/editZeitraum"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="18dp" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mainList"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/outputResult" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/outputResult"
+        android:layout_below="@+id/buttonViewAll"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="31dp"
+        android:textSize="20sp"
+        android:text="Your Result"
+        android:textColor="@android:color/black" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editID"
+        android:hint="ID"
+        android:layout_alignBottom="@+id/buttonViewAll"
+        android:layout_toEndOf="@+id/buttonViewAll" />
 
 </RelativeLayout>
