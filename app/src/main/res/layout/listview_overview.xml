@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/overview">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="120dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/linearLayout"
+        android:layout_marginRight="20dp">
+
+        <TextView
+            android:text="20.03.2016"
+            android:id="@+id/textSemesterStartDate"
+            android:layout_width="match_parent"
+            android:textColor="@android:color/black"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:text="07.07.2016"
+            android:layout_width="match_parent"
+            android:id="@+id/textSemesterEndDate"
+            android:textColor="@android:color/black"
+            android:layout_height="20dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_width="100pt"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp">
+
+        <TextView
+            android:text="Sommersemester der Dritte vom ersten nur 25 Addiert..."
+            android:layout_width="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/textSemesterName"
+            android:clickable="false"
+            android:layout_marginTop="10.5dp"
+            android:textColor="@android:color/black"
+            android:layout_height="18dp" />
+    </LinearLayout>
+
+</RelativeLayout>

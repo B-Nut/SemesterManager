@@ -33,8 +33,10 @@ public class MainActivity extends AppCompatActivity
     Button btnAddData,btnGetData;
     ListView listView;
     TextView result;
-    private ArrayAdapter<String> adapter;
-    ArrayList<String> values;
+    private SemesterAdapter sAdapter;
+    ArrayList<Semester> values;
+
+    Semester s1,s2,s3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,8 +135,8 @@ public class MainActivity extends AppCompatActivity
 
     public void viewList(){
         values = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this,R.layout.listview_element,values);
-        listView.setAdapter(adapter);
+        sAdapter = new SemesterAdapter(this,R.layout.listview_overview,values);
+        listView.setAdapter(sAdapter);
         btnAddData.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -147,9 +149,9 @@ public class MainActivity extends AppCompatActivity
         Cursor c = di.getAllData();
         values.clear();
         while (c.moveToNext()){
-            values.add(c.getString(1));
+            values.add(new Semester(c.getInt(0), c.getString(1),c.getString(2),c.getString(2)));
         }
-        adapter.notifyDataSetChanged();
+        sAdapter.notifyDataSetChanged();
     }
 
     @Override
