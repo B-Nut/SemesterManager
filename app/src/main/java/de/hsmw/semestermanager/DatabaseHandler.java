@@ -11,7 +11,7 @@ import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "semesterPlans.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String TABLE_MODULES = "modules";
     private static final String TABLE_PLANS = "plans";
     private static final String TABLE_ENTRIES = "entries";
@@ -29,8 +29,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 "ZEITRAUM TEXT," +
                 "ORT TEXT," +
                 "TERMINTYP TEXT," +
-                "PRIORITAET TEXT," +
-                "SEMESTERPLANID INTEGER," +
+                "PRIORITAET INTEGER," +
+                "SEMESTERID INTEGER," +
                 "MODULID INTEGER," +
                 "ISTGANZTAGSTERMIN INTEGER," +
                 "DOZENT TEXT" +
