@@ -60,7 +60,7 @@ public class DatabaseInterface {
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", ANZEIGENAME);
         values.put("SEMESTERID", SEMESTERID);
-        return db.insert("modules", null, values);
+        return db.insert("modules", null, values);}
 
     public long insertDataEntries(String ANZEIGENAME, String ZEITRAUM,String ORT, String TERMINTYP,int PRIORITAET, int SEMESTERID, int MODULID, int ISTGANZTAGSTERMIN, String DOZENT){
         ContentValues values = new ContentValues();
