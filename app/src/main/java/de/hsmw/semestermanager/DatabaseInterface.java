@@ -11,6 +11,7 @@ import android.util.Log;
  */
 
 /**
+ --------------------- Query-Liste------------------------------------
 add plans(old)      = insertDataPlans(String name, String timeframe)
 add plans           = insertDataPlans(String ANZEIGENAME, String ZEITRAUM)
 add modules         = insertDataModules(String ANZEIGENAME, int SEMESTERID)
