@@ -1,11 +1,12 @@
 package de.hsmw.semestermanager;
 
 import android.content.ContentValues;
-import android.content.Entity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
+
+import java.sql.Date;
 
 /**
  * Created by Benni on 26.11.2016.
@@ -22,8 +23,11 @@ public class DatabaseInterface {
 
     public long insertData(String name, String timeframe) {
         ContentValues values = new ContentValues();
+        Date startDate = Date.valueOf(timeframe);
+        Date endDate = Date.valueOf(timeframe);
         values.put("Anzeigename", name);
-        values.put("zeitraum", timeframe);
+        values.put("STARTTIME", startDate.toString());
+        values.put("ENDTIME", endDate.toString());
         return db.insert("plans", null, values);
     }
 
@@ -81,11 +85,13 @@ public class DatabaseInterface {
         return db.rawQuery(query, null);
     }
 
-    public Cursor getDataByIDPlans(int id) {
+    public Plan getDataByIDPlans(int id) {
         String[] columns = {"*"};
         String query = SQLiteQueryBuilder.buildQueryString(false, "plans", columns, "ID = " + id, "", "", "", "");
         Log.d("database", query);
-        return db.rawQuery(query, null);
+        Cursor c = db.rawQuery(query, null);
+        c.moveToNext();
+        return new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
     }
 
     public Cursor getDataByIDModules(int id) {
@@ -105,8 +111,13 @@ public class DatabaseInterface {
 
     //-------------------------searching for---------------------------------------------
 
-    public Cursor getListByStringPlans(String searchword) {
-        return db.rawQuery("SELECT * FROM plans WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+    public Plan[] getListByStringPlans(String searchword) {
+        Cursor c = db.rawQuery("SELECT * FROM plans WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+        Plan[] returnPlan = new Plan[c.getCount()];
+        while( c.moveToNext()){
+            returnPlan[c.getPosition()] = new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
+        }
+        return returnPlan;
     }
 
     public Cursor getListByStringModules(String searchword) {

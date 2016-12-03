@@ -21,12 +21,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         Log.d("database", "create Database");
         db.execSQL("CREATE TABLE " + TABLE_MODULES + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,ANZEIGENAME TEXT,SEMESTERID INTEGER)");
-        db.execSQL("CREATE TABLE " + TABLE_PLANS + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,ANZEIGENAME TEXT,ZEITRAUM TEXT)");
+        db.execSQL("CREATE TABLE " + TABLE_PLANS + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,ANZEIGENAME TEXT,STARTTIME DATETIME, ENDTIME DATETIME)");
 
         db.execSQL("CREATE TABLE " + TABLE_ENTRIES + " (" +
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "ANZEGENAME TEXT," +
-                "ZEITRAUM TEXT," +
+                "STARTTIME DATETIME," +
+                "ENDTIME DATETIME," +
                 "ORT TEXT," +
                 "TERMINTYP TEXT," +
                 "PRIORITAET INTEGER," +

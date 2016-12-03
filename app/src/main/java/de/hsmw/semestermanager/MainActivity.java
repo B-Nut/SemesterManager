@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity
     Button btnAddData, btnGetData;
     ListView listView;
     TextView result;
-    ArrayList<Semester> values;
+    ArrayList<Plan> values;
     private SemesterAdapter sAdapter;
 
     @Override
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity
         Cursor c = di.getAllData();
         values.clear();
         while (c.moveToNext()) {
-            values.add(new Semester(c.getInt(0), c.getString(1), c.getString(2), c.getString(2)));
+            values.add(new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(2)));
         }
         sAdapter.notifyDataSetChanged();
     }
