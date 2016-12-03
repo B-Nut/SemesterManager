@@ -18,6 +18,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".SemesterplanInput"
+            android:label="Neues Semester">
+            <intent-filter>
+                <action android:name="de.hsmw.semestermanager.SemesterplanInput" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

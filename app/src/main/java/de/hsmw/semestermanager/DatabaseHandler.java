@@ -11,7 +11,7 @@ import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "semesterPlans.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String TABLE_MODULES = "modules";
     private static final String TABLE_PLANS = "plans";
     private static final String TABLE_ENTRIES = "entries";
@@ -21,16 +21,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         Log.d("database", "create Database");
         db.execSQL("CREATE TABLE " + TABLE_MODULES + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,ANZEIGENAME TEXT,SEMESTERID INTEGER)");
-        db.execSQL("CREATE TABLE " + TABLE_PLANS + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,ANZEIGENAME TEXT,ZEITRAUM TEXT)");
+        db.execSQL("CREATE TABLE " + TABLE_PLANS + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,ANZEIGENAME TEXT,STARTTIME DATETIME, ENDTIME DATETIME)");
 
         db.execSQL("CREATE TABLE " + TABLE_ENTRIES + " (" +
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "ANZEGENAME TEXT," +
-                "ZEITRAUM TEXT," +
+                "STARTTIME DATETIME," +
+                "ENDTIME DATETIME," +
                 "ORT TEXT," +
                 "TERMINTYP TEXT," +
-                "PRIORITAET TEXT," +
-                "SEMESTERPLANID INTEGER," +
+                "PRIORITAET INTEGER," +
+                "SEMESTERID INTEGER," +
                 "MODULID INTEGER," +
                 "ISTGANZTAGSTERMIN INTEGER," +
                 "DOZENT TEXT" +

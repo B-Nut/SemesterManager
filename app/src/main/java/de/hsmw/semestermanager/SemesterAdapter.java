@@ -1,6 +1,5 @@
 package de.hsmw.semestermanager;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -15,13 +14,13 @@ import java.util.List;
  * Created by Benjamin on 30.11.2016.
  */
 
-public class SemesterAdapter extends ArrayAdapter<Semester> {
+public class SemesterAdapter extends ArrayAdapter<Plan> {
 
     public SemesterAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
 
-    public SemesterAdapter(Context context, int resource, List<Semester> items) {
+    public SemesterAdapter(Context context, int resource, List<Plan> items) {
         super(context, resource, items);
     }
 
@@ -35,7 +34,7 @@ public class SemesterAdapter extends ArrayAdapter<Semester> {
             v = vi.inflate(R.layout.listview_overview,null);
         }
 
-        Semester s = (Semester) getItem(position);
+        Plan s = (Plan) getItem(position);
 
         if( s != null) {
             TextView textName = (TextView) v.findViewById(R.id.textSemesterName);
@@ -46,10 +45,10 @@ public class SemesterAdapter extends ArrayAdapter<Semester> {
                 textName.setText(s.getName());
             }
             if (textEndDate != null){
-                textEndDate.setText(s.getEndDate());
+                textEndDate.setText(s.getEndDate().toString());
             }
             if (textStartDate != null){
-                textStartDate.setText(s.getStartDate());
+                textStartDate.setText(s.getStartDate().toString());
             }
         }
         return v;
