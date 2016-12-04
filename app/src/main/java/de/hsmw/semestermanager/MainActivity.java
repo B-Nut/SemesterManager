@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -20,15 +21,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     DatabaseHandler dh;
     DatabaseInterface di;
-    EditText editName, editTime, editID;
-    Button btnAddData, btnGetData;
     ListView listView;
-    TextView result;
     ArrayList<Plan> values;
     private SemesterAdapter sAdapter;
 
@@ -39,75 +40,33 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
         dh = new DatabaseHandler(this);
         di = new DatabaseInterface(dh.getWritableDatabase());
 
-        editName = (EditText) findViewById(R.id.editName);
-        editTime = (EditText) findViewById(R.id.editZeitraum);
-        btnAddData = (Button) findViewById(R.id.buttonAdd);
-        btnGetData = (Button) findViewById(R.id.buttonViewAll);
-
-        editID = (EditText) findViewById(R.id.editID);
-        result = (TextView) findViewById(R.id.outputResult);
         listView = (ListView) findViewById(R.id.mainList);
 
-        //addData();
-        //viewAll();
-        viewID();
-        viewList();
+        values = new ArrayList<>();
+        sAdapter = new SemesterAdapter(this, R.layout.listview_overview, values);
+        listView.setAdapter(sAdapter);
+
         updateList();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Plan clickedPlan = (Plan) parent.getItemAtPosition(position);
+                Intent i = new Intent("de.hsmw.semestermanager.SemesterplanView");
+                i.putExtra("ID", (long) clickedPlan.getId());
+                //Toast.makeText(MainActivity.this, Integer.toString(clickedPlan.getId()), Toast.LENGTH_LONG).show();
+                startActivity(i);
+            }
+        });
     }
 
-    public void addData() {
-        btnAddData.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(MainActivity.this, Long.toString(di.insertData(editName.getText().toString(), editTime.getText().toString())), Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
-    }
-
-    public void viewAll() {
-        btnGetData.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Cursor c = di.getAllData();
-                        if (c.getCount() == 0) {
-                            // BITCH YOU ARE STUPID
-                            showMessage("BITCH YOU ARE STUPID", "Ter is Noting");
-                            return;
-                        }
-                        StringBuffer buffer = new StringBuffer();
-                        while (c.moveToNext()) {
-                            buffer.append("ID : " + c.getString(0) + "\n");
-                            buffer.append("Name : " + c.getString(1) + "\n");
-                            buffer.append("Zeitraum : " + c.getString(2) + "\n\n");
-                        }
-                        showMessage("Data", buffer.toString());
-                    }
-                }
-        );
+    @Override
+    protected void onStart() {
+        super.onStart();
+        updateList();
     }
 
     public void showMessage(String title, String message) {
@@ -118,36 +77,10 @@ public class MainActivity extends AppCompatActivity
         builder.show();
     }
 
-    public void viewID() {
-        btnGetData.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                int id = Integer.parseInt(editID.getText().toString());
-                Cursor c = di.getDataByID(id);
-                c.moveToNext(); //Cursor zeigt Anfangs auf nichts (−1).
-                result.setText(c.getString(1));
-            }
-        });
-    }
-
-    public void viewList() {
-        values = new ArrayList<>();
-        sAdapter = new SemesterAdapter(this, R.layout.listview_overview, values);
-        listView.setAdapter(sAdapter);
-        btnAddData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                di.insertData(editName.getText().toString(), editTime.getText().toString());
-                updateList();
-            }
-        });
-    }
-
     public void updateList() {
-        Cursor c = di.getAllData();
         values.clear();
-        while (c.moveToNext()) {
-            values.add(new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(2)));
-        }
+        Plan[] plans = di.getAllPlans();
+        values.addAll(Arrays.asList(plans));
         sAdapter.notifyDataSetChanged();
     }
 
@@ -176,9 +109,6 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == R.id.action_add_new_semester) {
             startActivity(new Intent("de.hsmw.semestermanager.SemesterplanInput"));
             return true;
@@ -192,22 +122,6 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 }

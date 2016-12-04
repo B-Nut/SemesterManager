@@ -45,12 +45,16 @@ public class SemesterAdapter extends ArrayAdapter<Plan> {
                 textName.setText(s.getName());
             }
             if (textEndDate != null){
-                textEndDate.setText(s.getEndDate().toString());
+                textEndDate.setText(sqlToGermanDate(s.getEndDate().toString()));
             }
             if (textStartDate != null){
-                textStartDate.setText(s.getStartDate().toString());
+                textStartDate.setText(sqlToGermanDate(s.getStartDate().toString()));
             }
         }
         return v;
+    }
+    private String sqlToGermanDate(String sqlDate){
+        String[] vaiues = sqlDate.split("-");
+        return vaiues[2] + "." + vaiues[1] + "." + vaiues[0];
     }
 }

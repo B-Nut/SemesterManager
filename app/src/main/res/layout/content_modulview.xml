@@ -1,304 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/overview">
-
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
-        android:layout_height="match_parent"
-        android:weightSum="1"
-        tools:visibility="visible"
-        android:layout_width="400dp"/>
-
-        <TextView
-            android:text="Termine"
-            android:layout_marginTop="10dp"
-            android:layout_width="120dp"
-            android:layout_height="40dp"
-            android:visibility="visible"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="150dp"
-            android:id="@+id/modulview_termineueberschrift"/>
-
-        <View android:layout_width="350dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginLeft="20dp"
-            android:textStyle="bold"
-            android:orientation="vertical"
-            android:layout_height="2dip"
-            android:visibility="visible"
-            android:foreground="@android:color/black"
-            android:id="@+id/strich7" />
-
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_marginTop="50dp"
-        android:layout_height="match_parent"
-        android:layout_width="485dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:id="@+id/linearLayout2"/>
-
-        <TextView
-            android:text="8:00-9:00 Uhr"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="50dp"
-            android:layout_width="125dp"
-            android:layout_height="40dp"
-            android:visibility="visible"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"
-            android:layout_marginRight="20dp"
-            android:id="@+id/modulview_zeiten"/>
-
-        <TextView
-            android:text="20.03.16-07.07.16"
-            android:layout_marginTop="50dp"
-            android:layout_width="170dp"
-            android:layout_height="40dp"
-            android:visibility="visible"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="140dp"
-            android:id="@+id/modulview_datum"/>
-
-        <TextView
-            android:text="8-103"
-            android:layout_marginTop="50dp"
-            android:layout_width="85dp"
-            android:layout_height="40dp"
-            android:visibility="visible"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"
-            android:layout_marginStart="300dp"
-            android:id="@+id/modulview_ortsbezeichnung"/>
-
+    android:id="@+id/activity_modul_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="de.hsmw.semestermanager.ModulView">
 
 
     <TextView
-        android:text="SW-Projekt"
-        android:layout_marginLeft="20dp"
-        android:textStyle="bold"
-        android:layout_marginTop="80dp"
-        android:layout_width="110dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:id="@+id/modulview_modulbezeichnung" />
-
-    <TextView
-        android:text="Schubert"
-        android:layout_marginTop="80dp"
-        android:layout_width="140dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:layout_marginStart="300dp"
-        android:id="@+id/modulview_dozentenbezeichnung" />
-
-    <TextView
-        android:text="Seminar"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="110dp"
-        android:layout_width="110dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:id="@+id/modulview_termintypbezeichnung" />
-
-    <TextView
-        android:text="Wöchentlich"
-        android:layout_marginTop="110dp"
-        android:layout_width="140dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textSize="18sp"
-        android:layout_marginStart="140dp"
-        android:textColor="@android:color/black"
-        android:id="@+id/modulview_wiederholungsbezeichnung" />
-
-    <TextView
-        android:text="Hoch"
-        android:layout_marginTop="110dp"
-        android:layout_width="140dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textSize="18sp"
-        android:layout_marginStart="300dp"
-        android:textColor="@android:color/holo_red_light"
-        android:id="@+id/modulview_prioritätwert" />
-
-    <View android:layout_width="350dp"
-        android:orientation="vertical"
-        android:layout_height="1dip"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="140dp"
-        android:visibility="visible"
-        android:foreground="@android:color/black"
-        android:id="@+id/strich8" />
-
-
-    <TextView
-        android:text="Zeiten"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="150dp"
-        android:layout_width="125dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:layout_marginRight="20dp"
-        android:id="@+id/modulview_zeit"/>
-
-    <TextView
-        android:text="Datum (Zeitraum)"
-        android:layout_marginTop="150dp"
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:visibility="visible"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:layout_marginStart="140dp"
-        android:id="@+id/modulview_datum_zeitraum"/>
-
-    <TextView
-        android:text="Ort"
-        android:layout_marginTop="150dp"
-        android:layout_width="140dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textSize="18sp"
-        android:layout_marginStart="300dp"
-        android:textColor="@android:color/black"
-        android:id="@+id/modulview_ort" />
-
-    <TextView
-        android:text="Modul"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="200dp"
-        android:layout_width="125dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:layout_marginRight="20dp"
-        android:id="@+id/modulview_modul"/>
-
-    <TextView
-        android:text="Dozent"
-        android:layout_marginTop="200dp"
-        android:layout_width="140dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textSize="18sp"
-        android:layout_marginStart="300dp"
-        android:textColor="@android:color/black"
-        android:id="@+id/modulview_dozent" />
-
-
-    <TextView
-        android:text="Termintyp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="230dp"
-        android:layout_width="125dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:layout_marginRight="20dp"
-        android:id="@+id/modulview_termintyp"/>
-
-    <TextView
-        android:text="Wiederholung"
-        android:layout_marginTop="230dp"
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:visibility="visible"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:layout_marginStart="140dp"
-        android:id="@+id/modulview_wiederholung"/>
-
-    <TextView
-        android:text="Priorität"
-        android:layout_marginStart="300dp"
-        android:layout_marginTop="230dp"
-        android:layout_width="140dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:id="@+id/modulview_priorität"
-        tools:textColor="@android:color/background_dark" />
-
-    <View android:layout_width="350dp"
-        android:orientation="vertical"
-        android:layout_height="2dip"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="260dp"
-        android:visibility="visible"
-        android:foreground="@android:color/black"
-        android:id="@+id/strich9" />
-
-    <TextView
-        android:text="Statistik"
-        android:layout_marginTop="270dp"
-        android:layout_width="120dp"
-        android:layout_height="40dp"
+        android:text="Termine"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:visibility="visible"
         android:textStyle="bold"
         android:textSize="20sp"
         android:textColor="@android:color/black"
-        android:layout_marginStart="150dp"
-        android:id="@+id/modulview_statistikueberschrift"/>
+        android:id="@+id/modulview_termineueberschrift"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
-    <View android:layout_width="350dp"
-        android:orientation="vertical"
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_height="2dip"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="300dp"
+        android:textStyle="bold"
+        android:orientation="vertical"
         android:visibility="visible"
         android:foreground="@android:color/black"
-        android:id="@+id/strich10" />
+        android:layout_below="@+id/modulview_termineueberschrift"
+        android:id="@+id/strich1" />
 
     <TextView
-    android:text="Geleistete Stunden:"
-    android:layout_marginLeft="20dp"
-    android:layout_marginTop="320dp"
-    android:layout_width="125dp"
-    android:layout_height="50dp"
-    android:visibility="visible"
-    android:textSize="18sp"
-    android:textColor="@android:color/black"
-    android:layout_marginRight="20dp"
-    android:id="@+id/modulview_geleistete_Stunden"/>
+        android:text="Geleistete Stunden:"
+        android:layout_marginStart="20dp"
+        android:paddingBottom="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:id="@+id/modulview_geleistete_Stunden"
+        android:layout_alignParentBottom="true" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_height="2dip"
+        android:textStyle="bold"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:layout_above="@id/modulview_geleistete_Stunden"
+        android:foreground="@android:color/black"
+        android:id="@+id/strich2" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/list_termin_modulview"
+        android:layout_below="@+id/strich1"
+        android:layout_above="@id/strich2"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:text="50/230h"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="320dp"
-        android:layout_width="125dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:visibility="visible"
         android:textSize="18sp"
         android:textColor="@android:color/black"
-        android:layout_marginStart="250dp"
-        android:id="@+id/modulview_stunden"/>
-
-
-
+        android:id="@+id/modulview_stunden"
+        android:layout_toEndOf="@id/modulview_geleistete_Stunden"
+        android:layout_alignBaseline="@id/modulview_geleistete_Stunden"/>
 
 </RelativeLayout>
 

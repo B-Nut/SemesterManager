@@ -27,6 +27,22 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".ModulView"
+            android:label="Modul">
+            <intent-filter>
+                <action android:name="de.hsmw.semestermanager.ModulView" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".SemesterplanView"
+            android:label="Semesterplan">
+            <intent-filter>
+                <action android:name="de.hsmw.semestermanager.SemesterplanView" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -68,12 +68,13 @@ public long insertData(String name, String timeframe) {
         return db.insert("entries", null, values);
     }
     //------------------------------Get All Data-----------------------------------------
-    public Cursor getAllData() {
-        return db.rawQuery("select * from plans", null);
-    }
-
-    public Cursor getAllDataPlans() {
-        return db.rawQuery("select * from plans ORDER BY ZEITRAUM", null);
+    public Plan[] getAllPlans(){
+        Cursor c = db.rawQuery("select * from plans ORDER BY STARTTIME, ENDTIME", null);
+        Plan[] returnPlans = new Plan[c.getCount()];
+        while (c.moveToNext()) {
+            returnPlans[c.getPosition()] = new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
+        }
+        return returnPlans;
     }
 
     public Cursor getAllDataModules() {
@@ -81,7 +82,7 @@ public long insertData(String name, String timeframe) {
     }
 
     public Cursor getAllDataEntries() {
-        return db.rawQuery("select * from entries ORDER BY ZEITRAUM", null);
+        return db.rawQuery("select * from entries ORDER BY STARTTIME, ENDTIME", null);
     }
 //----------------------------Get Data By ID---------------------------
     public Cursor getDataByID(int id) {

@@ -39,7 +39,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 "MODULID INTEGER," +
                 "ISTGANZTAGSTERMIN INTEGER," +
                 "DOZENT TEXT," +
-                "PERIODE INTEGER,"+
+                "PERIODE INTEGER"+
                 ")");
     }
     @Override
