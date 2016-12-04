@@ -10,13 +10,96 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="de.hsmw.semestermanager.SemesterplanView">
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="118dp"
-        android:layout_marginTop="99dp"
-        android:id="@+id/semesterview_id" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:text="Module"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@android:color/black"
+                android:gravity="center"
+                android:id="@+id/semesterview_modulueberschrift"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_height="2dip"
+                android:textStyle="bold"
+                android:orientation="vertical"
+                android:visibility="visible"
+                android:foreground="@android:color/black"
+                android:id="@+id/strich1" />
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/list_semesterview_module" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="2dip"
+                android:textStyle="bold"
+                android:orientation="vertical"
+                android:foreground="@android:color/black"
+                android:id="@+id/strich2" />
+
+            <TextView
+                android:text="Termine"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@android:color/black"
+                android:gravity="center"
+                android:id="@+id/semesterview_terminueberschrift"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="2dip"
+                android:textStyle="bold"
+                android:orientation="vertical"
+                android:foreground="@android:color/black"
+                android:id="@+id/strich3" />
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:id="@+id/list_semesterview_termine" />
+        </LinearLayout>
+    </ScrollView>
+
 </RelativeLayout>

@@ -9,7 +9,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
         android:paddingTop="5dp"
         android:layout_marginEnd="20dp"
         android:id="@+id/textSemesterStartDate"
@@ -27,13 +26,13 @@
         android:paddingBottom="5dp"/>
 
     <TextView
-        android:text="Sommersemester der Dritte vom ersten nur 25 Addiert..."
+        android:text="Test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
         android:layout_alignTop="@id/textSemesterStartDate"
         android:layout_alignBottom="@id/textSemesterEndDate"
+        android:layout_alignParentStart="true"
         android:layout_toStartOf="@id/textSemesterStartDate"
         android:layout_marginEnd="10dp"
         android:gravity="center_vertical"

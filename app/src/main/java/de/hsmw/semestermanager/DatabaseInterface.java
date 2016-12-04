@@ -141,7 +141,31 @@ public class DatabaseInterface {
         Entry p = new Entry(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
         c.close();
         return  p;
+    }
+
+    public Module[] getModulesByPlanID(int id){
+        String[] columns = {"*"};
+        String query = SQLiteQueryBuilder.buildQueryString(false, "modules", columns, "SEMESTERID = " + id, "", "", "", "");
+        Cursor c = db.rawQuery(query,null);
+        Module[] returnArray = new Module[c.getCount()];
+        while (c.moveToNext()){
+            returnArray[c.getPosition()] = new Module(c.getInt(0), c.getString(1), c.getInt(2));
         }
+        c.close();
+        return returnArray;
+    }
+
+    public Entry[] getEntriesByPlanID(int id){
+        String[] columns = {"*"};
+        String query = SQLiteQueryBuilder.buildQueryString(false, "entries", columns, "SEMESTERID = " + id, "", "", "", "");
+        Cursor c = db.rawQuery(query,null);
+        Entry[] returnArray = new Entry[c.getCount()];
+        while (c.moveToNext()){
+            returnArray[c.getPosition()] = new Entry(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+        }
+        c.close();
+        return returnArray;
+    }
 
 
 //-------------------------searching for---------------------------------------------
