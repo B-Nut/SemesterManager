@@ -9,7 +9,7 @@ import android.util.Log;
 import java.sql.Date;
 
 /**
- * Created by Benni on 26.11.2016.
+ * Created by Adrian on 26.11.2016.
  */
 
 
@@ -21,21 +21,23 @@ public class DatabaseInterface {
     }
 
 
-    public long insertData(String name, String timeframe) {
-        ContentValues values = new ContentValues();
-        Date startDate = Date.valueOf(timeframe);
-        Date endDate = Date.valueOf(timeframe);
-        values.put("Anzeigename", name);
-        values.put("STARTTIME", startDate.toString());
-        values.put("ENDTIME", endDate.toString());
-        return db.insert("plans", null, values);
-    }
+
 
     //---------------------------Add Data----------------------------------------------
-    public long insertDataPlans(String ANZEIGENAME, String ZEITRAUM) {
+public long insertData(String name, String timeframe) {
+    ContentValues values = new ContentValues();
+    Date startDate = Date.valueOf(timeframe);
+    Date endDate = Date.valueOf(timeframe);
+    values.put("Anzeigename", name);
+    values.put("STARTTIME", startDate.toString());
+    values.put("ENDTIME", endDate.toString());
+    return db.insert("plans", null, values);
+}
+    public long insertDataPlans(String ANZEIGENAME, String STARTTIME, String ENDTIME) {
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", ANZEIGENAME);
-        values.put("ZEITRAUM", ZEITRAUM);
+        values.put("STARTTIME", STARTTIME);
+        values.put("ENDTIME", ENDTIME);
         return db.insert("plans", null, values);
     }
 
@@ -46,21 +48,26 @@ public class DatabaseInterface {
         return db.insert("modules", null, values);
     }
 
-    public long insertDataEntries(String ANZEIGENAME, String ZEITRAUM, String ORT, String TERMINTYP, int PRIORITAET, int SEMESTERID, int MODULID, int ISTGANZTAGSTERMIN, String DOZENT) {
+    public long insertDataEntries(int id, String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
         ContentValues values = new ContentValues();
-        values.put("ANZEIGENAME", ANZEIGENAME);
-        values.put("ZEITRAUM", ZEITRAUM);
-        values.put("ORT", ORT);
-        values.put("TERMINTYP", TERMINTYP);
-        values.put("PRIORITAET", PRIORITAET);
-        values.put("SEMESTERID", SEMESTERID);
-        values.put("MODULID", MODULID);
-        values.put("ISTGANZTAGSTERMIN", ISTGANZTAGSTERMIN);
-        values.put("DOZENT", DOZENT);
+        values.put("ANZEIGENAME", name);
+        values.put("STARTDATE", startDate);
+        values.put("ENDTSATA", endDate);
+        values.put("wiederholungsStart", wiederholungsStart);
+        values.put("wiederholungsEnde", wiederholungsEnde);
+        values.put("STARTTIME", startTime);
+        values.put("ENDTIME", endTime);
+        values.put("ORT", ort);
+        values.put("TERMINTYP", typ);
+        values.put("PRIORITAET", prioritaet);
+        values.put("SEMESTERID", planID);
+        values.put("MODULID", modulID);
+        values.put("ISTGANZTAGSTERMIN", istGanztagsTermin);
+        values.put("DOZENT", dozent);
+        values.put("PERIODE", periode);
         return db.insert("entries", null, values);
     }
     //------------------------------Get All Data-----------------------------------------
-
     public Cursor getAllData() {
         return db.rawQuery("select * from plans", null);
     }
@@ -76,8 +83,7 @@ public class DatabaseInterface {
     public Cursor getAllDataEntries() {
         return db.rawQuery("select * from entries ORDER BY ZEITRAUM", null);
     }
-
-    //----------------------------Get Data By ID---------------------------
+//----------------------------Get Data By ID---------------------------
     public Cursor getDataByID(int id) {
         String[] columns = {"*"};
         String query = SQLiteQueryBuilder.buildQueryString(false, "plans", columns, "ID = " + id, "", "", "", "");
@@ -85,56 +91,75 @@ public class DatabaseInterface {
         return db.rawQuery(query, null);
     }
 
-    public Plan getDataByIDPlans(int id) {
+  public Plan getDataByIDPlans(int id) {
         String[] columns = {"*"};
         String query = SQLiteQueryBuilder.buildQueryString(false, "plans", columns, "ID = " + id, "", "", "", "");
         Log.d("database", query);
         Cursor c = db.rawQuery(query, null);
         c.moveToNext();
-        return new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
+        Plan p = new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
+        c.close();
+        return  p;
     }
-
-    public Cursor getDataByIDModules(int id) {
+    public Module getDataByIDModules(int id) {
         String[] columns = {"*"};
         String query = SQLiteQueryBuilder.buildQueryString(false, "modules", columns, "ID = " + id, "", "", "", "");
         Log.d("database", query);
-        return db.rawQuery(query, null);
-    }
+        Cursor c = db.rawQuery(query, null);
+        c.moveToNext();
+        Module p = new Module(c.getInt(0), c.getString(1), c.getInt(2));
+        c.close();
+        return  p;
 
-    public Cursor getDataByIDEntries(int id) {
+    }
+    public Entry getDataByIDEntries(int id) {
         String[] columns = {"*"};
-        String query = SQLiteQueryBuilder.buildQueryString(false, "entries", columns, "ID = " + id, "", "", "", "");
+        String query = SQLiteQueryBuilder.buildQueryString(false, "modules", columns, "ID = " + id, "", "", "", "");
         Log.d("database", query);
-        return db.rawQuery(query, null);
+        Cursor c = db.rawQuery(query, null);
+        c.moveToNext();
+        Entry p = new Entry(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+        c.close();
+        return  p;
+        }
 
-    }
 
-    //-------------------------searching for---------------------------------------------
-
+//-------------------------searching for---------------------------------------------
     public Plan[] getListByStringPlans(String searchword) {
         Cursor c = db.rawQuery("SELECT * FROM plans WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
         Plan[] returnPlan = new Plan[c.getCount()];
         while( c.moveToNext()){
             returnPlan[c.getPosition()] = new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
         }
+        c.close();
         return returnPlan;
     }
 
-    public Cursor getListByStringModules(String searchword) {
-        return db.rawQuery("SELECT * FROM modules WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ANZEIGENAME", null);
+    public Module[] getListByStringModules(String searchword) {
+        Cursor c = db.rawQuery("SELECT * FROM modules WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+        Module[] returnModules = new Module[c.getCount()];
+        while( c.moveToNext()){
+            returnModules[c.getPosition()] = new Module(c.getInt(0), c.getString(1), c.getInt(2));
+        }
+        c.close();
+        return returnModules;
+    }
+    public Entry[] getListByStringEntries(String searchword) {
+        Cursor c = db.rawQuery("SELECT * FROM entries WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+        Entry[] returnEntries = new Entry[c.getCount()];
+        while( c.moveToNext()){
+            returnEntries[c.getPosition()] = new Entry(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+        }
+        c.close();
+        return returnEntries;
     }
 
-    public Cursor getListByStringEntries(String searchword) {
-        return db.rawQuery("SELECT * FROM entries WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
-    }
     //----------------------Update------------------------------------------------------
-
-    //UPDATE Customers SET CustomerName='Hamburg', ContactName='Hamburg',Address='Hamburg' WHERE CustomerID=1;
-
-    public long updateDataPlans(int ID, String ANZEIGENAME, String ZEITRAUM) {
+    public long updateDataPlans(int ID, String ANZEIGENAME, String STARTTIME, String ENDTIME) {
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", ANZEIGENAME);
-        values.put("ZEITRAUM", ZEITRAUM);
+        values.put("STARTTIME", STARTTIME);
+        values.put("ENDTIME", ENDTIME);
         return db.update("plans", values, "WHERE ID =" + String.valueOf(ID), null);
 
     }
@@ -146,17 +171,23 @@ public class DatabaseInterface {
         return db.update("Modules", values, "WHERE ID =" + String.valueOf(ID), null);
     }
 
-    public long updateDataEntries(int ID, String ANZEIGENAME, String ZEITRAUM, String ORT, String TERMINTYP, int PRIORITAET, int SEMESTERID, int MODULID, int ISTGANZTAGSTERMIN, String DOZENT) {
+    public long updateDataEntries(int id, String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
         ContentValues values = new ContentValues();
-        values.put("ANZEIGENAME", ANZEIGENAME);
-        values.put("ZEITRAUM", ZEITRAUM);
-        values.put("ORT", ORT);
-        values.put("TERMINTYP", TERMINTYP);
-        values.put("PRIORITAET", PRIORITAET);
-        values.put("SEMESTERID", SEMESTERID);
-        values.put("MODULID", MODULID);
-        values.put("ISTGANZTAGSTERMIN", ISTGANZTAGSTERMIN);
-        values.put("DOZENT", DOZENT);
-        return db.update("Entries", values, "WHERE ID =" + String.valueOf(ID), null);
+        values.put("ANZEIGENAME", name);
+        values.put("STARTDATE", startDate);
+        values.put("ENDTSATA", endDate);
+        values.put("wiederholungsStart", wiederholungsStart);
+        values.put("wiederholungsEnde", wiederholungsEnde);
+        values.put("STARTTIME", startTime);
+        values.put("ENDTIME", endTime);
+        values.put("ORT", ort);
+        values.put("TERMINTYP", typ);
+        values.put("PRIORITAET", prioritaet);
+        values.put("SEMESTERID", planID);
+        values.put("MODULID", modulID);
+        values.put("ISTGANZTAGSTERMIN", istGanztagsTermin);
+        values.put("DOZENT", dozent);
+        values.put("PERIODE", periode);
+        return db.update("Entries", values, "WHERE ID =" + String.valueOf(id), null);
     }
 }
