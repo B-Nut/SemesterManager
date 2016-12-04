@@ -11,9 +11,11 @@ import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "semesterPlans.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 7;
     private static final String TABLE_MODULES = "modules";
     private static final String TABLE_PLANS = "plans";
+   // private static final String TABLE_REVISION = "revision";
+    private static final String TABLE_REVISIONEXCEPTION = "revisionException";
     private static final String TABLE_ENTRIES = "entries";
 
     @Override
@@ -22,12 +24,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Log.d("database", "create Database");
         db.execSQL("CREATE TABLE " + TABLE_MODULES + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,ANZEIGENAME TEXT,SEMESTERID INTEGER)");
         db.execSQL("CREATE TABLE " + TABLE_PLANS + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,ANZEIGENAME TEXT,STARTTIME TEXT, ENDTIME TEXT)");
-
+     //   db.execSQL("CREATE TABLE " + TABLE_REVISION + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,STARTDATE TEXT, ENDDATA TEXT,PRIORITAET INTEGER)");
+        db.execSQL("CREATE TABLE " + TABLE_REVISIONEXCEPTION + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,PRIORITAET INTEGER, ISDELETED INTEGER, STARTDATE TEXT, ENDDATA TEXT,STARTTIME TEXT, ENDTIME TEXT)");
         db.execSQL("CREATE TABLE " + TABLE_ENTRIES + " (" +
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "ANZEGENAME TEXT," +
                 "STARTDATE TEXT," +
-                "ENDTSATA TEXT,"+
+                "ENDDATA TEXT,"+
                 "wiederholungsStart TEXT,"+
                 "wiederholungsEnde TEXT,"+
                 "STARTTIME TEXT,"+

@@ -24,15 +24,6 @@ public class DatabaseInterface {
 
 
     //---------------------------Add Data----------------------------------------------
-public long insertData(String name, String timeframe) {
-    ContentValues values = new ContentValues();
-    Date startDate = Date.valueOf(timeframe);
-    Date endDate = Date.valueOf(timeframe);
-    values.put("Anzeigename", name);
-    values.put("STARTTIME", startDate.toString());
-    values.put("ENDTIME", endDate.toString());
-    return db.insert("plans", null, values);
-}
     public long insertDataPlans(String ANZEIGENAME, String STARTTIME, String ENDTIME) {
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", ANZEIGENAME);
@@ -47,12 +38,28 @@ public long insertData(String name, String timeframe) {
         values.put("SEMESTERID", SEMESTERID);
         return db.insert("modules", null, values);
     }
-
-    public long insertDataEntries(int id, String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
+  /*  public long insertDataRevision(String STARTDATE,String ENDDATA, int PRIORITAET) {
+        ContentValues values = new ContentValues();
+        values.put("STARTDATE", STARTDATE);
+        values.put("ENDDATA", ENDDATA);
+        values.put("PRIORITAET", PRIORITAET);
+        return db.insert("modules", null, values);
+    }*/
+    public long insertDataRevisionException(int PRIORITAET,int ISDELETED,String STARTDATE,String ENDDATA,String STARTTIME,String ENDTIME) {
+        ContentValues values = new ContentValues();
+        values.put("PRIORITAET", PRIORITAET);
+        values.put("ISDELETED", ISDELETED);
+        values.put("STARTDATE", STARTDATE);
+        values.put("ENDDATA", ENDDATA);
+        values.put("STARTTIME", STARTTIME);
+        values.put("ENDTIME", ENDTIME);
+        return db.insert("modules", null, values);
+    }
+    public long insertDataEntries( String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", name);
         values.put("STARTDATE", startDate);
-        values.put("ENDTSATA", endDate);
+        values.put("ENDDATA", endDate);
         values.put("wiederholungsStart", wiederholungsStart);
         values.put("wiederholungsEnde", wiederholungsEnde);
         values.put("STARTTIME", startTime);
@@ -67,7 +74,7 @@ public long insertData(String name, String timeframe) {
         values.put("PERIODE", periode);
         return db.insert("entries", null, values);
     }
-    //------------------------------Get All Data-----------------------------------------
+//------------------------------Get All Data-----------------------------------------
     public Plan[] getAllPlans(){
         Cursor c = db.rawQuery("select * from plans ORDER BY STARTTIME, ENDTIME", null);
         Plan[] returnPlans = new Plan[c.getCount()];
@@ -76,23 +83,35 @@ public long insertData(String name, String timeframe) {
         }
         return returnPlans;
     }
-
-    public Cursor getAllDataModules() {
-        return db.rawQuery("select * from modules ORDER BY ANZEIGENAME", null);
+    public Module[] getAllDataModules(){
+        Cursor c = db.rawQuery("select * from modules ORDER BY ANZEIGENAME", null);
+        Module[] returnModule = new Module[c.getCount()];
+        while (c.moveToNext()) {
+            returnModule[c.getPosition()] = new Module(c.getInt(0), c.getString(1), c.getInt(2));
+        }
+        return returnModule;
     }
 
-    public Cursor getAllDataEntries() {
-        return db.rawQuery("select * from entries ORDER BY STARTTIME, ENDTIME", null);
+
+
+    public Plan[] getAllRevisionException(){
+        Cursor c = db.rawQuery("select * from revisionException ORDER BY STARTTIME, STARTTIME, ENDDATA, ENDTIME", null);
+        Plan[] returnPlans = new Plan[c.getCount()];
+        while (c.moveToNext()) {
+            returnPlans[c.getPosition()] = new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
+        }
+        return returnPlans;
+    }
+    public Entry[] getAllDataEntries(){
+        Cursor c = db.rawQuery("select * from entries ORDER BY STARTTIME, STARTTIME, ENDDATA, ENDTIME ", null);
+        Entry[] returnEntry = new Entry[c.getCount()];
+        while (c.moveToNext()) {
+            returnEntry[c.getPosition()] = new Entry(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+        }
+        return returnEntry;
     }
 //----------------------------Get Data By ID---------------------------
-    public Cursor getDataByID(int id) {
-        String[] columns = {"*"};
-        String query = SQLiteQueryBuilder.buildQueryString(false, "plans", columns, "ID = " + id, "", "", "", "");
-        Log.d("database", query);
-        return db.rawQuery(query, null);
-    }
-
-  public Plan getDataByIDPlans(int id) {
+    public Plan getDataByIDPlans(int id) {
         String[] columns = {"*"};
         String query = SQLiteQueryBuilder.buildQueryString(false, "plans", columns, "ID = " + id, "", "", "", "");
         Log.d("database", query);
@@ -155,7 +174,7 @@ public long insertData(String name, String timeframe) {
         return returnEntries;
     }
 
-    //----------------------Update------------------------------------------------------
+//----------------------Update------------------------------------------------------
     public long updateDataPlans(int ID, String ANZEIGENAME, String STARTTIME, String ENDTIME) {
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", ANZEIGENAME);
@@ -176,7 +195,7 @@ public long insertData(String name, String timeframe) {
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", name);
         values.put("STARTDATE", startDate);
-        values.put("ENDTSATA", endDate);
+        values.put("ENDDATA", endDate);
         values.put("wiederholungsStart", wiederholungsStart);
         values.put("wiederholungsEnde", wiederholungsEnde);
         values.put("STARTTIME", startTime);
@@ -191,4 +210,8 @@ public long insertData(String name, String timeframe) {
         values.put("PERIODE", periode);
         return db.update("Entries", values, "WHERE ID =" + String.valueOf(id), null);
     }
+    //------------------------------------------------------------------
+   /* semid = list aller module
+    modul id = liste aller entis
+    semid = alle entis die nicht zu einem modul gehoren*/
 }
