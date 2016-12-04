@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ import java.util.Arrays;
 
 public class SemesterplanView extends AppCompatActivity {
     Plan selectedPlan;
+
+    ScrollView scrollView;
 
     ListView moduleList;
     ArrayList<Module> modules;
@@ -37,6 +40,8 @@ public class SemesterplanView extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_semesterplan_view);
+
+        scrollView = (ScrollView) findViewById(R.id.semesterview_scrollview);
 
         dh = new DatabaseHandler(this);
         di = new DatabaseInterface(dh.getWritableDatabase());
@@ -70,9 +75,10 @@ public class SemesterplanView extends AppCompatActivity {
 
         entryList = (ListView) findViewById(R.id.list_semesterview_termine);
         entries = new ArrayList<>();
-        entriesListAdapter = new ArrayAdapter<>(this, R.layout.listview_element, entries);
+        entriesListAdapter = new EntryAdapterStandard(this, R.layout.listview_element, entries);
         entryList.setAdapter(entriesListAdapter);
         updateLists();
+        scrollView.fullScroll(View.FOCUS_UP);
     }
 
     public void updateLists() {

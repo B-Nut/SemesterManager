@@ -72,7 +72,7 @@ public class EntryAdapterStandard extends ArrayAdapter <Entry> {
                 semesterview_termin_ort.setText(e.getOrt());
             }
             if (semesterview_termin_modul != null) {
-                semesterview_termin_modul.setText(e.getModulID());
+                semesterview_termin_modul.setText(e.getName());
             }
             if (semesterview_termin_dozenten != null) {
                 semesterview_termin_dozenten.setText(e.getDozent());
@@ -81,7 +81,7 @@ public class EntryAdapterStandard extends ArrayAdapter <Entry> {
                 semesterview_termin_wiederholung.setText("");
             }
             if (semesterview_termin_prioritätswert != null) {
-                semesterview_termin_prioritätswert.setText(e.getPrioritaet());
+                semesterview_termin_prioritätswert.setText(String.valueOf(e.getPrioritaet()));
             }
             if (semesterview_termin_termintyp != null) {
                 semesterview_termin_termintyp.setText(e.getTyp());

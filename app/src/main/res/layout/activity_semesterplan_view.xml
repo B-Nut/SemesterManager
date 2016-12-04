@@ -12,7 +12,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/semesterview_scrollview">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,8 +23,6 @@
             <TextView
                 android:text="Module"
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginEnd="40dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
@@ -37,9 +36,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_height="2dip"
+               android:layout_height="2dip"
                 android:textStyle="bold"
                 android:orientation="vertical"
                 android:visibility="visible"
@@ -49,16 +46,12 @@
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:id="@+id/list_semesterview_module" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
                 android:layout_height="2dip"
                 android:textStyle="bold"
@@ -68,8 +61,6 @@
 
             <TextView
                 android:text="Termine"
-                android:layout_marginStart="40dp"
-                android:layout_marginEnd="40dp"
                 android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -83,9 +74,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp"
+               android:layout_marginBottom="10dp"
                 android:layout_height="2dip"
                 android:textStyle="bold"
                 android:orientation="vertical"
@@ -95,8 +84,6 @@
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
                 android:id="@+id/list_semesterview_termine" />
         </LinearLayout>

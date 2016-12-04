@@ -77,11 +77,11 @@ public class Entry {
 
     public String getDateString(){
         String returnString;
-        return "Dies ist ein Datum";
+        return "20.03 - 07.07";
 
     }
     public String getTimeString(){
-        return "Dies ist eine Zeit!";
+        return "16:00 - 17:30";
     }
 
     public int getId() {

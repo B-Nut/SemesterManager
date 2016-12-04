@@ -122,6 +122,7 @@ public class DatabaseInterface {
         c.close();
         return  p;
     }
+
     public Entry[] getEntriesByPlanID(int id){
         String[] columns = {"*"};
         String query = SQLiteQueryBuilder.buildQueryString(false, "entries", columns, "SEMESTERID = " + id, "", "", "", "");
@@ -133,6 +134,19 @@ public class DatabaseInterface {
         c.close();
         return returnArray;
     }
+
+    public Module[] getModulesByPlanID(int id){
+        String[] columns = {"*"};
+        String query = SQLiteQueryBuilder.buildQueryString(false, "modules", columns, "SEMESTERID = " + id, "", "", "", "");
+        Cursor c = db.rawQuery(query,null);
+        Module[] returnArray = new Module[c.getCount()];
+        while (c.moveToNext()){
+            returnArray[c.getPosition()] = new Module(c.getInt(0), c.getString(1), c.getInt(2));
+        }
+        c.close();
+        return returnArray;
+    }
+
     public Entry[] getEntriesByModulID(int id){
         String[] columns = {"*"};
         String query = SQLiteQueryBuilder.buildQueryString(false, "entries", columns, "ModulID = " + id, "", "", "", "");
