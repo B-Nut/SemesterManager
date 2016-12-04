@@ -13,7 +13,7 @@
         android:gravity="center_vertical"
         android:maxLines="1"
         android:ellipsize="end"
-        android:id="@+id/modulview_zeiten" />
+        android:id="@+id/semesterview_termin_zeiten" />
 
     <TextView
         android:text="20.03 - 07.07"
@@ -27,7 +27,7 @@
         android:gravity="center_vertical"
         android:maxLines="1"
         android:ellipsize="end"
-        android:id="@+id/modulview_datum"/>
+        android:id="@+id/semesterview_termin_datum"/>
 
     <TextView
         android:text="8-103"
@@ -42,14 +42,14 @@
         android:ellipsize="end"
         android:textSize="18sp"
         android:textColor="@android:color/black"
-        android:id="@+id/modulview_ort"
+        android:id="@+id/semesterview_termin_ort"
         android:layout_width="wrap_content" />
 
     <TextView
         android:text="SW-Projekt"
         android:layout_marginStart="20dp"
         android:textStyle="bold"
-        android:layout_below="@id/modulview_zeiten"
+        android:layout_below="@id/semesterview_termin_zeiten"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
         android:ellipsize="end"
         android:textSize="18sp"
         android:textColor="@android:color/black"
-        android:id="@+id/modulview_modul" />
+        android:id="@+id/semesterview_termin_modul" />
 
     <TextView
         android:text="Schubert"
@@ -67,14 +67,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginEnd="20dp"
-        android:layout_below="@id/modulview_datum"
+        android:layout_below="@id/semesterview_termin_datum"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:textSize="18sp"
         android:textColor="@android:color/black"
         android:maxLines="1"
         android:ellipsize="end"
-        android:id="@+id/modulview_dozenten" />
+        android:id="@+id/semesterview_termin_dozenten" />
 
     <TextView
         android:text="Wöchentlich"
@@ -87,9 +87,9 @@
         android:textSize="18sp"
         android:gravity="center_vertical"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/modulview_modul"
+        android:layout_below="@id/semesterview_termin_modul"
         android:textColor="@android:color/black"
-        android:id="@+id/modulview_wiederholung" />
+        android:id="@+id/semesterview_termin_wiederholung" />
 
     <TextView
         android:text="Hoch"
@@ -103,9 +103,9 @@
         android:ellipsize="end"
         android:textSize="18sp"
         android:textColor="@android:color/black"
-        android:layout_below="@id/modulview_dozenten"
-        android:layout_alignEnd="@id/modulview_dozenten"
-        android:id="@+id/modulview_prioritätswert" />
+        android:layout_below="@id/semesterview_termin_dozenten"
+        android:layout_alignEnd="@id/semesterview_termin_dozenten"
+        android:id="@+id/semesterview_termin_prioritätswert" />
 
     <TextView
         android:text="Seminar"
@@ -119,7 +119,7 @@
         android:ellipsize="end"
         android:textSize="18sp"
         android:textColor="@android:color/black"
-        android:id="@+id/modulview_termintyp"
-        android:layout_below="@+id/modulview_modul"
-        android:layout_alignStart="@+id/modulview_modul" />
+        android:id="@+id/semesterview_termin_termintyp"
+        android:layout_below="@+id/semesterview_termin_modul"
+        android:layout_alignStart="@+id/semesterview_termin_modul" />
 </RelativeLayout>
