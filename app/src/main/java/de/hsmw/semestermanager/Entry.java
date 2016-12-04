@@ -75,6 +75,15 @@ public class Entry {
         this.isException = isException;
     }
 
+    public String getDateString(){
+        String returnString;
+        return "Dies ist ein Datum";
+
+    }
+    public String getTimeString(){
+        return "Dies ist eine Zeit!";
+    }
+
     public int getId() {
         return id;
     }
