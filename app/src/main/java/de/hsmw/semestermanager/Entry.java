@@ -23,13 +23,13 @@ public class Entry {
     boolean isException;
 
 
-    public Entry(int id, String name, Date startDate, Date endDate, Date wiederholungsStart, Date wiederholungsEnde, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
+    public Entry(int id, String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
         this.id = id;
         this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.wiederholungsStart = wiederholungsStart;
-        this.wiederholungsEnde = wiederholungsEnde;
+        this.startDate = Date.valueOf(startDate);
+        this.endDate = Date.valueOf(endDate);
+        this.wiederholungsStart = Date.valueOf(wiederholungsStart);
+        this.wiederholungsEnde = Date.valueOf(wiederholungsEnde);
         this.startTime = startTime;
         this.endTime = endTime;
         this.ort = ort;
@@ -42,11 +42,11 @@ public class Entry {
         this.periode = periode;
     }
 
-    public Entry(int id, String name, Date startDate, Date endDate, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent) {
+    public Entry(int id, String name, String startDate, String endDate, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent) {
         this.id = id;
         this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDate = Date.valueOf(startDate);
+        this.endDate = Date.valueOf(endDate);
         this.startTime = startTime;
         this.endTime = endTime;
         this.ort = ort;
@@ -58,11 +58,11 @@ public class Entry {
         this.dozent = dozent;
     }
 
-    public Entry(int id, String name, Date startDate, Date endDate, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, boolean isException) {
+    public Entry(int id, String name, String startDate, String endDate, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, boolean isException) {
         this.id = id;
         this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDate = Date.valueOf(startDate);
+        this.endDate = Date.valueOf(endDate);
         this.startTime = startTime;
         this.endTime = endTime;
         this.ort = ort;
