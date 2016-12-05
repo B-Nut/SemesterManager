@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Modulname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/eingabemaske_modul_,´modulname"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Bitte Modulname eingeben"
+        android:ems="10"
+        android:id="@+id/eingabemaske_modul_modulnameeingabe"
+        android:cursorVisible="true" />
+
+    <TextView
+        android:text="Semesterzeitraum"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/eingabemaske_modul_Semesterzeitraumauswahl"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:text="Bestätigen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/eingabemaske_modul_eingabebestätigung"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp" />
+</LinearLayout>
