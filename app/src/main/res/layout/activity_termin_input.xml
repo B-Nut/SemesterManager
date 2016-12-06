@@ -42,10 +42,10 @@
         android:textStyle="bold"
         android:onClick="onCheckboxClicked"/>
     <TextView
-        android:text="Semesterzeitraum"
+        android:text="Terminzeitraum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:label="termin_semesterzeitraum"
+        android:label="termin_terminzeitraum"
         android:textColor="@android:color/black"
         android:textStyle="bold"
         android:textSize="20sp"
@@ -98,6 +98,25 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:id="@+id/eingabemaske_termin_periodisch" />
+    <TextView
+        android:text="Semesterzugehörigkeit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:label="termin_semesterzugehörigkeit"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Periodisch"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:id="@+id/eingabemaske_termin_semesterzugehörigkeit" />
     <TextView
         android:text="Modulname"
         android:layout_width="match_parent"
