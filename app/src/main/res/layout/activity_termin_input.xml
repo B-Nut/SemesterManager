@@ -32,6 +32,15 @@
         android:layout_alignParentStart="true"
         android:id="@+id/new_termin_name"
         android:hint="Geben Sie einen Terminname an."/>
+    <CheckBox android:id="@+id/termin_ganztags_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ganztagstermin"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:onClick="onCheckboxClicked"/>
     <TextView
         android:text="Semesterzeitraum"
         android:layout_width="match_parent"
@@ -71,6 +80,25 @@
         android:layout_gravity=""
         android:clickable="false" />
     <TextView
+        android:text="Periode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:label="termin_modulname_periode"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Periodisch"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:id="@+id/eingabemaske_termin_periodisch" />
+    <TextView
         android:text="Modulname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,7 +116,7 @@
         android:hint="Semesterzeitraum"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:id="@+id/eingabemaske_modul_semesterzeitraumauswahl" />
+        android:id="@+id/eingabemaske_termin_semesterzeitraumauswahl" />
     <TextView
         android:text="Termintyp"
         android:layout_width="match_parent"
@@ -107,7 +135,7 @@
         android:hint="Termintyp"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:id="@+id/eingabemaske_modul_termintypauswahl" />
+        android:id="@+id/eingabemaske_termin_termintypauswahl" />
     <TextView
         android:text="Terminpriorität"
         android:layout_width="match_parent"
@@ -120,37 +148,13 @@
         android:paddingBottom="5dp"
         android:scrollbarAlwaysDrawHorizontalTrack="true"
         android:scrollbarAlwaysDrawVerticalTrack="true" />
-    <EditText
+    <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:textSize="20sp"
+        android:hint="Modulauswahl"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:layout_alignParentStart="true"
-        android:id="@+id/new_termin_priority"
-        android:hint="Setzen Sie eine Terminpriorität zwischen 0 und 2."/>
-    <TextView
-        android:text="Ganztagstermin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:label="termin_ganztägig"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:scrollbarAlwaysDrawHorizontalTrack="true"
-        android:scrollbarAlwaysDrawVerticalTrack="true" />
-    <CheckBox android:id="@+id/termin_ganztags_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="           Unchecked: Nein
-           Checked: Ja"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:textSize="20sp"
-        android:onClick="onCheckboxClicked"/>
+        android:id="@+id/eingabemaske_termin_priorityauswahl" />
     <TextView
         android:text="Modulzugehörigkeit"
         android:layout_width="match_parent"
@@ -169,7 +173,7 @@
         android:hint="Modulauswahl"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:id="@+id/eingabemaske_modul_modulauswahl" />
+        android:id="@+id/eingabemaske_termin_modulauswahl" />
     <TextView
         android:text="Dozent"
         android:layout_width="match_parent"
@@ -214,28 +218,12 @@
         android:layout_alignParentStart="true"
         android:id="@+id/new_termin_ort"
         android:hint="Geben Sie einen Ort an."/>
-    <TextView
-        android:text="Periodisch"
+    <Button
+        android:text="Bestätigen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:label="termin_periode"
+        android:id="@+id/eingabemaske_termin_eingabebestätigung"
         android:textColor="@android:color/black"
         android:textStyle="bold"
-        android:textSize="20sp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:scrollbarAlwaysDrawHorizontalTrack="true"
-        android:scrollbarAlwaysDrawVerticalTrack="true" />
-    <CheckBox android:id="@+id/termin_periodisch_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="           Unchecked: Nein
-           Checked: Ja"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:textSize="20sp"
-        android:onClick="onCheckboxClicked"/>
-
-
-
+        android:layout_marginTop="40dp" />
 </LinearLayout>
