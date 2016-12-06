@@ -1,6 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_semesterplan_input"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="de.hsmw.semestermanager.YOURENTRYCLASS">
+    <TextView
+        android:text="Terminname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:label="termin_terminname"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_alignParentStart="true"
+        android:id="@+id/new_termin_name"
+        android:hint="Geben Sie einen Terminname an."/>
+    <TextView
+        android:text="Semesterzeitraum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:label="termin_semesterzeitraum"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
+    <TextView
+        android:text="Geben Sie ein Startdatum an."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/new_termin_date_start"
+        android:layout_below="@id/new_termin_name"
+        android:layout_alignStart="@id/new_termin_name"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:gravity="center_vertical"
+        android:layout_gravity="left"
+        android:clickable="false" />
+    <TextView
+        android:text="Geben Sie ein Enddatum an."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/new_termin_date_start"
+        android:layout_alignStart="@id/new_termin_date_start"
+        android:id="@+id/new_termin_date_end"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:gravity="center_vertical"
+        android:layout_gravity=""
+        android:clickable="false" />
+    <TextView
+        android:text="Modulname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:label="termin_modulname_spinner"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Semesterzeitraum"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:id="@+id/eingabemaske_modul_semesterzeitraumauswahl" />
+    <TextView
+        android:text="Termintyp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:label="termin_termintyp_spinner"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Termintyp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:id="@+id/eingabemaske_modul_termintypauswahl" />
+    <TextView
+        android:text="Terminpriorität"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:label="termin_priority"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_alignParentStart="true"
+        android:id="@+id/new_termin_priority"
+        android:hint="Setzen Sie eine Terminpriorität zwischen 0 und 2."/>
+    <TextView
+        android:text="Ganztagstermin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:label="termin_ganztägig"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
+    <CheckBox android:id="@+id/termin_ganztags_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="           Unchecked: Nein
+           Checked: Ja"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textSize="20sp"
+        android:onClick="onCheckboxClicked"/>
+    <TextView
+        android:text="Modulzugehörigkeit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:label="termin_modulauswahl"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Modulauswahl"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:id="@+id/eingabemaske_modul_modulauswahl" />
+    <TextView
+        android:text="Dozent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:label="termin_dozent"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_alignParentStart="true"
+        android:id="@+id/new_termin_dozent"
+        android:hint="Geben Sie einen Dozent an."/>
+    <TextView
+        android:text="Terminort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:label="termin_ort"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_alignParentStart="true"
+        android:id="@+id/new_termin_ort"
+        android:hint="Geben Sie einen Ort an."/>
+    <TextView
+        android:text="Periodisch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:label="termin_periode"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
+    <CheckBox android:id="@+id/termin_periodisch_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="           Unchecked: Nein
+           Checked: Ja"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textSize="20sp"
+        android:onClick="onCheckboxClicked"/>
+
+
 
 </LinearLayout>
