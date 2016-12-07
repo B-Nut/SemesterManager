@@ -23,6 +23,7 @@ public class InstrumentedTest {
         DatabaseHandler dh = new DatabaseHandler(appContext);
         DatabaseInterface di = new DatabaseInterface(dh.getWritableDatabase());
         int foobar = (int) di.insertDataPlans("Test", "2016.05.01", "2016.12.30");
+
         assertEquals(1, foobar);
     }
 }
