@@ -77,11 +77,19 @@ public class Entry implements DatabaseObject{
 
     public String getDateString(){
         String returnString;
-        return "20.03 - 07.07";
-
+        String[] temp = startDate.toString().split("-");
+        returnString = temp[2] + "." + temp[1];
+        temp = endDate.toString().split("-");
+        returnString += " - " + temp[2] + "." + temp[1];
+        return returnString;
     }
     public String getTimeString(){
-        return "16:00 - 17:30";
+        String returnString;
+        String[] temp = startTime.toString().split(":");
+        returnString = temp[0] + ":" + temp[1] + " - ";
+        temp = endTime.toString().split(":");
+        returnString += temp[0] + ":" + temp[1];
+        return returnString;
     }
 
     public int getId() {
