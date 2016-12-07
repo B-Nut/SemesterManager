@@ -16,29 +16,13 @@ import java.util.List;
 
 public class EntryAdapterStandard extends ArrayAdapter <Entry> {
 
-    public EntryAdapterStandard(Context context, int resource) {
-        super(context, resource);
+    int viewResource;
+
+    public EntryAdapterStandard(Context context, int resource, List<Entry> items) {
+        super(context, resource, items);
+        viewResource = resource;
     }
 
-    public EntryAdapterStandard(Context context, int resource, int textViewResourceId) {
-        super(context, resource, textViewResourceId);
-    }
-
-    public EntryAdapterStandard(Context context, int resource, Entry[] objects) {
-        super(context, resource, objects);
-    }
-
-    public EntryAdapterStandard(Context context, int resource, int textViewResourceId, Entry[] objects) {
-        super(context, resource, textViewResourceId, objects);
-    }
-
-    public EntryAdapterStandard(Context context, int resource, List<Entry> objects) {
-        super(context, resource, objects);
-    }
-
-    public EntryAdapterStandard(Context context, int resource, int textViewResourceId, List<Entry> objects) {
-        super(context, resource, textViewResourceId, objects);
-    }
 
     @NonNull
     @Override
@@ -47,10 +31,10 @@ public class EntryAdapterStandard extends ArrayAdapter <Entry> {
 
         if (v == null) {
             LayoutInflater vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.listview_semesterview_termine,null);
+            v = vi.inflate(viewResource,null);
         }
 
-        Entry e = (Entry) getItem(position);
+        Entry e = getItem(position);
 
         if(e != null) {
             TextView semesterview_termin_zeiten = (TextView) v.findViewById(R.id.semesterview_termin_zeiten);

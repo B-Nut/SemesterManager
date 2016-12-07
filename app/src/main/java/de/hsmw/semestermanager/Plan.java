@@ -6,7 +6,7 @@ import java.sql.Date;
  * Created by Benjamin on 30.11.2016.
  */
 
-public class Plan {
+public class Plan implements DatabaseObject{
     private int id;
     private String name;
     private Date startDate;

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_semesterplan_input"
@@ -9,7 +14,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="de.hsmw.semestermanager.TerminInput">
+    tools:context="de.hsmw.semestermanager.TerminInput"
+    android:scrollbars="vertical">
     <TextView
         android:text="Terminname"
         android:layout_width="match_parent"
@@ -39,51 +45,99 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:onClick="onCheckboxClicked"/>
-    <TextView
-        android:text="Terminzeitraum"
+        android:textStyle="bold"/>
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:label="termin_terminzeitraum"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:scrollbarAlwaysDrawHorizontalTrack="true"
-        android:scrollbarAlwaysDrawVerticalTrack="true" />
-    <TextView
-        android:text="Geben Sie ein Startdatum an."
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/new_termin_date_start"
-        android:layout_below="@id/new_termin_name"
-        android:layout_alignStart="@id/new_termin_name"
-        android:textSize="20sp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:gravity="center_vertical"
-        android:layout_gravity="left"
-        android:clickable="false" />
-    <TextView
-        android:text="Geben Sie ein Enddatum an."
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/new_termin_date_start"
-        android:layout_alignStart="@id/new_termin_date_start"
-        android:id="@+id/new_termin_date_end"
-        android:textSize="20sp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:gravity="center_vertical"
-        android:layout_gravity=""
-        android:clickable="false" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Terminzeitraum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/new_termin_label_terminzeitraum"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp" />
+        <TextView
+            android:text="-"
+            android:id="@+id/new_termin_date_trenner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/new_termin_label_terminzeitraum"
+            android:textSize="20sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_centerHorizontal="true"/>
+        <TextView
+            android:text="Startdatum"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/new_termin_date_start"
+            android:layout_below="@id/new_termin_label_terminzeitraum"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/new_termin_date_trenner"
+            android:textSize="20sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:clickable="false" />
+        <TextView
+            android:text="Enddatum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/new_termin_label_terminzeitraum"
+            android:id="@+id/new_termin_date_end"
+            android:layout_toEndOf="@id/new_termin_date_trenner"
+            android:layout_alignParentEnd="true"
+            android:textSize="20sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:clickable="false" />
+        <TextView
+            android:text="-"
+            android:id="@+id/new_termin_time_trenner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/new_termin_date_trenner"
+            android:textSize="20sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"/>
+        <TextView
+            android:text="Startzeit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/new_termin_time_start"
+            android:layout_below="@id/new_termin_date_trenner"
+            android:layout_toStartOf="@id/new_termin_time_trenner"
+            android:layout_alignParentStart="true"
+            android:textSize="20sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:clickable="false"/>
+        <TextView
+            android:text="Endzeit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/new_termin_time_end"
+            android:layout_below="@id/new_termin_date_trenner"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@id/new_termin_time_trenner"
+            android:textSize="20sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:clickable="false"/>
+    </RelativeLayout>
     <TextView
         android:text="Periode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:label="termin_modulname_periode"
         android:textColor="@android:color/black"
         android:textStyle="bold"
         android:textSize="20sp"
@@ -97,12 +151,11 @@
         android:hint="Periodisch"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:id="@+id/new_eingabemaske_termin_periodisch" />
+        android:id="@+id/new_termin_periodisch" />
     <TextView
         android:text="Semesterzugehörigkeit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:label="termin_semesterzugehörigkeit"
         android:textColor="@android:color/black"
         android:textStyle="bold"
         android:textSize="20sp"
@@ -116,12 +169,11 @@
         android:hint="Periodisch"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:id="@+id/new_eingabemaske_termin_semesterzugehörigkeit" />
+        android:id="@+id/new_termin_semesterzugehörigkeit" />
     <TextView
         android:text="Modulname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:label="termin_modulname_spinner"
         android:textColor="@android:color/black"
         android:textStyle="bold"
         android:textSize="20sp"
@@ -135,7 +187,7 @@
         android:hint="Semesterzeitraum"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:id="@+id/new_eingabemaske_termin_semesterzeitraumauswahl" />
+        android:id="@+id/new_termin_modulauswahl" />
     <TextView
         android:text="Termintyp"
         android:layout_width="match_parent"
@@ -154,7 +206,7 @@
         android:hint="Termintyp"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:id="@+id/new_eingabemaske_termin_termintypauswahl" />
+        android:id="@+id/new_termin_termintypauswahl" />
     <TextView
         android:text="Terminpriorität"
         android:layout_width="match_parent"
@@ -170,29 +222,10 @@
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Modulauswahl"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:id="@+id/new_eingabemaske_termin_priorityauswahl" />
-    <TextView
-        android:text="Modulzugehörigkeit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:label="termin_modulauswahl"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:scrollbarAlwaysDrawHorizontalTrack="true"
-        android:scrollbarAlwaysDrawVerticalTrack="true" />
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Modulauswahl"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:id="@+id/new_eingabemaske_termin_modulauswahl" />
+        android:id="@+id/new_termin_priorityauswahl" />
+
     <TextView
         android:text="Dozent"
         android:layout_width="match_parent"
@@ -208,11 +241,9 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
         android:textSize="20sp"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:layout_alignParentStart="true"
         android:id="@+id/new_termin_dozent"
         android:hint="Geben Sie einen Dozent an."/>
     <TextView
@@ -246,3 +277,4 @@
         android:textStyle="bold"
         android:layout_marginTop="40dp" />
 </LinearLayout>
+</ScrollView>

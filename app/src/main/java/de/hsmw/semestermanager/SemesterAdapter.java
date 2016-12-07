@@ -11,17 +11,15 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Created by Benjamin on 30.11.2016.
+ * Created by Eric on 30.11.2016.
  */
 
 public class SemesterAdapter extends ArrayAdapter<Plan> {
-
-    public SemesterAdapter(Context context, int textViewResourceId) {
-        super(context, textViewResourceId);
-    }
+    int viewResource;
 
     public SemesterAdapter(Context context, int resource, List<Plan> items) {
         super(context, resource, items);
+        viewResource = resource;
     }
 
     @NonNull
@@ -31,10 +29,10 @@ public class SemesterAdapter extends ArrayAdapter<Plan> {
 
         if (v == null){
             LayoutInflater vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.listview_overview,null);
+            v = vi.inflate(viewResource,null);
         }
 
-        Plan s = (Plan) getItem(position);
+        Plan s = getItem(position);
 
         if( s != null) {
             TextView textName = (TextView) v.findViewById(R.id.textSemesterName);
@@ -45,16 +43,12 @@ public class SemesterAdapter extends ArrayAdapter<Plan> {
                 textName.setText(s.getName());
             }
             if (textEndDate != null){
-                textEndDate.setText(sqlToGermanDate(s.getEndDate().toString()));
+                textEndDate.setText(Helper.sqlToGermanDate(s.getEndDate().toString()));
             }
             if (textStartDate != null){
-                textStartDate.setText(sqlToGermanDate(s.getStartDate().toString()));
+                textStartDate.setText(Helper.sqlToGermanDate(s.getStartDate().toString()));
             }
         }
         return v;
-    }
-    private String sqlToGermanDate(String sqlDate){
-        String[] vaiues = sqlDate.split("-");
-        return vaiues[2] + "." + vaiues[1] + "." + vaiues[0];
     }
 }

@@ -49,7 +49,7 @@ public class DatabaseInterface {
     }
     public long insertDataEntries( String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
         ContentValues values = new ContentValues();
-        values.put("ANZEIGENAME", name);
+        values.put("ANZEGENAME", name);
         values.put("STARTDATE", startDate);
         values.put("ENDDATA", endDate);
         values.put("wiederholungsStart", wiederholungsStart);
@@ -68,7 +68,8 @@ public class DatabaseInterface {
     }
 //------------------------------Get All Data-----------------------------------------
     public Plan[] getAllPlans(){
-        Cursor c = db.rawQuery("select * from plans ORDER BY STARTTIME, ENDTIME", null);
+        //Cursor c = db.rawQuery("select * from plans ORDER BY STARTTIME, ENDTIME", null);
+        Cursor c = db.rawQuery("select * from plans", null);
         Plan[] returnPlans = new Plan[c.getCount()];
         while (c.moveToNext()) {
             returnPlans[c.getPosition()] = new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
@@ -76,7 +77,8 @@ public class DatabaseInterface {
         return returnPlans;
     }
     public Module[] getAllDataModules(){
-        Cursor c = db.rawQuery("select * from modules ORDER BY ANZEIGENAME", null);
+        //Cursor c = db.rawQuery("select * from modules ORDER BY ANZEIGENAME", null);
+        Cursor c = db.rawQuery("select * from modules", null);
         Module[] returnModule = new Module[c.getCount()];
         while (c.moveToNext()) {
             returnModule[c.getPosition()] = new Module(c.getInt(0), c.getString(1), c.getInt(2));
@@ -84,7 +86,8 @@ public class DatabaseInterface {
         return returnModule;
     }
     public Entry[] getAllDataEntries(){
-        Cursor c = db.rawQuery("select * from entries ORDER BY STARTTIME, STARTTIME, ENDDATA, ENDTIME ", null);
+        //Cursor c = db.rawQuery("select * from entries ORDER BY STARTTIME, STARTTIME, ENDDATA, ENDTIME ", null);
+        Cursor c = db.rawQuery("select * from entries", null);
         Entry[] returnEntry = new Entry[c.getCount()];
         while (c.moveToNext()) {
             returnEntry[c.getPosition()] = new Entry(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
@@ -160,7 +163,8 @@ public class DatabaseInterface {
     }
     public Entry[] getEntriesByPlanIDUndNichtModul(int id){
         String[] columns = {"*"};
-        String query = "select * from entries WHERE SEMESTERID =  \""+ id +  "\" AND ModulID = \"0\" ORDER BY STARTTIME, ENDTIME,";
+        //String query = "select * from entries WHERE SEMESTERID =  \""+ id +  "\" AND ModulID = \"0\" ORDER BY STARTTIME, ENDTIME";
+        String query = "select * from entries WHERE SEMESTERID =  \""+ id +  "\" AND ModulID = \"0\"";
         //String query = SQLiteQueryBuilder.buildQueryString(false, "entries", columns, "SEMESTERID = " + id AND "ModulID = " + 0, "", "", "", "");
         Cursor c = db.rawQuery(query,null);
         Entry[] returnArray = new Entry[c.getCount()];
@@ -172,7 +176,8 @@ public class DatabaseInterface {
     }
 //-------------------------searching for---------------------------------------------
     public Plan[] getListByStringPlans(String searchword) {
-        Cursor c = db.rawQuery("SELECT * FROM plans WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+        //Cursor c = db.rawQuery("SELECT * FROM plans WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+        Cursor c = db.rawQuery("SELECT * FROM plans WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
         Plan[] returnPlan = new Plan[c.getCount()];
         while( c.moveToNext()){
             returnPlan[c.getPosition()] = new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
@@ -181,7 +186,8 @@ public class DatabaseInterface {
         return returnPlan;
     }
     public Module[] getListByStringModules(String searchword) {
-        Cursor c = db.rawQuery("SELECT * FROM modules WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+        //Cursor c = db.rawQuery("SELECT * FROM modules WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+        Cursor c = db.rawQuery("SELECT * FROM modules WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
         Module[] returnModules = new Module[c.getCount()];
         while( c.moveToNext()){
             returnModules[c.getPosition()] = new Module(c.getInt(0), c.getString(1), c.getInt(2));
@@ -190,7 +196,8 @@ public class DatabaseInterface {
         return returnModules;
     }
     public Entry[] getListByStringEntries(String searchword) {
-        Cursor c = db.rawQuery("SELECT * FROM entries WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+        //Cursor c = db.rawQuery("SELECT * FROM entries WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+        Cursor c = db.rawQuery("SELECT * FROM entries WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
         Entry[] returnEntries = new Entry[c.getCount()];
         while( c.moveToNext()){
             returnEntries[c.getPosition()] = new Entry(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));

@@ -4,7 +4,7 @@ package de.hsmw.semestermanager;
  * Created by Benjamin on 02.12.2016.
  */
 
-public class Module {
+public class Module implements DatabaseObject{
     private  int id;
     private  String name;
     private  int planID;

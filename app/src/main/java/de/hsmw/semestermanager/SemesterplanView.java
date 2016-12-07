@@ -1,12 +1,17 @@
 package de.hsmw.semestermanager;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -31,7 +36,7 @@ public class SemesterplanView extends AppCompatActivity {
 
     ListView entryList;
     ArrayList<Entry> entries;
-    ArrayAdapter<Entry> entriesListAdapter;
+    EntryAdapterStandard entriesListAdapter;
 
     DatabaseHandler dh;
     DatabaseInterface di;
@@ -56,7 +61,7 @@ public class SemesterplanView extends AppCompatActivity {
 
         moduleList = (ListView) findViewById(R.id.list_semesterview_module);
         modules = new ArrayList<>();
-        modulesListAdapter = new ArrayAdapter<Module>(this, R.layout.listview_semesterview_modules, modules){
+        modulesListAdapter = new ArrayAdapter<Module>(this, R.layout.listview_semesterview_modules, modules) {
             @NonNull
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -73,9 +78,20 @@ public class SemesterplanView extends AppCompatActivity {
         };
         moduleList.setAdapter(modulesListAdapter);
 
+        moduleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int modulID = ((Module) parent.getItemAtPosition(position)).getId();
+                Intent i = new Intent("de.hsmw.semestermanager.ModulView");
+                i.putExtra("ID", (long) modulID);
+                //Uncomment for revealing construction-site
+                //startActivity(i);
+            }
+        });
+
         entryList = (ListView) findViewById(R.id.list_semesterview_termine);
         entries = new ArrayList<>();
-        entriesListAdapter = new EntryAdapterStandard(this, R.layout.listview_element, entries);
+        entriesListAdapter = new EntryAdapterStandard(this, R.layout.listview_semesterview_termine, entries);
         entryList.setAdapter(entriesListAdapter);
         updateLists();
         scrollView.fullScroll(View.FOCUS_UP);
@@ -115,4 +131,35 @@ public class SemesterplanView extends AppCompatActivity {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.plan, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_add_new_modul) {
+            startActivity(new Intent("de.hsmw.semestermanager.ModulInput"));
+            return true;
+        }
+        if (id == R.id.action_add_new_entry) {
+            startActivity(new Intent("de.hsmw.semestermanager.TerminInput"));
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        updateLists();
+     }
 }

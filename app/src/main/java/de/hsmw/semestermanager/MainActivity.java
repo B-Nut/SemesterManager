@@ -64,14 +64,6 @@ public class MainActivity extends AppCompatActivity
         updateList();
     }
 
-    public void showMessage(String title, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.show();
-    }
-
     public void updateList() {
         values.clear();
         Plan[] plans = di.getAllPlans();

@@ -7,7 +7,7 @@ import java.sql.Time;
  * Created by Benjamin on 02.12.2016.
  */
 
-public class Entry {
+public class Entry implements DatabaseObject{
     int id;
     String name;
     Date startDate, endDate, wiederholungsStart, wiederholungsEnde;
