@@ -117,7 +117,7 @@ public class DatabaseInterface {
     }
     public Entry getDataByIDEntries(int id) {
         String[] columns = {"*"};
-        String query = SQLiteQueryBuilder.buildQueryString(false, "modules", columns, "ID = " + id, "", "", "", "");
+        String query = SQLiteQueryBuilder.buildQueryString(false, "Entries", columns, "ID = " + id, "", "", "", "");
         Log.d("database", query);
         Cursor c = db.rawQuery(query, null);
         c.moveToNext();
