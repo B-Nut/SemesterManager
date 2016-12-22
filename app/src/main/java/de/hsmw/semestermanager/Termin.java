@@ -10,7 +10,7 @@ import java.sql.Time;
 public class Termin implements DatabaseObject{
     int id;
     String name;
-    Date startDate, endDate, wiederholungsStart, wiederholungsEnde;
+    Date startDate, wiederholungsStart, wiederholungsEnde;
     Time startTime, endTime;
     String ort;
     String typ;
@@ -21,17 +21,17 @@ public class Termin implements DatabaseObject{
     String dozent;
     int periode;
     boolean isException;
+    int exceptionContextID;
+    Date exceptionTargetDay;
 
-
-    public Termin(int id, String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
+    public Termin(int id, String name, Date startDate, Date wiederholungsStart, Date wiederholungsEnde, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, boolean isException, int exceptionContextID, Date exceptionTargetDay) {
         this.id = id;
         this.name = name;
-        this.startDate = Date.valueOf(startDate);
-        this.endDate = Date.valueOf(endDate);
-        this.wiederholungsStart = Date.valueOf(wiederholungsStart);
-        this.wiederholungsEnde = Date.valueOf(wiederholungsEnde);
-        this.startTime = Time.valueOf(startTime);
-        this.endTime = Time.valueOf(endTime);
+        this.startDate = startDate;
+        this.wiederholungsStart = wiederholungsStart;
+        this.wiederholungsEnde = wiederholungsEnde;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.ort = ort;
         this.typ = typ;
         this.prioritaet = prioritaet;
@@ -40,47 +40,15 @@ public class Termin implements DatabaseObject{
         this.istGanztagsTermin = istGanztagsTermin;
         this.dozent = dozent;
         this.periode = periode;
-    }
-
-    public Termin(int id, String name, String startDate, String endDate, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent) {
-        this.id = id;
-        this.name = name;
-        this.startDate = Date.valueOf(startDate);
-        this.endDate = Date.valueOf(endDate);
-        this.startTime = Time.valueOf(startTime);
-        this.endTime = Time.valueOf(endTime);
-        this.ort = ort;
-        this.typ = typ;
-        this.prioritaet = prioritaet;
-        this.planID = planID;
-        this.modulID = modulID;
-        this.istGanztagsTermin = istGanztagsTermin;
-        this.dozent = dozent;
-    }
-
-    public Termin(int id, String name, String startDate, String endDate, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, boolean isException) {
-        this.id = id;
-        this.name = name;
-        this.startDate = Date.valueOf(startDate);
-        this.endDate = Date.valueOf(endDate);
-        this.startTime = Time.valueOf(startTime);
-        this.endTime = Time.valueOf(endTime);
-        this.ort = ort;
-        this.typ = typ;
-        this.prioritaet = prioritaet;
-        this.planID = planID;
-        this.modulID = modulID;
-        this.istGanztagsTermin = istGanztagsTermin;
-        this.dozent = dozent;
         this.isException = isException;
+        this.exceptionContextID = exceptionContextID;
+        this.exceptionTargetDay = exceptionTargetDay;
     }
 
     public String getDateString(){
         String returnString;
         String[] temp = startDate.toString().split("-");
         returnString = temp[2] + "." + temp[1];
-        temp = endDate.toString().split("-");
-        returnString += " - " + temp[2] + "." + temp[1];
         return returnString;
     }
     public String getTimeString(){
@@ -102,10 +70,6 @@ public class Termin implements DatabaseObject{
 
     public Date getStartDate() {
         return startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
     }
 
     public Date getWiederholungsStart() {
@@ -155,6 +119,7 @@ public class Termin implements DatabaseObject{
     public int getPeriode() {
         return periode;
     }
+
     public Time getDuration(){
         return  new Time(endTime.getTime() - startTime.getTime());
     }
