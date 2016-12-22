@@ -16,7 +16,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_PLANS = "plans";
    // private static final String TABLE_REVISION = "revision";
     private static final String TABLE_REVISIONEXCEPTION = "revisionException";
-    private static final String TABLE_ENTRIES = "entries";
+    private static final String TABLE_TERMINE = "termine";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -25,8 +25,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TABLE_MODULES + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,ANZEIGENAME TEXT,SEMESTERID INTEGER)");
         db.execSQL("CREATE TABLE " + TABLE_PLANS + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,ANZEIGENAME TEXT,STARTTIME TEXT, ENDTIME TEXT)");
      //   db.execSQL("CREATE TABLE " + TABLE_REVISION + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,STARTDATE TEXT, ENDDATA TEXT,PRIORITAET INTEGER)");
-        db.execSQL("CREATE TABLE " + TABLE_REVISIONEXCEPTION + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,PRIORITAET INTEGER, ISDELETED INTEGER, STARTDATE TEXT, ENDDATA TEXT,STARTTIME TEXT, ENDTIME TEXT)");
-        db.execSQL("CREATE TABLE " + TABLE_ENTRIES + " (" +
+        db.execSQL("CREATE TABLE " + TABLE_REVISIONEXCEPTION + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, TerminID INTEGER, PRIORITAET INTEGER, ISDELETED INTEGER, STARTDATE TEXT, ENDDATA TEXT,STARTTIME TEXT, ENDTIME TEXT)");
+        db.execSQL("CREATE TABLE " + TABLE_TERMINE + " (" +
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "ANZEGENAME TEXT," +
                 "STARTDATE TEXT," +

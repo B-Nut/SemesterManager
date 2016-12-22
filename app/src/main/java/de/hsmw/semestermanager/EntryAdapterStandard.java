@@ -14,11 +14,11 @@ import java.util.List;
  * Created by Thomas on 04.12.2016.
  */
 
-public class EntryAdapterStandard extends ArrayAdapter <Entry> {
+public class EntryAdapterStandard extends ArrayAdapter <Termin> {
 
     int viewResource;
 
-    public EntryAdapterStandard(Context context, int resource, List<Entry> items) {
+    public EntryAdapterStandard(Context context, int resource, List<Termin> items) {
         super(context, resource, items);
         viewResource = resource;
     }
@@ -34,7 +34,7 @@ public class EntryAdapterStandard extends ArrayAdapter <Entry> {
             v = vi.inflate(viewResource,null);
         }
 
-        Entry e = getItem(position);
+        Termin e = getItem(position);
 
         if(e != null) {
             TextView semesterview_termin_zeiten = (TextView) v.findViewById(R.id.semesterview_termin_zeiten);

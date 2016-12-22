@@ -7,7 +7,7 @@ import java.sql.Time;
  * Created by Benjamin on 02.12.2016.
  */
 
-public class Entry implements DatabaseObject{
+public class Termin implements DatabaseObject{
     int id;
     String name;
     Date startDate, endDate, wiederholungsStart, wiederholungsEnde;
@@ -23,7 +23,7 @@ public class Entry implements DatabaseObject{
     boolean isException;
 
 
-    public Entry(int id, String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
+    public Termin(int id, String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
         this.id = id;
         this.name = name;
         this.startDate = Date.valueOf(startDate);
@@ -42,7 +42,7 @@ public class Entry implements DatabaseObject{
         this.periode = periode;
     }
 
-    public Entry(int id, String name, String startDate, String endDate, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent) {
+    public Termin(int id, String name, String startDate, String endDate, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent) {
         this.id = id;
         this.name = name;
         this.startDate = Date.valueOf(startDate);
@@ -58,7 +58,7 @@ public class Entry implements DatabaseObject{
         this.dozent = dozent;
     }
 
-    public Entry(int id, String name, String startDate, String endDate, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, boolean isException) {
+    public Termin(int id, String name, String startDate, String endDate, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, boolean isException) {
         this.id = id;
         this.name = name;
         this.startDate = Date.valueOf(startDate);

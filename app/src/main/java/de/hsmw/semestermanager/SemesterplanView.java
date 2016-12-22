@@ -1,7 +1,6 @@
 package de.hsmw.semestermanager;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,8 +34,8 @@ public class SemesterplanView extends AppCompatActivity {
     ArrayAdapter<Module> modulesListAdapter;
 
     ListView entryList;
-    ArrayList<Entry> entries;
-    EntryAdapterStandard entriesListAdapter;
+    ArrayList<Termin> termine;
+    EntryAdapterStandard termineListAdapter;
 
     DatabaseHandler dh;
     DatabaseInterface di;
@@ -90,9 +89,9 @@ public class SemesterplanView extends AppCompatActivity {
         });
 
         entryList = (ListView) findViewById(R.id.list_semesterview_termine);
-        entries = new ArrayList<>();
-        entriesListAdapter = new EntryAdapterStandard(this, R.layout.listview_semesterview_termine, entries);
-        entryList.setAdapter(entriesListAdapter);
+        termine = new ArrayList<>();
+        termineListAdapter = new EntryAdapterStandard(this, R.layout.listview_semesterview_termine, termine);
+        entryList.setAdapter(termineListAdapter);
         updateLists();
         scrollView.fullScroll(View.FOCUS_UP);
     }
@@ -103,10 +102,10 @@ public class SemesterplanView extends AppCompatActivity {
         setListViewHeightBasedOnChildren(moduleList);
         modulesListAdapter.notifyDataSetChanged();
 
-        entries.clear();
-        entries.addAll(Arrays.asList(di.getEntriesByPlanID(selectedPlan.getId())));
+        termine.clear();
+        termine.addAll(Arrays.asList(di.getTermineByPlanID(selectedPlan.getId())));
         setListViewHeightBasedOnChildren(entryList);
-        entriesListAdapter.notifyDataSetChanged();
+        termineListAdapter.notifyDataSetChanged();
     }
 
 

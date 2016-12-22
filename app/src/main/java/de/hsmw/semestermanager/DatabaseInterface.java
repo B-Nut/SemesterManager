@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
-import java.sql.Date;
-
 /**
  * Created by Adrian on 26.11.2016.
  */
@@ -47,7 +45,7 @@ public class DatabaseInterface {
         values.put("ENDTIME", ENDTIME);
         return db.insert("modules", null, values);
     }
-    public long insertDataEntries( String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
+    public long insertDataTermine( String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
         ContentValues values = new ContentValues();
         values.put("ANZEGENAME", name);
         values.put("STARTDATE", startDate);
@@ -64,7 +62,7 @@ public class DatabaseInterface {
         values.put("ISTGANZTAGSTERMIN", istGanztagsTermin);
         values.put("DOZENT", dozent);
         values.put("PERIODE", periode);
-        return db.insert("entries", null, values);
+        return db.insert("termine", null, values);
     }
 //------------------------------Get All Data-----------------------------------------
     public Plan[] getAllPlans(){
@@ -85,14 +83,14 @@ public class DatabaseInterface {
         }
         return returnModule;
     }
-    public Entry[] getAllDataEntries(){
-        //Cursor c = db.rawQuery("select * from entries ORDER BY STARTTIME, STARTTIME, ENDDATA, ENDTIME ", null);
-        Cursor c = db.rawQuery("select * from entries", null);
-        Entry[] returnEntry = new Entry[c.getCount()];
+    public Termin[] getAllDataTermine(){
+        //Cursor c = db.rawQuery("select * from termine ORDER BY STARTTIME, STARTTIME, ENDDATA, ENDTIME ", null);
+        Cursor c = db.rawQuery("select * from termine", null);
+        Termin[] returnTermin = new Termin[c.getCount()];
         while (c.moveToNext()) {
-            returnEntry[c.getPosition()] = new Entry(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+            returnTermin[c.getPosition()] = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
         }
-        return returnEntry;
+        return returnTermin;
     }
 //----------------------------Get Data By ID---------------------------
     public Plan getDataByIDPlans(int id) {
@@ -115,24 +113,24 @@ public class DatabaseInterface {
         c.close();
         return  p;
     }
-    public Entry getDataByIDEntries(int id) {
+    public Termin getDataByIDTermine(int id) {
         String[] columns = {"*"};
-        String query = SQLiteQueryBuilder.buildQueryString(false, "Entries", columns, "ID = " + id, "", "", "", "");
+        String query = SQLiteQueryBuilder.buildQueryString(false, "Termine", columns, "ID = " + id, "", "", "", "");
         Log.d("database", query);
         Cursor c = db.rawQuery(query, null);
         c.moveToNext();
-        Entry p = new Entry(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+        Termin p = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
         c.close();
         return  p;
     }
 
-    public Entry[] getEntriesByPlanID(int id){
+    public Termin[] getTermineByPlanID(int id){
         String[] columns = {"*"};
-        String query = SQLiteQueryBuilder.buildQueryString(false, "entries", columns, "SEMESTERID = " + id, "", "", "", "");
+        String query = SQLiteQueryBuilder.buildQueryString(false, "termine", columns, "SEMESTERID = " + id, "", "", "", "");
         Cursor c = db.rawQuery(query,null);
-        Entry[] returnArray = new Entry[c.getCount()];
+        Termin[] returnArray = new Termin[c.getCount()];
         while (c.moveToNext()){
-            returnArray[c.getPosition()] = new Entry(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+            returnArray[c.getPosition()] = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
         }
         c.close();
         return returnArray;
@@ -150,26 +148,26 @@ public class DatabaseInterface {
         return returnArray;
     }
 
-    public Entry[] getEntriesByModulID(int id){
+    public Termin[] getTermineByModulID(int id){
         String[] columns = {"*"};
-        String query = SQLiteQueryBuilder.buildQueryString(false, "entries", columns, "ModulID = " + id, "", "", "", "");
+        String query = SQLiteQueryBuilder.buildQueryString(false, "termine", columns, "ModulID = " + id, "", "", "", "");
         Cursor c = db.rawQuery(query,null);
-        Entry[] returnArray = new Entry[c.getCount()];
+        Termin[] returnArray = new Termin[c.getCount()];
         while (c.moveToNext()){
-            returnArray[c.getPosition()] = new Entry(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+            returnArray[c.getPosition()] = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
         }
         c.close();
         return returnArray;
     }
-    public Entry[] getEntriesByPlanIDUndNichtModul(int id){
+    public Termin[] getTermineByPlanIDUndNichtModul(int id){
         String[] columns = {"*"};
-        //String query = "select * from entries WHERE SEMESTERID =  \""+ id +  "\" AND ModulID = \"0\" ORDER BY STARTTIME, ENDTIME";
-        String query = "select * from entries WHERE SEMESTERID =  \""+ id +  "\" AND ModulID = \"0\"";
-        //String query = SQLiteQueryBuilder.buildQueryString(false, "entries", columns, "SEMESTERID = " + id AND "ModulID = " + 0, "", "", "", "");
+        //String query = "select * from termine WHERE SEMESTERID =  \""+ id +  "\" AND ModulID = \"0\" ORDER BY STARTTIME, ENDTIME";
+        String query = "select * from termine WHERE SEMESTERID =  \""+ id +  "\" AND ModulID = \"0\"";
+        //String query = SQLiteQueryBuilder.buildQueryString(false, "termine", columns, "SEMESTERID = " + id AND "ModulID = " + 0, "", "", "", "");
         Cursor c = db.rawQuery(query,null);
-        Entry[] returnArray = new Entry[c.getCount()];
+        Termin[] returnArray = new Termin[c.getCount()];
         while (c.moveToNext()){
-            returnArray[c.getPosition()] = new Entry(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+            returnArray[c.getPosition()] = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
         }
         c.close();
         return returnArray;
@@ -195,15 +193,15 @@ public class DatabaseInterface {
         c.close();
         return returnModules;
     }
-    public Entry[] getListByStringEntries(String searchword) {
-        //Cursor c = db.rawQuery("SELECT * FROM entries WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
-        Cursor c = db.rawQuery("SELECT * FROM entries WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
-        Entry[] returnEntries = new Entry[c.getCount()];
+    public Termin[] getListByStringTermine(String searchword) {
+        //Cursor c = db.rawQuery("SELECT * FROM termine WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+        Cursor c = db.rawQuery("SELECT * FROM termine WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
+        Termin[] returnTermine = new Termin[c.getCount()];
         while( c.moveToNext()){
-            returnEntries[c.getPosition()] = new Entry(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+            returnTermine[c.getPosition()] = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
         }
         c.close();
-        return returnEntries;
+        return returnTermine;
     }
 //----------------------Update------------------------------------------------------
     public long updateDataPlans(int ID, String ANZEIGENAME, String STARTTIME, String ENDTIME) {
@@ -219,7 +217,7 @@ public class DatabaseInterface {
         values.put("SEMESTERID", SEMESTERID);
         return db.update("Modules", values, "WHERE ID =" + String.valueOf(ID), null);
     }
-    public long updateDataEntries(int id, String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
+    public long updateDataTermine(int id, String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", name);
         values.put("STARTDATE", startDate);
@@ -236,7 +234,7 @@ public class DatabaseInterface {
         values.put("ISTGANZTAGSTERMIN", istGanztagsTermin);
         values.put("DOZENT", dozent);
         values.put("PERIODE", periode);
-        return db.update("Entries", values, "WHERE ID =" + String.valueOf(id), null);
+        return db.update("Termine", values, "WHERE ID =" + String.valueOf(id), null);
     }
     //------------------------------------------------------------------
 }
