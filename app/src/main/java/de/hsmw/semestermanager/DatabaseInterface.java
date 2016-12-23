@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by Adrian on 26.11.2016.
@@ -241,4 +244,24 @@ public class DatabaseInterface {
         return db.update("Termine", values, "WHERE ID =" + String.valueOf(id), null);
     }
     //------------------------------------------------------------------
+    public Termin[] getTermineByDate(Date date){
+        ArrayList<Termin> returnArray = new ArrayList<>();
+
+        //Query werfen, der mir roh alle Termine eines Tages zurück gibt. -> Diese in das Returnarray schreiben.
+        //Terminwiederholungen ignorieren.
+        //Beim Iterieren Terminwiederholungsausnahmen bemerken und TerminwiederholungsID merken. - Diese Ausnahmen nur speichern, wenn isDeleted false ist.
+
+        //Query werfen, der mir alle Terminwiederholungsausnahmen gibt, dessen date dem exceptionTargetDay entspricht.
+        //TerminwiederholungsID merken
+
+        //Query werfen, der mir alle Terminwiederholungen gibt.
+
+        //Für Terminwiederholungen - dessen ID's nicht gemerkt wurden -  getTerminAtDate(date) aufrufen -> Termin anfügen, wenn nicht null.
+
+
+        //returnArray Sortieren
+        Collections.sort(returnArray);
+
+        return returnArray.toArray(new Termin[returnArray.size()]);
+    }
 }

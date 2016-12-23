@@ -14,11 +14,11 @@ import java.util.List;
  * Created by Thomas on 04.12.2016.
  */
 
-public class EntryAdapterStandard extends ArrayAdapter <Termin> {
+public class TerminAdapterStandard extends ArrayAdapter <Termin> {
 
     int viewResource;
 
-    public EntryAdapterStandard(Context context, int resource, List<Termin> items) {
+    public TerminAdapterStandard(Context context, int resource, List<Termin> items) {
         super(context, resource, items);
         viewResource = resource;
     }

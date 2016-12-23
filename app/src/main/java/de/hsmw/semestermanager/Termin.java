@@ -2,12 +2,13 @@ package de.hsmw.semestermanager;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.GregorianCalendar;
 
 /**
  * Created by Benjamin on 02.12.2016.
  */
 
-public class Termin implements DatabaseObject{
+public class Termin implements DatabaseObject, Comparable<Termin>{
     int id;
     String name;
     Date startDate, wiederholungsStart, wiederholungsEnde;
@@ -17,14 +18,14 @@ public class Termin implements DatabaseObject{
     int prioritaet;
     int planID;
     int modulID;
-    int istGanztagsTermin; //0 false; 1 true -> SQLite kann keine Booleans
+    int isGanztagsTermin; //0 false; 1 true -> SQLite kann keine Booleans
     String dozent;
     int periode;
     int isException;
     int exceptionContextID;
     Date exceptionTargetDay;
 
-    public Termin(int id, String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, String exceptionTargetDay) {
+    public Termin(int id, String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int isGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, String exceptionTargetDay) {
         this.id = id;
         this.name = name;
         this.startDate = Date.valueOf(startDate);
@@ -37,13 +38,34 @@ public class Termin implements DatabaseObject{
         this.prioritaet = prioritaet;
         this.planID = planID;
         this.modulID = modulID;
-        this.istGanztagsTermin = istGanztagsTermin;
+        this.isGanztagsTermin = isGanztagsTermin;
         this.dozent = dozent;
         this.periode = periode;
         this.isException = isException;
         this.exceptionContextID = exceptionContextID;
         this.exceptionTargetDay = Date.valueOf(exceptionTargetDay);
 
+    }
+
+    public Termin(int id, String name, Date startDate, Date wiederholungsStart, Date wiederholungsEnde, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int isGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, Date exceptionTargetDay) {
+        this.id = id;
+        this.name = name;
+        this.startDate = startDate;
+        this.wiederholungsStart = wiederholungsStart;
+        this.wiederholungsEnde = wiederholungsEnde;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.ort = ort;
+        this.typ = typ;
+        this.prioritaet = prioritaet;
+        this.planID = planID;
+        this.modulID = modulID;
+        this.isGanztagsTermin = isGanztagsTermin;
+        this.dozent = dozent;
+        this.periode = periode;
+        this.isException = isException;
+        this.exceptionContextID = exceptionContextID;
+        this.exceptionTargetDay = exceptionTargetDay;
     }
 
     public String getDateString(){
@@ -109,8 +131,8 @@ public class Termin implements DatabaseObject{
         return modulID;
     }
 
-    public int getIstGanztagsTermin() {
-        return istGanztagsTermin;
+    public int getIsGanztagsTermin() {
+        return isGanztagsTermin;
     }
 
     public String getDozent() {
@@ -125,7 +147,39 @@ public class Termin implements DatabaseObject{
     public int getExceptionContextID(){return exceptionContextID;}
     public Date getExceptionTargetDay() {return exceptionTargetDay;}
 
+    @Override
+    public int compareTo(Termin o) {
+        int comparedStart = Helper.compareSQLTime(startTime, o.startTime);
+        if(comparedStart == 0){
+            return  Helper.compareSQLTime(endTime, o.endTime);
+        }else{
+            return comparedStart;
+        }
+    }
+
   /*  public Date getDuration(){
         return new Date(endDate.getTime() - startDate.getTime());
     }*/
+
+    public Termin getTerminAtDate(Date date){
+        if(isGanztagsTermin == 0 || periode == 0){
+            return null;
+        }
+
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(startDate);
+        while (calendar.getTime().compareTo(date) < 0) {
+            calendar.add(GregorianCalendar.DAY_OF_MONTH, periode);
+        }
+        if(calendar.getTime().compareTo(date) == 0){
+            Termin returnTermin = this.clone();
+            returnTermin.startDate = new Date (calendar.getTime().getTime());
+            return returnTermin;
+        }else {
+            return null;
+        }
+    }
+    public Termin clone(){
+       return new Termin(id,name,startDate,wiederholungsStart,wiederholungsEnde,startTime,endTime,ort,typ,prioritaet,planID,modulID,isGanztagsTermin,dozent,periode,isException,exceptionContextID,exceptionTargetDay);
+    }
 }

@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -68,7 +69,25 @@ public class Helper {
         String[] vaiues = sqlDate.split("-");
         return vaiues[2] + "." + vaiues[1] + "." + vaiues[0];
     }
-
+    public static int[] timeToIntArray(Time t){
+        String[] timeStrings = t.toString().split(":");
+        int[] time = new int[3];
+        for(int i = 0; i < timeStrings.length; i++){
+            time[i] = Integer.parseInt(timeStrings[i]);
+        }
+        return time;
+    }
+    public static int compareSQLTime(Time myTime, Time theirTime){
+        int[] mys = Helper.timeToIntArray(myTime);
+        int[] theirs = Helper.timeToIntArray(theirTime);
+        for(int i = 0; i < mys.length; i++) {
+            int singleCompare = Integer.compare(mys[i], theirs[i]);
+            if (singleCompare != 0) {
+                return singleCompare;
+            }
+        }
+        return 0;
+    }
     //Brauchen wir vielleicht noch. :)
     public void showMessage(Context context, String title, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

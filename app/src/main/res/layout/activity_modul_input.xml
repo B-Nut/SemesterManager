@@ -26,13 +26,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:hint="Bitte Modulname eingeben"
+        android:hint="Geben Sie einen Modulnamen ein."
         android:ems="10"
         android:id="@+id/new_modul_name"
         android:cursorVisible="true" />
 
     <TextView
-        android:text="Semesterzeitraum"
+        android:text="Semester"
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

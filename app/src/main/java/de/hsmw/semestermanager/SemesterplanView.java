@@ -35,7 +35,7 @@ public class SemesterplanView extends AppCompatActivity {
 
     ListView entryList;
     ArrayList<Termin> termine;
-    EntryAdapterStandard termineListAdapter;
+    TerminAdapterStandard termineListAdapter;
 
     DatabaseHandler dh;
     DatabaseInterface di;
@@ -90,7 +90,7 @@ public class SemesterplanView extends AppCompatActivity {
 
         entryList = (ListView) findViewById(R.id.list_semesterview_termine);
         termine = new ArrayList<>();
-        termineListAdapter = new EntryAdapterStandard(this, R.layout.listview_semesterview_termine, termine);
+        termineListAdapter = new TerminAdapterStandard(this, R.layout.listview_semesterview_termine, termine);
         entryList.setAdapter(termineListAdapter);
         updateLists();
         scrollView.fullScroll(View.FOCUS_UP);

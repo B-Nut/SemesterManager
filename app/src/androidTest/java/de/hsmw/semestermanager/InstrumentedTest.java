@@ -81,7 +81,7 @@ public class InstrumentedTest {
         assertEquals(prioritaet, termin.getPrioritaet());
         assertEquals(planID, termin.getPlanID());
         assertEquals(modulID, termin.getModulID());
-        assertEquals(istGanztagsTermin, termin.getIstGanztagsTermin());
+        assertEquals(istGanztagsTermin, termin.getIsGanztagsTermin());
         assertEquals(dozent, termin.getDozent());
         assertEquals(periode, termin.getPeriode());
     }

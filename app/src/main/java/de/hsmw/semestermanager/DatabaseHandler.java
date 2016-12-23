@@ -28,7 +28,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      //   db.execSQL("CREATE TABLE " + TABLE_REVISIONEXCEPTION + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, TerminID INTEGER, PRIORITAET INTEGER, ISDELETED INTEGER, STARTDATE TEXT, ENDDATA TEXT,STARTTIME TEXT, ENDTIME TEXT)");
         db.execSQL("CREATE TABLE " + TABLE_TERMINE + " (" +
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "ANZEGENAME TEXT," +
+                "ANZEIGENAME TEXT," +
                 "STARTDATE TEXT," +
                 "wiederholungsStart TEXT,"+
                 "wiederholungsEnde TEXT,"+
