@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
+import java.sql.Date;
+import java.sql.Time;
 
 /**
  * Created by Adrian on 26.11.2016.
@@ -17,9 +19,6 @@ public class DatabaseInterface {
     DatabaseInterface(SQLiteDatabase db) {
         this.db = db;
     }
-
-
-
 
     //---------------------------Add Data----------------------------------------------
     public long insertDataPlans(String ANZEIGENAME, String STARTTIME, String ENDTIME) {
@@ -45,11 +44,10 @@ public class DatabaseInterface {
         values.put("ENDTIME", ENDTIME);
         return db.insert("modules", null, values);
     }
-    public long insertDataTermine( String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
+    public long insertDataTermine( String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isExeption,int exceptionContextID,String exceptionTargetDay) {
         ContentValues values = new ContentValues();
-        values.put("ANZEGENAME", name);
+        values.put("ANZEIGENAME", name);
         values.put("STARTDATE", startDate);
-        values.put("ENDDATA", endDate);
         values.put("wiederholungsStart", wiederholungsStart);
         values.put("wiederholungsEnde", wiederholungsEnde);
         values.put("STARTTIME", startTime);
@@ -62,6 +60,9 @@ public class DatabaseInterface {
         values.put("ISTGANZTAGSTERMIN", istGanztagsTermin);
         values.put("DOZENT", dozent);
         values.put("PERIODE", periode);
+        values.put("ISEXEPTION", isExeption);
+        values.put("EXCEPTIONCONTEXTID", exceptionContextID);
+        values.put("EXCEPTIONTARGETDAY", exceptionTargetDay);
         return db.insert("termine", null, values);
     }
 //------------------------------Get All Data-----------------------------------------
@@ -88,7 +89,8 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery("select * from termine", null);
         Termin[] returnTermin = new Termin[c.getCount()];
         while (c.moveToNext()) {
-            returnTermin[c.getPosition()] = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+
+            returnTermin[c.getPosition()] = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17));
         }
         return returnTermin;
     }
@@ -119,7 +121,7 @@ public class DatabaseInterface {
         Log.d("database", query);
         Cursor c = db.rawQuery(query, null);
         c.moveToNext();
-        Termin p = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+        Termin p =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17));
         c.close();
         return  p;
     }
@@ -130,7 +132,7 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery(query,null);
         Termin[] returnArray = new Termin[c.getCount()];
         while (c.moveToNext()){
-            returnArray[c.getPosition()] = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+            returnArray[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17));
         }
         c.close();
         return returnArray;
@@ -154,7 +156,7 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery(query,null);
         Termin[] returnArray = new Termin[c.getCount()];
         while (c.moveToNext()){
-            returnArray[c.getPosition()] = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+            returnArray[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17));
         }
         c.close();
         return returnArray;
@@ -167,7 +169,7 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery(query,null);
         Termin[] returnArray = new Termin[c.getCount()];
         while (c.moveToNext()){
-            returnArray[c.getPosition()] = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+            returnArray[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17));
         }
         c.close();
         return returnArray;
@@ -198,7 +200,7 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery("SELECT * FROM termine WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
         Termin[] returnTermine = new Termin[c.getCount()];
         while( c.moveToNext()){
-            returnTermine[c.getPosition()] = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getString(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getInt(13),c.getString(14),c.getInt(15));
+            returnTermine[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17));
         }
         c.close();
         return returnTermine;
@@ -217,11 +219,10 @@ public class DatabaseInterface {
         values.put("SEMESTERID", SEMESTERID);
         return db.update("Modules", values, "WHERE ID =" + String.valueOf(ID), null);
     }
-    public long updateDataTermine(int id, String name, String startDate, String endDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode) {
+    public long updateDataTermine(int id, String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode,int isExeption,int exceptionContextID,String exceptionTargetDay) {
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", name);
         values.put("STARTDATE", startDate);
-        values.put("ENDDATA", endDate);
         values.put("wiederholungsStart", wiederholungsStart);
         values.put("wiederholungsEnde", wiederholungsEnde);
         values.put("STARTTIME", startTime);
@@ -234,6 +235,9 @@ public class DatabaseInterface {
         values.put("ISTGANZTAGSTERMIN", istGanztagsTermin);
         values.put("DOZENT", dozent);
         values.put("PERIODE", periode);
+        values.put("ISEXEPTION", isExeption);
+        values.put("EXCEPTIONCONTEXTID", exceptionContextID);
+        values.put("EXCEPTIONTARGETDAY", exceptionTargetDay);
         return db.update("Termine", values, "WHERE ID =" + String.valueOf(id), null);
     }
     //------------------------------------------------------------------

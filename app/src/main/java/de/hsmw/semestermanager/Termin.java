@@ -20,18 +20,18 @@ public class Termin implements DatabaseObject{
     int istGanztagsTermin; //0 false; 1 true -> SQLite kann keine Booleans
     String dozent;
     int periode;
-    boolean isException;
+    int isException;
     int exceptionContextID;
     Date exceptionTargetDay;
 
-    public Termin(int id, String name, Date startDate, Date wiederholungsStart, Date wiederholungsEnde, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, boolean isException, int exceptionContextID, Date exceptionTargetDay) {
+    public Termin(int id, String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, String exceptionTargetDay) {
         this.id = id;
         this.name = name;
-        this.startDate = startDate;
-        this.wiederholungsStart = wiederholungsStart;
-        this.wiederholungsEnde = wiederholungsEnde;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startDate = Date.valueOf(startDate);
+        this.wiederholungsStart = Date.valueOf(wiederholungsStart);
+        this.wiederholungsEnde = Date.valueOf(wiederholungsEnde);
+        this.startTime = Time.valueOf(startTime);
+        this.endTime = Time.valueOf(endTime);
         this.ort = ort;
         this.typ = typ;
         this.prioritaet = prioritaet;
@@ -42,7 +42,8 @@ public class Termin implements DatabaseObject{
         this.periode = periode;
         this.isException = isException;
         this.exceptionContextID = exceptionContextID;
-        this.exceptionTargetDay = exceptionTargetDay;
+        this.exceptionTargetDay = Date.valueOf(exceptionTargetDay);
+
     }
 
     public String getDateString(){
@@ -120,7 +121,11 @@ public class Termin implements DatabaseObject{
         return periode;
     }
 
-    public Time getDuration(){
-        return  new Time(endTime.getTime() - startTime.getTime());
-    }
+    public int getIsException(){return isException ;}
+    public int getExceptionContextID(){return exceptionContextID;}
+    public Date getExceptionTargetDay() {return exceptionTargetDay;}
+
+  /*  public Date getDuration(){
+        return new Date(endDate.getTime() - startDate.getTime());
+    }*/
 }
