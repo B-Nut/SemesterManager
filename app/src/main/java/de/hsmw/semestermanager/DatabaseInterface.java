@@ -47,7 +47,7 @@ public class DatabaseInterface {
         values.put("ENDTIME", ENDTIME);
         return db.insert("modules", null, values);
     }
-    public long insertDataTermine( String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isExeption,int exceptionContextID,String exceptionTargetDay) {
+    public long insertDataTermine( String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isExeption,int exceptionContextID,String exceptionTargetDay,int delete) {
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", name);
         values.put("STARTDATE", startDate);
@@ -66,6 +66,7 @@ public class DatabaseInterface {
         values.put("ISEXEPTION", isExeption);
         values.put("EXCEPTIONCONTEXTID", exceptionContextID);
         values.put("EXCEPTIONTARGETDAY", exceptionTargetDay);
+        values.put("DELETE", delete);
         return db.insert("termine", null, values);
     }
 //------------------------------Get All Data-----------------------------------------
@@ -93,7 +94,7 @@ public class DatabaseInterface {
         Termin[] returnTermin = new Termin[c.getCount()];
         while (c.moveToNext()) {
 
-            returnTermin[c.getPosition()] = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17));
+            returnTermin[c.getPosition()] = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17),c.getInt(18));
         }
         return returnTermin;
     }
@@ -124,7 +125,7 @@ public class DatabaseInterface {
         Log.d("database", query);
         Cursor c = db.rawQuery(query, null);
         c.moveToNext();
-        Termin p =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17));
+        Termin p =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17),c.getInt(18));
         c.close();
         return  p;
     }
@@ -135,7 +136,7 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery(query,null);
         Termin[] returnArray = new Termin[c.getCount()];
         while (c.moveToNext()){
-            returnArray[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17));
+            returnArray[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17),c.getInt(18));
         }
         c.close();
         return returnArray;
@@ -159,7 +160,7 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery(query,null);
         Termin[] returnArray = new Termin[c.getCount()];
         while (c.moveToNext()){
-            returnArray[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17));
+            returnArray[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17),c.getInt(18));
         }
         c.close();
         return returnArray;
@@ -172,7 +173,7 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery(query,null);
         Termin[] returnArray = new Termin[c.getCount()];
         while (c.moveToNext()){
-            returnArray[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17));
+            returnArray[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17),c.getInt(18));
         }
         c.close();
         return returnArray;
@@ -203,7 +204,7 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery("SELECT * FROM termine WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
         Termin[] returnTermine = new Termin[c.getCount()];
         while( c.moveToNext()){
-            returnTermine[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17));
+            returnTermine[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17),c.getInt(18));
         }
         c.close();
         return returnTermine;
@@ -222,7 +223,7 @@ public class DatabaseInterface {
         values.put("SEMESTERID", SEMESTERID);
         return db.update("Modules", values, "WHERE ID =" + String.valueOf(ID), null);
     }
-    public long updateDataTermine(int id, String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode,int isExeption,int exceptionContextID,String exceptionTargetDay) {
+    public long updateDataTermine(int id, String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode,int isExeption,int exceptionContextID,String exceptionTargetDay,int delete) {
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", name);
         values.put("STARTDATE", startDate);
@@ -241,15 +242,35 @@ public class DatabaseInterface {
         values.put("ISEXEPTION", isExeption);
         values.put("EXCEPTIONCONTEXTID", exceptionContextID);
         values.put("EXCEPTIONTARGETDAY", exceptionTargetDay);
+        values.put("DELETE",delete);
         return db.update("Termine", values, "WHERE ID =" + String.valueOf(id), null);
     }
     //------------------------------------------------------------------
-    public Termin[] getTermineByDate(Date date){
+    public Termin[] getTermineByDate(String date){
         ArrayList<Termin> returnArray = new ArrayList<>();
+        ArrayList<Integer> TerminwiederholungsausnahmenArray = new ArrayList<>();
+        ArrayList<Integer> EXCEPTIONCONTEXTIDArray = new ArrayList<>();
 
         //Query werfen, der mir roh alle Termine eines Tages zurück gibt. -> Diese in das Returnarray schreiben.
-        //Terminwiederholungen ignorieren.
-        //Beim Iterieren Terminwiederholungsausnahmen bemerken und TerminwiederholungsID merken. - Diese Ausnahmen nur speichern, wenn isDeleted false ist.
+
+
+            String query = "select * from termine  " + "WHERE STARTDATE =  \""+ date + "\" ";
+
+            Cursor c = db.rawQuery(query,null);
+            Termin[] allTermin = new Termin[c.getCount()];
+            while (c.moveToNext()){
+                allTermin[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17),c.getInt(18));
+
+                //Beim Iterieren Terminwiederholungsausnahmen bemerken und TerminwiederholungsID merken. - Diese Ausnahmen nur speichern, wenn isDeleted false ist.
+                if (c.getInt(15) !=0 && c.getInt(18)==0) { TerminwiederholungsausnahmenArray.add(c.getInt(15)) ;  }
+                if (c.getInt(14) !=0 && c.getInt(18)==0) { EXCEPTIONCONTEXTIDArray.add(c.getInt(0)) ;  }
+            }
+            c.close();
+
+
+
+
+
 
         //Query werfen, der mir alle Terminwiederholungsausnahmen gibt, dessen date dem exceptionTargetDay entspricht.
         //TerminwiederholungsID merken

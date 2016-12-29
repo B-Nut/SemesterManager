@@ -45,6 +45,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 "ISEXEPTION INTEGER,"+
                 "EXCEPTIONCONTEXTID INTEGER,"+
                 "EXCEPTIONTARGETDAY TEXT"+
+                "ISDELETE INTEGER"+
                 ")");
     }
     @Override

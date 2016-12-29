@@ -24,8 +24,9 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
     int isException;
     int exceptionContextID;
     Date exceptionTargetDay;
+    int delete;
 
-    public Termin(int id, String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int isGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, String exceptionTargetDay) {
+    public Termin(int id, String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int isGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, String exceptionTargetDay, int delete) {
         this.id = id;
         this.name = name;
         this.startDate = Date.valueOf(startDate);
@@ -44,10 +45,11 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
         this.isException = isException;
         this.exceptionContextID = exceptionContextID;
         this.exceptionTargetDay = Date.valueOf(exceptionTargetDay);
+        this.delete = delete;
 
     }
 
-    public Termin(int id, String name, Date startDate, Date wiederholungsStart, Date wiederholungsEnde, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int isGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, Date exceptionTargetDay) {
+    public Termin(int id, String name, Date startDate, Date wiederholungsStart, Date wiederholungsEnde, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int isGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, Date exceptionTargetDay,int delete) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
@@ -66,6 +68,7 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
         this.isException = isException;
         this.exceptionContextID = exceptionContextID;
         this.exceptionTargetDay = exceptionTargetDay;
+        this.delete = delete;
     }
 
     public String getDateString(){
@@ -146,6 +149,7 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
     public int getIsException(){return isException ;}
     public int getExceptionContextID(){return exceptionContextID;}
     public Date getExceptionTargetDay() {return exceptionTargetDay;}
+    public  int getDelete(){return  delete;}
 
     @Override
     public int compareTo(Termin o) {
@@ -180,6 +184,6 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
         }
     }
     public Termin clone(){
-       return new Termin(id,name,startDate,wiederholungsStart,wiederholungsEnde,startTime,endTime,ort,typ,prioritaet,planID,modulID,isGanztagsTermin,dozent,periode,isException,exceptionContextID,exceptionTargetDay);
+       return new Termin(id,name,startDate,wiederholungsStart,wiederholungsEnde,startTime,endTime,ort,typ,prioritaet,planID,modulID,isGanztagsTermin,dozent,periode,isException,exceptionContextID,exceptionTargetDay,delete);
     }
 }
