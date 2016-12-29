@@ -248,41 +248,61 @@ public class DatabaseInterface {
     //------------------------------------------------------------------
     public Termin[] getTermineByDate(String date){
         ArrayList<Termin> returnArray = new ArrayList<>();
-        ArrayList<Integer> TerminwiederholungsausnahmenArray = new ArrayList<>();
+        ArrayList<Integer> TerminwiederholungsIgnorierArray = new ArrayList<>();
         ArrayList<Integer> EXCEPTIONCONTEXTIDArray = new ArrayList<>();
 
         //Query werfen, der mir roh alle Termine eines Tages zurück gibt. -> Diese in das Returnarray schreiben.
 
 
-            String query = "select * from termine  " + "WHERE STARTDATE =  \""+ date + "\" ";
+        String query = "select * from termine WHERE STARTDATE =  \""+ date + "\" ";
 
-            Cursor c = db.rawQuery(query,null);
-            Termin[] allTermin = new Termin[c.getCount()];
-            while (c.moveToNext()){
-                allTermin[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17),c.getInt(18));
+        Cursor c = db.rawQuery(query,null);
+        while (c.moveToNext()){
+            int terminId = c.getInt(0);
+            int isException = c.getInt(15);
+            int isDeleted = c.getInt(18);
+            int periode = c.getInt(14);
+            int exceptionContextID = c.getInt(16);
+            String exceptionDay = c.getString(17);
 
-                //Beim Iterieren Terminwiederholungsausnahmen bemerken und TerminwiederholungsID merken. - Diese Ausnahmen nur speichern, wenn isDeleted false ist.
-                if (c.getInt(15) !=0 && c.getInt(18)==0) { TerminwiederholungsausnahmenArray.add(c.getInt(15)) ;  }
-                if (c.getInt(14) !=0 && c.getInt(18)==0) { EXCEPTIONCONTEXTIDArray.add(c.getInt(0)) ;  }
+            //Terminwiederholungen und Ausnahmen ignorieren.
+            if(periode == 0 && isException == 0) {
+                returnArray.add(cursor2Termin(c));
+            }else if (isException != 0){
+                //TerminwiederholungsID merken, wenn die ExceptionTargetDay dem date entspricht.
+                if (exceptionDay.equals(date)) {
+                    TerminwiederholungsIgnorierArray.add(exceptionContextID);
+                }
+                if(isDeleted != 0) {
+                    returnArray.add(cursor2Termin(c));
+                }
             }
-            c.close();
-
-
-
-
-
-
-        //Query werfen, der mir alle Terminwiederholungsausnahmen gibt, dessen date dem exceptionTargetDay entspricht.
-        //TerminwiederholungsID merken
+        }
+        c.close();
 
         //Query werfen, der mir alle Terminwiederholungen gibt.
+        query = "select * from termine  WHERE PERIODE <> 0 AND ISEXCEPTION = 0";
+        c = db.rawQuery(query,null);
+        while (c.moveToNext()){
+            //Für Terminwiederholungen - dessen ID's nicht gemerkt wurden -  getTerminAtDate(date) aufrufen -> Termin anfügen, wenn nicht null.
+            int terminId = c.getInt(0);
+            //TESTEN :)
+            if (TerminwiederholungsIgnorierArray.contains(terminId)){
+                continue;
+            }
 
-        //Für Terminwiederholungen - dessen ID's nicht gemerkt wurden -  getTerminAtDate(date) aufrufen -> Termin anfügen, wenn nicht null.
-
+            Termin t = cursor2Termin(c).getTerminAtDate(Date.valueOf(date));
+            if(t != null){
+                returnArray.add(t);
+            }
+        }
 
         //returnArray Sortieren
         Collections.sort(returnArray);
 
         return returnArray.toArray(new Termin[returnArray.size()]);
+    }
+    private Termin cursor2Termin(Cursor c){
+        return new Termin(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4), c.getString(5), c.getString(6), c.getString(7), c.getString(8), c.getInt(9), c.getInt(10), c.getInt(11), c.getInt(12), c.getString(13), c.getInt(14), c.getInt(15), c.getInt(16), c.getString(17), c.getInt(18));
     }
 }
