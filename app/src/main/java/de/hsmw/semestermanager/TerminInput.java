@@ -70,7 +70,7 @@ public class TerminInput extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                di.insertDataTermine(terminName.getText().toString(),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(endDate.getText().toString()),startTime.getText().toString()+":00",endTime.getText().toString()+":00",ort.getText().toString(),typen[typ.getSelectedItemPosition()],priorität.getSelectedItemPosition(),semester.getSelectedItemPosition()+1,modul.getSelectedItemPosition()+1,ganztagstermin.isChecked()?1:0,dozent.getText().toString(),periode.getSelectedItemPosition(),0,0,"2016-01-01");
+                di.insertDataTermine(terminName.getText().toString(),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(endDate.getText().toString()),startTime.getText().toString()+":00",endTime.getText().toString()+":00",ort.getText().toString(),typen[typ.getSelectedItemPosition()],priorität.getSelectedItemPosition(),semester.getSelectedItemPosition()+1,modul.getSelectedItemPosition()+1,ganztagstermin.isChecked()?1:0,dozent.getText().toString(),periode.getSelectedItemPosition(),0,0,"2016-01-01",0);
                 finish();
             }
         });

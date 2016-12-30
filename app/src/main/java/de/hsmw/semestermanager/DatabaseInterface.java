@@ -75,7 +75,7 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery("select * from plans", null);
         Plan[] returnPlans = new Plan[c.getCount()];
         while (c.moveToNext()) {
-            returnPlans[c.getPosition()] = new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
+            returnPlans[c.getPosition()] = cursor2Plan(c);
         }
         return returnPlans;
     }
@@ -84,7 +84,7 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery("select * from modules", null);
         Module[] returnModule = new Module[c.getCount()];
         while (c.moveToNext()) {
-            returnModule[c.getPosition()] = new Module(c.getInt(0), c.getString(1), c.getInt(2));
+            returnModule[c.getPosition()] = cursor2Module(c);
         }
         return returnModule;
     }
@@ -93,9 +93,8 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery("select * from termine", null);
         Termin[] returnTermin = new Termin[c.getCount()];
         while (c.moveToNext()) {
-
-            returnTermin[c.getPosition()] = new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17),c.getInt(18));
-        }
+            returnTermin[c.getPosition()] =  cursor2Termin(c);
+            }
         return returnTermin;
     }
 //----------------------------Get Data By ID---------------------------
@@ -105,7 +104,7 @@ public class DatabaseInterface {
         Log.d("database", query);
         Cursor c = db.rawQuery(query, null);
         c.moveToNext();
-        Plan p = new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
+        Plan p = cursor2Plan(c);
         c.close();
         return  p;
     }
@@ -115,7 +114,7 @@ public class DatabaseInterface {
         Log.d("database", query);
         Cursor c = db.rawQuery(query, null);
         c.moveToNext();
-        Module p = new Module(c.getInt(0), c.getString(1), c.getInt(2));
+        Module p = cursor2Module(c);
         c.close();
         return  p;
     }
@@ -125,7 +124,7 @@ public class DatabaseInterface {
         Log.d("database", query);
         Cursor c = db.rawQuery(query, null);
         c.moveToNext();
-        Termin p =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17),c.getInt(18));
+        Termin p =   cursor2Termin(c);
         c.close();
         return  p;
     }
@@ -136,8 +135,8 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery(query,null);
         Termin[] returnArray = new Termin[c.getCount()];
         while (c.moveToNext()){
-            returnArray[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17),c.getInt(18));
-        }
+            returnArray[c.getPosition()] =  cursor2Termin(c);
+            }
         c.close();
         return returnArray;
     }
@@ -148,7 +147,7 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery(query,null);
         Module[] returnArray = new Module[c.getCount()];
         while (c.moveToNext()){
-            returnArray[c.getPosition()] = new Module(c.getInt(0), c.getString(1), c.getInt(2));
+            returnArray[c.getPosition()] = cursor2Module(c);
         }
         c.close();
         return returnArray;
@@ -160,8 +159,8 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery(query,null);
         Termin[] returnArray = new Termin[c.getCount()];
         while (c.moveToNext()){
-            returnArray[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17),c.getInt(18));
-        }
+            returnArray[c.getPosition()] =  cursor2Termin(c);
+            }
         c.close();
         return returnArray;
     }
@@ -169,12 +168,11 @@ public class DatabaseInterface {
         String[] columns = {"*"};
         //String query = "select * from termine WHERE SEMESTERID =  \""+ id +  "\" AND ModulID = \"0\" ORDER BY STARTTIME, ENDTIME";
         String query = "select * from termine WHERE SEMESTERID =  \""+ id +  "\" AND ModulID = \"0\"";
-        //String query = SQLiteQueryBuilder.buildQueryString(false, "termine", columns, "SEMESTERID = " + id AND "ModulID = " + 0, "", "", "", "");
         Cursor c = db.rawQuery(query,null);
         Termin[] returnArray = new Termin[c.getCount()];
         while (c.moveToNext()){
-            returnArray[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17),c.getInt(18));
-        }
+            returnArray[c.getPosition()] =  cursor2Termin(c);
+           }
         c.close();
         return returnArray;
     }
@@ -184,7 +182,7 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery("SELECT * FROM plans WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
         Plan[] returnPlan = new Plan[c.getCount()];
         while( c.moveToNext()){
-            returnPlan[c.getPosition()] = new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
+            returnPlan[c.getPosition()] = cursor2Plan(c);
         }
         c.close();
         return returnPlan;
@@ -194,7 +192,7 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery("SELECT * FROM modules WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
         Module[] returnModules = new Module[c.getCount()];
         while( c.moveToNext()){
-            returnModules[c.getPosition()] = new Module(c.getInt(0), c.getString(1), c.getInt(2));
+            returnModules[c.getPosition()] = cursor2Module(c);
         }
         c.close();
         return returnModules;
@@ -204,7 +202,7 @@ public class DatabaseInterface {
         Cursor c = db.rawQuery("SELECT * FROM termine WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
         Termin[] returnTermine = new Termin[c.getCount()];
         while( c.moveToNext()){
-            returnTermine[c.getPosition()] =  new Termin(c.getInt(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getString(6),c.getString(7),c.getString(8),c.getInt(9),c.getInt(10),c.getInt(11),c.getInt(12),c.getString(13),c.getInt(14),c.getInt(15),c.getInt(16),c.getString(17),c.getInt(18));
+            returnTermine[c.getPosition()] =  cursor2Termin(c);
         }
         c.close();
         return returnTermine;
@@ -304,5 +302,12 @@ public class DatabaseInterface {
     }
     private Termin cursor2Termin(Cursor c){
         return new Termin(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4), c.getString(5), c.getString(6), c.getString(7), c.getString(8), c.getInt(9), c.getInt(10), c.getInt(11), c.getInt(12), c.getString(13), c.getInt(14), c.getInt(15), c.getInt(16), c.getString(17), c.getInt(18));
+    }
+    private Plan cursor2Plan(Cursor c){
+       return new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
+
+    }
+    private Module cursor2Module(Cursor c){
+        return new Module(c.getInt(0), c.getString(1), c.getInt(2));
     }
 }
