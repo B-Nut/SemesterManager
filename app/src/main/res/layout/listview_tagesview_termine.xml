@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <TextView
+        android:text="16:00-17:30"
+        android:layout_marginStart="5dp"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:id="@+id/tagesview_termin_zeiten" />
+
+    <TextView
+        android:text="8-103"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="5dp"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:id="@+id/tagesview_termin_ort"
+        android:layout_width="wrap_content" />
+
+    <TextView
+        android:text="20.03 - 07.07"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_toEndOf="@id/tagesview_termin_zeiten"
+        android:layout_toStartOf="@id/tagesview_termin_ort"
+        android:textColor="@android:color/black"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:gravity="center"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:id="@+id/tagesview_termin_datum"/>
+
+    <TextView
+        android:text="SW-Projekt"
+        android:layout_alignStart="@id/tagesview_termin_zeiten"
+        android:textStyle="bold"
+        android:layout_below="@id/tagesview_termin_zeiten"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:id="@+id/tagesview_termin_modul" />
+
+    <TextView
+        android:text="Schubert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/tagesview_termin_ort"
+        android:layout_below="@id/tagesview_termin_datum"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:id="@+id/tagesview_termin_dozenten" />
+
+    <TextView
+        android:text="Wöchentlich"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="18sp"
+        android:gravity="center_vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tagesview_termin_modul"
+        android:textColor="@android:color/black"
+        android:id="@+id/tagesview_termin_wiederholung" />
+
+    <TextView
+        android:text="Hoch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:layout_below="@id/tagesview_termin_dozenten"
+        android:layout_alignEnd="@id/tagesview_termin_dozenten"
+        android:id="@+id/tagesview_termin_prioritätswert" />
+
+    <TextView
+        android:text="Seminar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:id="@+id/tagesview_termin_termintyp"
+        android:layout_below="@+id/tagesview_termin_modul"
+        android:layout_alignStart="@+id/tagesview_termin_modul" />
+
+</RelativeLayout>
