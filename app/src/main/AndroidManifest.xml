@@ -18,8 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".SemesterplanInput"
+        <activity
+            android:name=".SemesterplanInput"
             android:label="Neues Semester">
             <intent-filter>
                 <action android:name="de.hsmw.semestermanager.SemesterplanInput" />
@@ -27,7 +27,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".SemesterplanView"
+        <activity
+            android:name=".SemesterplanView"
             android:label="Semesterplan">
             <intent-filter>
                 <action android:name="de.hsmw.semestermanager.SemesterplanView" />
@@ -35,7 +36,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ModulInput"
+        <activity
+            android:name=".ModulInput"
             android:label="Neues Modul">
             <intent-filter>
                 <action android:name="de.hsmw.semestermanager.ModulInput" />
@@ -43,7 +45,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ModulView"
+        <activity
+            android:name=".ModulView"
             android:label="Modul">
             <intent-filter>
                 <action android:name="de.hsmw.semestermanager.ModulView" />
@@ -51,13 +54,24 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".TerminInput"
+        <activity
+            android:name=".TerminInput"
             android:label="Neuer Termin">
             <intent-filter>
                 <action android:name="de.hsmw.semestermanager.TerminInput" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".DayView"
+            android:label="Tagesview"
+            android:theme="@style/AppTheme.SwypeBar">
+        <intent-filter>
+            <action android:name="de.hsmw.semestermanager.DayView" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
         </activity>
     </application>
 

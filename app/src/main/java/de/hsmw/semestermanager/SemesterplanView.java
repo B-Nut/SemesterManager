@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -152,6 +153,10 @@ public class SemesterplanView extends AppCompatActivity {
         }
         if (id == R.id.action_add_new_entry) {
             startActivity(new Intent("de.hsmw.semestermanager.TerminInput"));
+        }
+        if (id == R.id.action_view_day){
+            Log.d("database", "DayViewActivity gestartet");
+            startActivity(new Intent("de.hsmw.semestermanager.DayView"));
         }
         return super.onOptionsItemSelected(item);
     }

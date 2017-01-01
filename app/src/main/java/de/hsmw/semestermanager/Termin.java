@@ -1,5 +1,7 @@
 package de.hsmw.semestermanager;
 
+import android.content.Context;
+
 import java.sql.Date;
 import java.sql.Time;
 import java.util.GregorianCalendar;
@@ -79,10 +81,14 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
     }
     public String getTimeString(){
         String returnString;
-        String[] temp = startTime.toString().split(":");
-        returnString = temp[0] + ":" + temp[1] + " - ";
-        temp = endTime.toString().split(":");
-        returnString += temp[0] + ":" + temp[1];
+        if (isGanztagsTermin != 0){
+            returnString = "Ganztags";
+        }else {
+            String[] temp = startTime.toString().split(":");
+            returnString = temp[0] + ":" + temp[1] + " - ";
+            temp = endTime.toString().split(":");
+            returnString += temp[0] + ":" + temp[1];
+        }
         return returnString;
     }
 
@@ -185,5 +191,12 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
     }
     public Termin clone(){
        return new Termin(id,name,startDate,wiederholungsStart,wiederholungsEnde,startTime,endTime,ort,typ,prioritaet,planID,modulID,isGanztagsTermin,dozent,periode,isException,exceptionContextID,exceptionTargetDay, isDeleted);
+    }
+    public Module getModule(Context c){
+        DatabaseHandler dh = new DatabaseHandler(c);
+        DatabaseInterface di = new DatabaseInterface(dh.getReadableDatabase());
+        Module returnModule = di.getDataByIDModules(getModulID());
+        dh.close();
+        return returnModule;
     }
 }

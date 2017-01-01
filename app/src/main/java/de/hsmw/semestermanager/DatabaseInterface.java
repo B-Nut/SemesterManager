@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
+import android.widget.Toast;
+
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -66,7 +68,7 @@ public class DatabaseInterface {
         values.put("ISEXEPTION", isExeption);
         values.put("EXCEPTIONCONTEXTID", exceptionContextID);
         values.put("EXCEPTIONTARGETDAY", exceptionTargetDay);
-        values.put("DELETE", delete);
+        values.put("ISDELETED", delete);
         return db.insert("termine", null, values);
     }
 //------------------------------Get All Data-----------------------------------------
@@ -245,13 +247,12 @@ public class DatabaseInterface {
     }
     //------------------------------------------------------------------
     public Termin[] getTermineByDate(String date){
+        Log.d("database", "getTermineByDate aufgerufen!");
         ArrayList<Termin> returnArray = new ArrayList<>();
         ArrayList<Integer> TerminwiederholungsIgnorierArray = new ArrayList<>();
         ArrayList<Integer> EXCEPTIONCONTEXTIDArray = new ArrayList<>();
 
         //Query werfen, der mir roh alle Termine eines Tages zurück gibt. -> Diese in das Returnarray schreiben.
-
-
         String query = "select * from termine WHERE STARTDATE =  \""+ date + "\" ";
 
         Cursor c = db.rawQuery(query,null);
@@ -271,7 +272,7 @@ public class DatabaseInterface {
                 if (exceptionDay.equals(date)) {
                     TerminwiederholungsIgnorierArray.add(exceptionContextID);
                 }
-                if(isDeleted != 0) {
+                if(isDeleted == 0) {
                     returnArray.add(cursor2Termin(c));
                 }
             }
@@ -279,7 +280,7 @@ public class DatabaseInterface {
         c.close();
 
         //Query werfen, der mir alle Terminwiederholungen gibt.
-        query = "select * from termine  WHERE PERIODE <> 0 AND ISEXCEPTION = 0";
+        query = "select * from termine  WHERE PERIODE<>'0' AND ISEXEPTION='0'";
         c = db.rawQuery(query,null);
         while (c.moveToNext()){
             //Für Terminwiederholungen - dessen ID's nicht gemerkt wurden -  getTerminAtDate(date) aufrufen -> Termin anfügen, wenn nicht null.

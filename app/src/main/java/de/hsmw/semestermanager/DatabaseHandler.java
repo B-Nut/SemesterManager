@@ -20,7 +20,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         Log.d("database", "create Database");
         db.execSQL("CREATE TABLE " + TABLE_MODULES + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,ANZEIGENAME TEXT,SEMESTERID INTEGER)");
         db.execSQL("CREATE TABLE " + TABLE_PLANS + " (ID INTEGER PRIMARY KEY AUTOINCREMENT,ANZEIGENAME TEXT,STARTTIME TEXT, ENDTIME TEXT)");
@@ -44,8 +43,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 "PERIODE INTEGER,"+
                 "ISEXEPTION INTEGER,"+
                 "EXCEPTIONCONTEXTID INTEGER,"+
-                "EXCEPTIONTARGETDAY TEXT"+
-                "ISDELETE INTEGER"+
+                "EXCEPTIONTARGETDAY TEXT,"+
+                "ISDELETED INTEGER"+
                 ")");
     }
     @Override

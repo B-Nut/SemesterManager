@@ -52,7 +52,7 @@ public class TerminInput extends AppCompatActivity {
         Helper.pickTime(this, startTime, "Wähle Beginn des Termins");
         Helper.pickTime(this, endTime, "Wähle Ende des Termins");
 
-        String[] perioden = {"Wöchentlich", "Zweiwöchentlich"};
+        String[] perioden = {"keine Wiederholung", "Wöchentlich", "Zweiwöchentlich"};
         Helper.fillSpinner(this, perioden, periode);
 
         final String[] typen = {"Vorlesung", "Seminar"};
