@@ -302,7 +302,7 @@ public class DatabaseInterface {
         return returnArray.toArray(new Termin[returnArray.size()]);
     }
     //_________________Delete_____________________
-    public void deletPlanByID(int ID) {
+    public void deletePlanByID(int ID) {
         try {
             db.delete("PLANS", "ID =  \"" +ID+ "\" ", null);
             Log.d("DatabaseInterface","Plan_geloescht: "+ID);
@@ -310,20 +310,20 @@ public class DatabaseInterface {
             e.printStackTrace();
         }
     }
-    public void deletMudulByID(int ID) {
+    public void deleteMudulByID(int ID) {
         try {
             db.delete("MODULES", "ID =  \"" +ID+ "\" ", null);
             Log.d("DatabaseInterface","Modul_geloescht: "+ID);
-            db.delete("MODULES", "EXCEPTIONCONTEXTID =  \"" +ID+ "\" ", null);
-            Log.d("DatabaseInterface","EXCEPTIONCONTEXTID_geloescht : "+ID);
-            }catch(Exception e){
+        }catch(Exception e){
             e.printStackTrace();
         }
     }
-    public void deletTerminByID(int ID) {
+    public void deleteTerminByID(int ID) {
         try {
             db.delete("TERMINE", "ID =  \"" +ID+ "\" ", null);
             Log.d("DatabaseInterface","Termin_geloescht: "+ID);
+            int deletedItems = db.delete("TERMINE", "EXCEPTIONCONTEXTID =  \"" +ID+ "\" ", null);
+            Log.d("DatabaseInterface",deletedItems + " Wiederholungsausnahmen im Kontext der ID " + ID + " gelöscht.");
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -341,4 +341,6 @@ public class DatabaseInterface {
     private Module cursor2Module(Cursor c){
         return new Module(c.getInt(0), c.getString(1), c.getInt(2));
     }
+
+    //Ich brauche noch eine Funktion, die mir die Anzahl (int) der Wiederholungsausnahmen zu einer Wiederholuung gibt.
 }

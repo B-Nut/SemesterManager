@@ -1,5 +1,7 @@
 package de.hsmw.semestermanager;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -7,13 +9,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -94,7 +97,7 @@ public class DayView extends AppCompatActivity {
 
             View rootView = inflater.inflate(R.layout.fragment_day_view, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            Calendar c = Calendar.getInstance();
+            final Calendar c = Calendar.getInstance();
             c.add(Calendar.DATE, getArguments().getInt(ARG_SECTION_NUMBER) - scrollOffset);
             SimpleDateFormat df = new SimpleDateFormat("EEEE - dd.MM.yyyy");
             String formattedDate = df.format(c.getTime());
@@ -107,9 +110,38 @@ public class DayView extends AppCompatActivity {
             termine = new ArrayList<>();
             terminListAdapter = new TerminAdapterDayView<>(rootView.getContext(), R.layout.listview_tagesview_termine, termine);
             listView.setAdapter(terminListAdapter);
-            SimpleDateFormat af = new SimpleDateFormat("yyyy-MM-dd");
+
+            final SimpleDateFormat af = new SimpleDateFormat("yyyy-MM-dd");
             updateList(af.format(c.getTime()));
-            dh.close();
+            //dh.close();
+            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(listView.getContext());
+                    alert.setTitle("You aren't going to skip that class?");
+                    alert.setMessage("Are you sure to delete record");
+                    alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            int terminId = ((Termin) parent.getItemAtPosition(position)).getId();
+                            Log.d("DayView", "try to delete termin with ID: " + terminId);
+                            di.deleteTerminByID(terminId);
+                            updateList(af.format(c.getTime()));
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    alert.show();
+                    return true;
+                }
+            });
             return rootView;
         }
         public void updateList(String date){
@@ -153,7 +185,7 @@ public class DayView extends AppCompatActivity {
                 case 2:
                     return "SECTION 3";
                 case 3:
-                    return "penis";
+                    return "Section 4";
             }
             return null;
         }
