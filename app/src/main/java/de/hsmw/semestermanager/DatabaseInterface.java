@@ -39,7 +39,7 @@ public class DatabaseInterface {
         values.put("SEMESTERID", SEMESTERID);
         return db.insert("modules", null, values);
     }
-    public long insertDataRevisionException(int PRIORITAET,int ISDELETED,String STARTDATE,String ENDDATA,String STARTTIME,String ENDTIME) {
+   /* public long insertDataRevisionException(int PRIORITAET,int ISDELETED,String STARTDATE,String ENDDATA,String STARTTIME,String ENDTIME) {
         ContentValues values = new ContentValues();
         values.put("PRIORITAET", PRIORITAET);
         values.put("ISDELETED", ISDELETED);
@@ -48,7 +48,7 @@ public class DatabaseInterface {
         values.put("STARTTIME", STARTTIME);
         values.put("ENDTIME", ENDTIME);
         return db.insert("modules", null, values);
-    }
+    }*/
     public long insertDataTermine( String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isExeption,int exceptionContextID,String exceptionTargetDay,int delete) {
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", name);
@@ -301,6 +301,36 @@ public class DatabaseInterface {
 
         return returnArray.toArray(new Termin[returnArray.size()]);
     }
+    //_________________Delete_____________________
+    public void deletPlanByID(int ID) {
+        try {
+            db.delete("PLANS", "ID =  \"" +ID+ "\" ", null);
+            Log.d("DatabaseInterface","Plan_geloescht: "+ID);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void deletMudulByID(int ID) {
+        try {
+            db.delete("MODULES", "ID =  \"" +ID+ "\" ", null);
+            Log.d("DatabaseInterface","Modul_geloescht: "+ID);
+            db.delete("MODULES", "EXCEPTIONCONTEXTID =  \"" +ID+ "\" ", null);
+            Log.d("DatabaseInterface","EXCEPTIONCONTEXTID_geloescht : "+ID);
+            }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void deletTerminByID(int ID) {
+        try {
+            db.delete("TERMINE", "ID =  \"" +ID+ "\" ", null);
+            Log.d("DatabaseInterface","Termin_geloescht: "+ID);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //____________________________________________
+
     private Termin cursor2Termin(Cursor c){
         return new Termin(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4), c.getString(5), c.getString(6), c.getString(7), c.getString(8), c.getInt(9), c.getInt(10), c.getInt(11), c.getInt(12), c.getString(13), c.getInt(14), c.getInt(15), c.getInt(16), c.getString(17), c.getInt(18));
     }
