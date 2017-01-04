@@ -316,6 +316,7 @@ public class DatabaseInterface {
             Log.d("DatabaseInterface","Modul_geloescht: "+ID);
         }catch(Exception e){
             e.printStackTrace();
+
         }
     }
     public void deleteTerminByID(int ID) {
@@ -329,7 +330,17 @@ public class DatabaseInterface {
         }
     }
 
-    //____________________________________________
+    //___________________SonderFunktionen_________________
+    public int getCountExceptionsByID(int ID) {
+        //Cursor c = db.rawQuery("SELECT * FROM termine WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+
+        Cursor c = db.rawQuery("SELECT * from TERMINE WHERE EXCEPTIONCONTEXTID = \"%" + ID + "%\"", null);
+        c.close();
+        return c.getCount();
+    }
+
+
+    //____________________________________________________
 
     private Termin cursor2Termin(Cursor c){
         return new Termin(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4), c.getString(5), c.getString(6), c.getString(7), c.getString(8), c.getInt(9), c.getInt(10), c.getInt(11), c.getInt(12), c.getString(13), c.getInt(14), c.getInt(15), c.getInt(16), c.getString(17), c.getInt(18));
@@ -342,5 +353,5 @@ public class DatabaseInterface {
         return new Module(c.getInt(0), c.getString(1), c.getInt(2));
     }
 
-    //Ich brauche noch eine Funktion, die mir die Anzahl (int) der Wiederholungsausnahmen zu einer Wiederholuung gibt.
+
 }
