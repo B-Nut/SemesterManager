@@ -4,9 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
-
+import java.sql.Date;
+import java.sql.Time;
+import java.util.GregorianCalendar;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -27,11 +30,12 @@ public class DatabaseInterface {
 
     //---------------------------Add Data----------------------------------------------
     public long insertDataPlans(String ANZEIGENAME, String STARTTIME, String ENDTIME) {
+        if ((Date.valueOf(STARTTIME).before(Date.valueOf(ENDTIME))||(Date.valueOf(STARTTIME).equals(Date.valueOf(ENDTIME)))) ){
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", ANZEIGENAME);
         values.put("STARTTIME", STARTTIME);
         values.put("ENDTIME", ENDTIME);
-        return db.insert("plans", null, values);
+        return db.insert("plans", null, values);}else {Log.d("DatabaseInterface", "insertDataPlans = return -1"); return -1;}
     }
     public long insertDataModules(String ANZEIGENAME, int SEMESTERID) {
         ContentValues values = new ContentValues();
@@ -39,21 +43,13 @@ public class DatabaseInterface {
         values.put("SEMESTERID", SEMESTERID);
         return db.insert("modules", null, values);
     }
-   /* public long insertDataRevisionException(int PRIORITAET,int ISDELETED,String STARTDATE,String ENDDATA,String STARTTIME,String ENDTIME) {
-        ContentValues values = new ContentValues();
-        values.put("PRIORITAET", PRIORITAET);
-        values.put("ISDELETED", ISDELETED);
-        values.put("STARTDATE", STARTDATE);
-        values.put("ENDDATA", ENDDATA);
-        values.put("STARTTIME", STARTTIME);
-        values.put("ENDTIME", ENDTIME);
-        return db.insert("modules", null, values);
-    }*/
-    public long insertDataTermine( String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isExeption,int exceptionContextID,String exceptionTargetDay,int delete) {
+
+    public long insertDataTermine( String name, String startDate,String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isExeption,int exceptionContextID,String exceptionTargetDay,int delete) {
+        if(Date.valueOf(startDate).equals(Date.valueOf(wiederholungsEnde))||Date.valueOf(startDate).before(Date.valueOf(wiederholungsEnde))){
+        if (Time.valueOf(startTime).equals(Time.valueOf(endTime))||Time.valueOf(startTime).before(Time.valueOf(endTime))){
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", name);
         values.put("STARTDATE", startDate);
-        values.put("wiederholungsStart", wiederholungsStart);
         values.put("wiederholungsEnde", wiederholungsEnde);
         values.put("STARTTIME", startTime);
         values.put("ENDTIME", endTime);
@@ -69,12 +65,12 @@ public class DatabaseInterface {
         values.put("EXCEPTIONCONTEXTID", exceptionContextID);
         values.put("EXCEPTIONTARGETDAY", exceptionTargetDay);
         values.put("ISDELETED", delete);
-        return db.insert("termine", null, values);
+        return db.insert("termine", null, values);}else{Log.d("DatabaseInterface", "insertDataTermine = return -1"); return -1;}}else {Log.d("DatabaseInterface", "insertDataTermine = return -1"); return -1;}
     }
 //------------------------------Get All Data-----------------------------------------
     public Plan[] getAllPlans(){
-        //Cursor c = db.rawQuery("select * from plans ORDER BY STARTTIME, ENDTIME", null);
-        Cursor c = db.rawQuery("select * from plans", null);
+        Cursor c = db.rawQuery("select * from plans ORDER BY STARTTIME, ENDTIME", null);
+        //Cursor c = db.rawQuery("select * from plans", null);
         Plan[] returnPlans = new Plan[c.getCount()];
         while (c.moveToNext()) {
             returnPlans[c.getPosition()] = cursor2Plan(c);
@@ -82,8 +78,8 @@ public class DatabaseInterface {
         return returnPlans;
     }
     public Module[] getAllDataModules(){
-        //Cursor c = db.rawQuery("select * from modules ORDER BY ANZEIGENAME", null);
-        Cursor c = db.rawQuery("select * from modules", null);
+        Cursor c = db.rawQuery("select * from modules ORDER BY ANZEIGENAME", null);
+        //Cursor c = db.rawQuery("select * from modules", null);
         Module[] returnModule = new Module[c.getCount()];
         while (c.moveToNext()) {
             returnModule[c.getPosition()] = cursor2Module(c);
@@ -91,8 +87,8 @@ public class DatabaseInterface {
         return returnModule;
     }
     public Termin[] getAllDataTermine(){
-        //Cursor c = db.rawQuery("select * from termine ORDER BY STARTTIME, STARTTIME, ENDDATA, ENDTIME ", null);
-        Cursor c = db.rawQuery("select * from termine", null);
+        Cursor c = db.rawQuery("select * from termine ORDER BY STARTTIME, STARTTIME, ENDDATA, ENDTIME ", null);
+        //Cursor c = db.rawQuery("select * from termine", null);
         Termin[] returnTermin = new Termin[c.getCount()];
         while (c.moveToNext()) {
             returnTermin[c.getPosition()] =  cursor2Termin(c);
@@ -168,8 +164,8 @@ public class DatabaseInterface {
     }
     public Termin[] getTermineByPlanIDUndNichtModul(int id){
         String[] columns = {"*"};
-        //String query = "select * from termine WHERE SEMESTERID =  \""+ id +  "\" AND ModulID = \"0\" ORDER BY STARTTIME, ENDTIME";
-        String query = "select * from termine WHERE SEMESTERID =  \""+ id +  "\" AND ModulID = \"0\"";
+        String query = "select * from termine WHERE SEMESTERID =  \""+ id +  "\" AND ModulID = \"0\" ORDER BY STARTTIME, ENDTIME";
+        //String query = "select * from termine WHERE SEMESTERID =  \""+ id +  "\" AND ModulID = \"0\"";
         Cursor c = db.rawQuery(query,null);
         Termin[] returnArray = new Termin[c.getCount()];
         while (c.moveToNext()){
@@ -180,8 +176,8 @@ public class DatabaseInterface {
     }
 //-------------------------searching for---------------------------------------------
     public Plan[] getListByStringPlans(String searchword) {
-        //Cursor c = db.rawQuery("SELECT * FROM plans WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
-        Cursor c = db.rawQuery("SELECT * FROM plans WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
+        Cursor c = db.rawQuery("SELECT * FROM plans WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+        //Cursor c = db.rawQuery("SELECT * FROM plans WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
         Plan[] returnPlan = new Plan[c.getCount()];
         while( c.moveToNext()){
             returnPlan[c.getPosition()] = cursor2Plan(c);
@@ -190,8 +186,8 @@ public class DatabaseInterface {
         return returnPlan;
     }
     public Module[] getListByStringModules(String searchword) {
-        //Cursor c = db.rawQuery("SELECT * FROM modules WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
-        Cursor c = db.rawQuery("SELECT * FROM modules WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
+        Cursor c = db.rawQuery("SELECT * FROM modules WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+        //Cursor c = db.rawQuery("SELECT * FROM modules WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
         Module[] returnModules = new Module[c.getCount()];
         while( c.moveToNext()){
             returnModules[c.getPosition()] = cursor2Module(c);
@@ -200,8 +196,8 @@ public class DatabaseInterface {
         return returnModules;
     }
     public Termin[] getListByStringTermine(String searchword) {
-        //Cursor c = db.rawQuery("SELECT * FROM termine WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
-        Cursor c = db.rawQuery("SELECT * FROM termine WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
+        Cursor c = db.rawQuery("SELECT * FROM termine WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
+        //Cursor c = db.rawQuery("SELECT * FROM termine WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"", null);
         Termin[] returnTermine = new Termin[c.getCount()];
         while( c.moveToNext()){
             returnTermine[c.getPosition()] =  cursor2Termin(c);
@@ -211,11 +207,12 @@ public class DatabaseInterface {
     }
 //----------------------Update------------------------------------------------------
     public long updateDataPlans(int ID, String ANZEIGENAME, String STARTTIME, String ENDTIME) {
+        if ((Date.valueOf(STARTTIME).before(Date.valueOf(ENDTIME))||(Date.valueOf(STARTTIME).equals(Date.valueOf(ENDTIME)))) ){
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", ANZEIGENAME);
         values.put("STARTTIME", STARTTIME);
         values.put("ENDTIME", ENDTIME);
-        return db.update("plans", values, "WHERE ID =" + String.valueOf(ID), null);
+        return db.update("plans", values, "WHERE ID =" + String.valueOf(ID), null);}else {Log.d("DatabaseInterface", "updateDataPlans = return -1"); return -1;}
     }
     public long updateDataModules(int ID, String ANZEIGENAME, int SEMESTERID) {
         ContentValues values = new ContentValues();
@@ -223,27 +220,29 @@ public class DatabaseInterface {
         values.put("SEMESTERID", SEMESTERID);
         return db.update("Modules", values, "WHERE ID =" + String.valueOf(ID), null);
     }
-    public long updateDataTermine(int id, String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode,int isExeption,int exceptionContextID,String exceptionTargetDay,int delete) {
-        ContentValues values = new ContentValues();
-        values.put("ANZEIGENAME", name);
-        values.put("STARTDATE", startDate);
-        values.put("wiederholungsStart", wiederholungsStart);
-        values.put("wiederholungsEnde", wiederholungsEnde);
-        values.put("STARTTIME", startTime);
-        values.put("ENDTIME", endTime);
-        values.put("ORT", ort);
-        values.put("TERMINTYP", typ);
-        values.put("PRIORITAET", prioritaet);
-        values.put("SEMESTERID", planID);
-        values.put("MODULID", modulID);
-        values.put("ISTGANZTAGSTERMIN", istGanztagsTermin);
-        values.put("DOZENT", dozent);
-        values.put("PERIODE", periode);
-        values.put("ISEXEPTION", isExeption);
-        values.put("EXCEPTIONCONTEXTID", exceptionContextID);
-        values.put("EXCEPTIONTARGETDAY", exceptionTargetDay);
-        values.put("DELETE",delete);
-        return db.update("Termine", values, "WHERE ID =" + String.valueOf(id), null);
+    public long updateDataTermine(int id, String name, String startDate, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode,int isExeption,int exceptionContextID,String exceptionTargetDay,int delete) {
+        if(Date.valueOf(startDate).equals(Date.valueOf(wiederholungsEnde))||Date.valueOf(startDate).before(Date.valueOf(wiederholungsEnde))){
+            if (Time.valueOf(startTime).equals(Time.valueOf(endTime))||Time.valueOf(startTime).before(Time.valueOf(endTime))){
+                ContentValues values = new ContentValues();
+                values.put("ANZEIGENAME", name);
+                values.put("STARTDATE", startDate);
+                values.put("wiederholungsEnde", wiederholungsEnde);
+                values.put("STARTTIME", startTime);
+                values.put("ENDTIME", endTime);
+                values.put("ORT", ort);
+                values.put("TERMINTYP", typ);
+                values.put("PRIORITAET", prioritaet);
+                values.put("SEMESTERID", planID);
+                values.put("MODULID", modulID);
+                values.put("ISTGANZTAGSTERMIN", istGanztagsTermin);
+                values.put("DOZENT", dozent);
+                values.put("PERIODE", periode);
+                values.put("ISEXEPTION", isExeption);
+                values.put("EXCEPTIONCONTEXTID", exceptionContextID);
+                values.put("EXCEPTIONTARGETDAY", exceptionTargetDay);
+                values.put("ISDELETED", delete);
+
+        return db.update("Termine", values, "WHERE ID =" + String.valueOf(id), null);}else{Log.d("DatabaseInterface", "updateDataTermine = return -1"); return -1;}}else {Log.d("DatabaseInterface", "updateDataTermine = return -1"); return -1;}
     }
     //------------------------------------------------------------------
     public Termin[] getTermineByDate(String date){
@@ -332,8 +331,6 @@ public class DatabaseInterface {
 
     //___________________SonderFunktionen_________________
     public int getCountExceptionsByID(int ID) {
-        //Cursor c = db.rawQuery("SELECT * FROM termine WHERE ANZEIGENAME LIKE \"%" + searchword + "%\"ORDER BY ZEITRAUM", null);
-
         Cursor c = db.rawQuery("SELECT * from TERMINE WHERE EXCEPTIONCONTEXTID = \"%" + ID + "%\"", null);
         c.close();
         return c.getCount();

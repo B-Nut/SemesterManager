@@ -29,7 +29,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "ANZEIGENAME TEXT," +
                 "STARTDATE TEXT," +
-                "wiederholungsStart TEXT,"+
                 "wiederholungsEnde TEXT,"+
                 "STARTTIME TEXT,"+
                 "ENDTIME TEXT,"+
