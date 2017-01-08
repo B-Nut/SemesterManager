@@ -11,28 +11,29 @@ import java.util.GregorianCalendar;
  */
 
 public class Termin implements DatabaseObject, Comparable<Termin>{
-    int id;
-    String name;
-    Date startDate, wiederholungsStart, wiederholungsEnde;
-    Time startTime, endTime;
-    String ort;
-    String typ;
-    int prioritaet;
-    int planID;
-    int modulID;
-    int isGanztagsTermin; //0 false; 1 true -> SQLite kann keine Booleans
-    String dozent;
-    int periode;
-    int isException;
-    int exceptionContextID;
-    Date exceptionTargetDay;
-    int isDeleted;
+    private int id;
+    private String name;
+    private Date startDate;
+    private Date wiederholungsEnde;
+    private Time startTime;
+    private Time endTime;
+    private String ort;
+    private String typ;
+    private int prioritaet;
+    private int planID;
+    private int modulID;
+    private int isGanztagsTermin; //0 false; 1 true -> SQLite kann keine Booleans
+    private String dozent;
+    private int periode;
+    private int isException;
+    private int exceptionContextID;
+    private Date exceptionTargetDay;
+    private int isDeleted;
 
-    public Termin(int id, String name, String startDate, String wiederholungsStart, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int isGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, String exceptionTargetDay, int isDeleted) {
+    public Termin(int id, String name, String startDate, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int isGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, String exceptionTargetDay, int isDeleted) {
         this.id = id;
         this.name = name;
         this.startDate = Date.valueOf(startDate);
-        this.wiederholungsStart = Date.valueOf(wiederholungsStart);
         this.wiederholungsEnde = Date.valueOf(wiederholungsEnde);
         this.startTime = Time.valueOf(startTime);
         this.endTime = Time.valueOf(endTime);
@@ -51,11 +52,10 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
 
     }
 
-    public Termin(int id, String name, Date startDate, Date wiederholungsStart, Date wiederholungsEnde, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int isGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, Date exceptionTargetDay,int isDeleted) {
+    public Termin(int id, String name, Date startDate, Date wiederholungsEnde, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int isGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, Date exceptionTargetDay,int isDeleted) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
-        this.wiederholungsStart = wiederholungsStart;
         this.wiederholungsEnde = wiederholungsEnde;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -102,10 +102,6 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
 
     public Date getStartDate() {
         return startDate;
-    }
-
-    public Date getWiederholungsStart() {
-        return wiederholungsStart;
     }
 
     public Date getWiederholungsEnde() {
@@ -178,7 +174,7 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
 
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime(startDate);
-        while (calendar.getTime().compareTo(date) < 0) {
+        while (calendar.getTime().compareTo(date) < 0 && calendar.getTime().compareTo(wiederholungsEnde) < 0) {
             calendar.add(GregorianCalendar.DAY_OF_MONTH, periode);
         }
         if(calendar.getTime().compareTo(date) == 0){
@@ -189,14 +185,61 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
             return null;
         }
     }
+
+    /**
+     * Berechnet, wie viel Zeit alle Regulären Termine einer Terminwiederholung insgesamt dauern. Terminwiederholungsausnahmen sind von der Berechnung aktiv einbezogen.
+     * @param date Das Datum bis zu dem gezählt werden soll.
+     * @param c
+     * @return Wie viel Zeit alle Regulären Termine einer Terminwiederholung insgesamt dauern. Terminwiederholungsausnahmen sind von der Berechnung aktiv einbezogen.
+     */
+    public long getDurationSumUntil(Date date, Context c){
+        if(isException != 0 || periode == 0){
+            return 0;
+        }
+
+        DatabaseInterface di = DatabaseInterface.getInstance(c);
+        Termin[] exceptions = di.getExceptionsByWiederholungsID(id);
+
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(startDate);
+        long returnValue = 0;
+        long terminOnce = getDuration();
+        for(Termin exception : exceptions){
+            if (exception.getStartDate().compareTo(date) < 0) {
+                returnValue += exception.getDuration();
+            }
+            if (exception.getExceptionTargetDay().compareTo(date) < 0) {
+                returnValue -= exception.getDuration();
+            }
+        }
+        while (calendar.getTime().compareTo(date) <= 0 && calendar.getTime().compareTo(wiederholungsEnde) <= 0) {
+            calendar.add(GregorianCalendar.DAY_OF_MONTH, periode);
+            returnValue += terminOnce;
+        }
+        returnValue -= (di.getCountExceptionsByID(id) * terminOnce);
+        return returnValue;
+    }
+    public long getDuration(){
+        if(isGanztagsTermin == 0) {
+            return (endTime.getTime() - startTime.getTime());
+        }else{
+            return 0;
+        }
+    }
+
     public Termin clone(){
-       return new Termin(id,name,startDate,wiederholungsStart,wiederholungsEnde,startTime,endTime,ort,typ,prioritaet,planID,modulID,isGanztagsTermin,dozent,periode,isException,exceptionContextID,exceptionTargetDay, isDeleted);
+       return new Termin(id,name,startDate,wiederholungsEnde,startTime,endTime,ort,typ,prioritaet,planID,modulID,isGanztagsTermin,dozent,periode,isException,exceptionContextID,exceptionTargetDay, isDeleted);
     }
     public Module getModule(Context c){
-        DatabaseHandler dh = new DatabaseHandler(c);
-        DatabaseInterface di = new DatabaseInterface(dh.getReadableDatabase());
+        DatabaseInterface di = DatabaseInterface.getInstance(c);
         Module returnModule = di.getDataByIDModules(getModulID());
-        dh.close();
         return returnModule;
+    }
+    public void resetModule(){
+        modulID = 0;
+    }
+    public void updateDatabase(Context c){
+        DatabaseInterface di = DatabaseInterface.getInstance(c);
+        di.updateDataTermine(id,name,startDate.toString(),wiederholungsEnde.toString(),startTime.toString(),endTime.toString(),ort,typ,prioritaet,planID,modulID,isGanztagsTermin,dozent,periode,isException,exceptionContextID,exceptionTargetDay.toString(),isDeleted);
     }
 }

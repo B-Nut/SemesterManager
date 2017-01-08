@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.sql.Time;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -112,6 +114,14 @@ public class Helper {
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+    }
+    public static String formatLong2HourString(long l){
+        String returnString = "";
+        long hours = (l / 1000 / 60 / 60);
+        long minutes = (l/1000/60) - (hours * 60);
+        DecimalFormat df = new DecimalFormat("00");
+        returnString = hours + ":" + df.format(minutes);
+        return returnString;
     }
 }
 

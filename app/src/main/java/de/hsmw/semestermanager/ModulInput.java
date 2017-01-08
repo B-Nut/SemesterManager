@@ -33,8 +33,7 @@ public class ModulInput extends AppCompatActivity {
         setContentView(R.layout.activity_modul_input);
 
 
-        dh = new DatabaseHandler(this);
-        di = new DatabaseInterface(dh.getWritableDatabase());
+        di = DatabaseInterface.getInstance(this);
 
         // you need to have a list of data that you want the spinner to display
         plans = di.getAllPlans();

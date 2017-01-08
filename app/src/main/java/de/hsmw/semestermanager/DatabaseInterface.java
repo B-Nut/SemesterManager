@@ -1,6 +1,7 @@
 package de.hsmw.semestermanager;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -23,8 +24,15 @@ import java.util.Collections;
 
 public class DatabaseInterface {
     private SQLiteDatabase db;
+    private static DatabaseInterface di;
 
-    DatabaseInterface(SQLiteDatabase db) {
+    public static DatabaseInterface getInstance(Context c){
+        if( di == null){
+            di = new DatabaseInterface(new DatabaseHandler(c.getApplicationContext()).getWritableDatabase());
+        }
+        return di;
+    }
+    private DatabaseInterface(SQLiteDatabase db) {
         this.db = db;
     }
 
@@ -69,8 +77,8 @@ public class DatabaseInterface {
     }
 //------------------------------Get All Data-----------------------------------------
     public Plan[] getAllPlans(){
-        Cursor c = db.rawQuery("select * from plans ORDER BY STARTTIME, ENDTIME", null);
-        //Cursor c = db.rawQuery("select * from plans", null);
+        //Cursor c = db.rawQuery("select * from plans ORDER BY STARTTIME, ENDTIME", null);
+        Cursor c = db.rawQuery("select * from plans", null);
         Plan[] returnPlans = new Plan[c.getCount()];
         while (c.moveToNext()) {
             returnPlans[c.getPosition()] = cursor2Plan(c);
@@ -78,8 +86,8 @@ public class DatabaseInterface {
         return returnPlans;
     }
     public Module[] getAllDataModules(){
-        Cursor c = db.rawQuery("select * from modules ORDER BY ANZEIGENAME", null);
-        //Cursor c = db.rawQuery("select * from modules", null);
+        //Cursor c = db.rawQuery("select * from modules ORDER BY ANZEIGENAME", null);
+        Cursor c = db.rawQuery("select * from modules", null);
         Module[] returnModule = new Module[c.getCount()];
         while (c.moveToNext()) {
             returnModule[c.getPosition()] = cursor2Module(c);
@@ -212,13 +220,13 @@ public class DatabaseInterface {
         values.put("ANZEIGENAME", ANZEIGENAME);
         values.put("STARTTIME", STARTTIME);
         values.put("ENDTIME", ENDTIME);
-        return db.update("plans", values, "WHERE ID =" + String.valueOf(ID), null);}else {Log.d("DatabaseInterface", "updateDataPlans = return -1"); return -1;}
+        return db.update("plans", values, "ID =" + String.valueOf(ID), null);}else {Log.d("DatabaseInterface", "updateDataPlans = return -1"); return -1;}
     }
     public long updateDataModules(int ID, String ANZEIGENAME, int SEMESTERID) {
         ContentValues values = new ContentValues();
         values.put("ANZEIGENAME", ANZEIGENAME);
         values.put("SEMESTERID", SEMESTERID);
-        return db.update("Modules", values, "WHERE ID =" + String.valueOf(ID), null);
+        return db.update("Modules", values, "ID =" + String.valueOf(ID), null);
     }
     public long updateDataTermine(int id, String name, String startDate, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode,int isExeption,int exceptionContextID,String exceptionTargetDay,int delete) {
         if(Date.valueOf(startDate).equals(Date.valueOf(wiederholungsEnde))||Date.valueOf(startDate).before(Date.valueOf(wiederholungsEnde))){
@@ -242,35 +250,33 @@ public class DatabaseInterface {
                 values.put("EXCEPTIONTARGETDAY", exceptionTargetDay);
                 values.put("ISDELETED", delete);
 
-        return db.update("Termine", values, "WHERE ID =" + String.valueOf(id), null);}else{Log.d("DatabaseInterface", "updateDataTermine = return -1"); return -1;}}else {Log.d("DatabaseInterface", "updateDataTermine = return -1"); return -1;}
+        return db.update("Termine", values, "ID =" + String.valueOf(id), null);}else{Log.d("DatabaseInterface", "updateDataTermine = return -1"); return -1;}}else {Log.d("DatabaseInterface", "updateDataTermine = return -1"); return -1;}
     }
     //------------------------------------------------------------------
-    public Termin[] getTermineByDate(String date){
-        Log.d("database", "getTermineByDate aufgerufen!");
+    public Termin[] getTermineByDate(String date, int planOrModuleID, boolean isPlan){
         ArrayList<Termin> returnArray = new ArrayList<>();
         ArrayList<Integer> TerminwiederholungsIgnorierArray = new ArrayList<>();
-        ArrayList<Integer> EXCEPTIONCONTEXTIDArray = new ArrayList<>();
+
+        String restrictionExtension;
+        if (isPlan){
+            restrictionExtension = "SEMESTERID = \""+ planOrModuleID + "\"";
+        }else {
+            restrictionExtension = "MODULID = \""+ planOrModuleID + "\"";
+        }
 
         //Query werfen, der mir roh alle Termine eines Tages zurück gibt. -> Diese in das Returnarray schreiben.
-        String query = "select * from termine WHERE STARTDATE =  \""+ date + "\" ";
+        String query = "select * from termine WHERE STARTDATE =  \""+ date + "\" AND " + restrictionExtension;
 
         Cursor c = db.rawQuery(query,null);
         while (c.moveToNext()){
-            int terminId = c.getInt(0);
-            int isException = c.getInt(15);
-            int isDeleted = c.getInt(18);
-            int periode = c.getInt(14);
-            int exceptionContextID = c.getInt(16);
-            String exceptionDay = c.getString(17);
+            int isException = c.getInt(14);
+            int isDeleted = c.getInt(17);
+            int periode = c.getInt(13);
 
             //Terminwiederholungen und Ausnahmen ignorieren.
             if(periode == 0 && isException == 0) {
                 returnArray.add(cursor2Termin(c));
             }else if (isException != 0){
-                //TerminwiederholungsID merken, wenn die ExceptionTargetDay dem date entspricht.
-                if (exceptionDay.equals(date)) {
-                    TerminwiederholungsIgnorierArray.add(exceptionContextID);
-                }
                 if(isDeleted == 0) {
                     returnArray.add(cursor2Termin(c));
                 }
@@ -278,13 +284,22 @@ public class DatabaseInterface {
         }
         c.close();
 
+        //Alle Terminwiederholungsausnahme holen, die für der aktuellen Tag gelten
+        query = "select * from termine WHERE EXCEPTIONTARGETDAY =  \""+ date + "\" AND " + restrictionExtension;
+        c = db.rawQuery(query,null);
+        while (c.moveToNext()){
+            int exceptionContextID = c.getInt(15);
+            TerminwiederholungsIgnorierArray.add(exceptionContextID);
+        }
+        c.close();
+
         //Query werfen, der mir alle Terminwiederholungen gibt.
-        query = "select * from termine  WHERE PERIODE<>'0' AND ISEXEPTION='0'";
+        query = "select * from termine  WHERE PERIODE<>'0' AND ISEXEPTION='0' AND " + restrictionExtension;
         c = db.rawQuery(query,null);
         while (c.moveToNext()){
             //Für Terminwiederholungen - dessen ID's nicht gemerkt wurden -  getTerminAtDate(date) aufrufen -> Termin anfügen, wenn nicht null.
             int terminId = c.getInt(0);
-            //TESTEN :)
+            //TODO: TESTEN :)
             if (TerminwiederholungsIgnorierArray.contains(terminId)){
                 continue;
             }
@@ -331,16 +346,24 @@ public class DatabaseInterface {
 
     //___________________SonderFunktionen_________________
     public int getCountExceptionsByID(int ID) {
-        Cursor c = db.rawQuery("SELECT * from TERMINE WHERE EXCEPTIONCONTEXTID = \"%" + ID + "%\"", null);
+        Cursor c = db.rawQuery("SELECT * from TERMINE WHERE EXCEPTIONCONTEXTID = \"" + ID + "\"", null);
+        int returnValue = c.getCount();
         c.close();
-        return c.getCount();
+        return returnValue;
     }
 
-
+    public Termin[] getExceptionsByWiederholungsID(int wiederholungsID){
+        Cursor c = db.rawQuery("SELECT * from TERMINE WHERE EXCEPTIONCONTEXTID = \"" + wiederholungsID + "\"", null);
+        Termin[] returnArray = new Termin[c.getCount()];
+        while (c.moveToNext()){
+            returnArray[c.getPosition()] = cursor2Termin(c);
+        }
+        return returnArray;
+    }
     //____________________________________________________
 
     private Termin cursor2Termin(Cursor c){
-        return new Termin(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4), c.getString(5), c.getString(6), c.getString(7), c.getString(8), c.getInt(9), c.getInt(10), c.getInt(11), c.getInt(12), c.getString(13), c.getInt(14), c.getInt(15), c.getInt(16), c.getString(17), c.getInt(18));
+        return new Termin(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4), c.getString(5), c.getString(6), c.getString(7), c.getInt(8), c.getInt(9), c.getInt(10), c.getInt(11), c.getString(12), c.getInt(13), c.getInt(14), c.getInt(15), c.getString(16), c.getInt(17));
     }
     private Plan cursor2Plan(Cursor c){
        return new Plan(c.getInt(0), c.getString(1), c.getString(2), c.getString(3));
@@ -349,6 +372,4 @@ public class DatabaseInterface {
     private Module cursor2Module(Cursor c){
         return new Module(c.getInt(0), c.getString(1), c.getInt(2));
     }
-
-
 }

@@ -72,7 +72,6 @@ public class DayView extends AppCompatActivity {
         private ListView listView;
         private ArrayList<Termin> termine;
         private TerminAdapterDayView<Termin> terminListAdapter;
-        private DatabaseHandler dh;
         private DatabaseInterface di;
 
         public PlaceholderFragment() {
@@ -91,20 +90,20 @@ public class DayView extends AppCompatActivity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, final ViewGroup container,
+                                 final Bundle savedInstanceState) {
             int scrollOffset = 22;
-
-            View rootView = inflater.inflate(R.layout.fragment_day_view, container, false);
+            final int currentPage = getArguments().getInt(ARG_SECTION_NUMBER) - scrollOffset;
+            final View rootView = inflater.inflate(R.layout.fragment_day_view, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             final Calendar c = Calendar.getInstance();
-            c.add(Calendar.DATE, getArguments().getInt(ARG_SECTION_NUMBER) - scrollOffset);
+            c.add(Calendar.DATE, currentPage);
             SimpleDateFormat df = new SimpleDateFormat("EEEE - dd.MM.yyyy");
             String formattedDate = df.format(c.getTime());
+            Log.d("onCreateView", formattedDate);
             textView.setText(formattedDate);
 
-            dh = new DatabaseHandler(rootView.getContext());
-            di = new DatabaseInterface(dh.getWritableDatabase());
+            di = DatabaseInterface.getInstance(rootView.getContext());
 
             listView = (ListView) rootView.findViewById(R.id.list_termin_dayview);
             termine = new ArrayList<>();
@@ -113,18 +112,28 @@ public class DayView extends AppCompatActivity {
 
             final SimpleDateFormat af = new SimpleDateFormat("yyyy-MM-dd");
             updateList(af.format(c.getTime()));
-            //dh.close();
             listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
+
+                    final Termin t = (Termin) parent.getItemAtPosition(position);
+                    String question;
+                    if(t.getPeriode() != 0 && t.getIsException() == 0){
+                        question = "Are you sure you want to delete this repeated appointment? This will also delete " + di.getCountExceptionsByID(t.getId()) + " exceptions.";
+                    }else if (t.getIsException() != 0){
+                        question = "Are you sure you want to delete this exception? The regular appointment the exception is referring to will be restored.";
+                    }else{
+                        question = "Are you sure you want to delete this appointment?";
+                    }
+
                     AlertDialog.Builder alert = new AlertDialog.Builder(listView.getContext());
-                    alert.setTitle("You aren't going to skip that class?");
-                    alert.setMessage("Are you sure to delete record");
+                    //alert.setTitle(question);
+                    alert.setMessage(question);
                     alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            int terminId = ((Termin) parent.getItemAtPosition(position)).getId();
+                            int terminId = (t.getId());
                             Log.d("DayView", "try to delete termin with ID: " + terminId);
                             di.deleteTerminByID(terminId);
                             updateList(af.format(c.getTime()));
@@ -146,7 +155,8 @@ public class DayView extends AppCompatActivity {
         }
         public void updateList(String date){
             termine.clear();
-            termine.addAll(Arrays.asList(di.getTermineByDate(date)));
+            //TODO: Hardcoded integer entfernen.
+            termine.addAll(Arrays.asList(di.getTermineByDate(date, 1, true)));
             //Log.d("database",di.getTermineByDate(date)[0].getName());
             terminListAdapter.notifyDataSetChanged();
         }

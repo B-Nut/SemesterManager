@@ -29,8 +29,7 @@ public class TerminInput extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_termin_input);
 
-        dh = new DatabaseHandler(this);
-        di = new DatabaseInterface(dh.getWritableDatabase());
+        di = DatabaseInterface.getInstance(this);
 
         terminName = (EditText) findViewById(R.id.new_termin_name);
         ganztagstermin = (CheckBox) findViewById(R.id.new_termin_ganztags_checkbox);
@@ -65,12 +64,13 @@ public class TerminInput extends AppCompatActivity {
         Helper.fillSpinner(this, allPlans, semester);
 
         Module[] allModules = di.getAllDataModules();
+        //TODO: ModulListe noch  richtig machen.
         Helper.fillSpinner(this, allModules, modul);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                di.insertDataTermine(terminName.getText().toString(),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(endDate.getText().toString()),startTime.getText().toString()+":00",endTime.getText().toString()+":00",ort.getText().toString(),typen[typ.getSelectedItemPosition()],priorität.getSelectedItemPosition(),semester.getSelectedItemPosition()+1,modul.getSelectedItemPosition()+1,ganztagstermin.isChecked()?1:0,dozent.getText().toString(),periode.getSelectedItemPosition(),0,0,"2016-01-01",0);
+                di.insertDataTermine(terminName.getText().toString(),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(endDate.getText().toString()),startTime.getText().toString()+":00",endTime.getText().toString()+":00",ort.getText().toString(),typen[typ.getSelectedItemPosition()],priorität.getSelectedItemPosition(),semester.getSelectedItemPosition()+1,modul.getSelectedItemPosition()+1,ganztagstermin.isChecked()?1:0,dozent.getText().toString(),periode.getSelectedItemPosition(),0,0,"2016-01-01",0);
                 finish();
             }
         });

@@ -1,5 +1,7 @@
 package de.hsmw.semestermanager;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -38,7 +40,6 @@ public class SemesterplanView extends AppCompatActivity {
     ArrayList<Termin> termine;
     TerminAdapterStandard termineListAdapter;
 
-    DatabaseHandler dh;
     DatabaseInterface di;
 
     @Override
@@ -48,10 +49,9 @@ public class SemesterplanView extends AppCompatActivity {
 
         scrollView = (ScrollView) findViewById(R.id.semesterview_scrollview);
 
-        dh = new DatabaseHandler(this);
-        di = new DatabaseInterface(dh.getWritableDatabase());
+        di = DatabaseInterface.getInstance(this);
 
-        int i = (int) getIntent().getExtras().getLong("ID");
+        int i = getIntent().getExtras().getInt("ID");
         selectedPlan = di.getDataByIDPlans(i);
 
         setTitle(selectedPlan.getName());
@@ -83,9 +83,44 @@ public class SemesterplanView extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int modulID = ((Module) parent.getItemAtPosition(position)).getId();
                 Intent i = new Intent("de.hsmw.semestermanager.ModulView");
-                i.putExtra("ID", (long) modulID);
-                //Uncomment for revealing construction-site
-                //startActivity(i);
+                i.putExtra("ID", modulID);
+                startActivity(i);
+            }
+        });
+
+        moduleList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
+
+                final Module m = (Module) parent.getItemAtPosition(position);
+                String question;
+                question = "Are you sure you want to delete this module? All appointments associated with it are going to be deleted too";
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(moduleList.getContext());
+                alert.setMessage(question);
+                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int moduleId = (m.getId());
+                        di.deleteMudulByID(moduleId);
+                        Termin[] termine = di.getTermineByModulID(moduleId);
+                        for(Termin t : termine){
+                            di.deleteTerminByID(t.getId());
+                        }
+                        updateLists();
+                        dialog.dismiss();
+                    }
+                });
+                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+                return true;
             }
         });
 
@@ -93,6 +128,44 @@ public class SemesterplanView extends AppCompatActivity {
         termine = new ArrayList<>();
         termineListAdapter = new TerminAdapterStandard(this, R.layout.listview_semesterview_termine, termine);
         entryList.setAdapter(termineListAdapter);
+        entryList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
+
+                final Termin t = (Termin) parent.getItemAtPosition(position);
+                String question;
+                if(t.getPeriode() != 0 && t.getIsException() == 0){
+                    question = "Are you sure you want to delete this repeated appointment? This will also delete " + di.getCountExceptionsByID(t.getId()) + " exceptions.";
+                }else if (t.getIsException() != 0){
+                    question = "Are you sure you want to delete this exception? The regular appointment the exception is referring to will be restored.";
+                }else{
+                    question = "Are you sure you want to delete this appointment?";
+                }
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(entryList.getContext());
+                alert.setMessage(question);
+                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int terminId = (t.getId());
+                        di.deleteTerminByID(terminId);
+                        updateLists();
+                        dialog.dismiss();
+                    }
+                });
+                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+                return true;
+            }
+        });
+
         updateLists();
         scrollView.fullScroll(View.FOCUS_UP);
     }
@@ -104,7 +177,12 @@ public class SemesterplanView extends AppCompatActivity {
         modulesListAdapter.notifyDataSetChanged();
 
         termine.clear();
-        termine.addAll(Arrays.asList(di.getTermineByPlanID(selectedPlan.getId())));
+        Termin[] t = di.getTermineByPlanID(selectedPlan.getId());
+        for (Termin tt : t){
+            if (tt.getModulID() == 0){
+                 termine.add(tt);
+            }
+        }
         setListViewHeightBasedOnChildren(entryList);
         termineListAdapter.notifyDataSetChanged();
     }
@@ -153,10 +231,11 @@ public class SemesterplanView extends AppCompatActivity {
         }
         if (id == R.id.action_add_new_entry) {
             startActivity(new Intent("de.hsmw.semestermanager.TerminInput"));
+            return true;
         }
         if (id == R.id.action_view_day){
-            Log.d("database", "DayViewActivity gestartet");
             startActivity(new Intent("de.hsmw.semestermanager.DayView"));
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -26,8 +26,7 @@ public class SemesterplanInput extends AppCompatActivity {
         findViewById(R.id.new_semester_submit).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                DatabaseHandler dh = new DatabaseHandler(SemesterplanInput.this);
-                DatabaseInterface di = new DatabaseInterface(dh.getWritableDatabase());
+                DatabaseInterface di = DatabaseInterface.getInstance(SemesterplanInput.this);
                 String name = ((EditText) findViewById(R.id.new_semester_name)).getText().toString();
                 String startDate = Helper.dateToSQL(((TextView) findViewById(R.id.new_semester_date_start)).getText().toString());
                 String endDate = Helper.dateToSQL(((TextView) findViewById(R.id.new_semester_date_end)).getText().toString());

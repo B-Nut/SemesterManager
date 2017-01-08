@@ -1,5 +1,6 @@
 package de.hsmw.semestermanager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -35,8 +36,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        dh = new DatabaseHandler(this);
-        di = new DatabaseInterface(dh.getWritableDatabase());
+       di = DatabaseInterface.getInstance(this);
 
         listView = (ListView) findViewById(R.id.mainList);
 
@@ -51,9 +51,48 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Plan clickedPlan = (Plan) parent.getItemAtPosition(position);
                 Intent i = new Intent("de.hsmw.semestermanager.SemesterplanView");
-                i.putExtra("ID", (long) clickedPlan.getId());
+                i.putExtra("ID", clickedPlan.getId());
                 //Toast.makeText(MainActivity.this, Integer.toString(clickedPlan.getId()), Toast.LENGTH_LONG).show();
                 startActivity(i);
+            }
+        });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
+
+                final Plan p = (Plan) parent.getItemAtPosition(position);
+                String question;
+                question = "Are you sure you want to delete this semester? All appointments and modules associated with it are going to be deleted too.";
+
+                android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(listView.getContext());
+                alert.setMessage(question);
+                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int planId = (p.getId());
+                        di.deletePlanByID(planId);
+                        Termin[] termine = di.getTermineByPlanID(planId);
+                        for(Termin t : termine){
+                            di.deleteTerminByID(t.getId());
+                        }
+                        Module[] module = di.getModulesByPlanID(planId);
+                        for(Module m : module){
+                            di.deleteMudulByID(m.getId());
+                        }
+                        updateList();
+                        dialog.dismiss();
+                    }
+                });
+                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+                return true;
             }
         });
     }
