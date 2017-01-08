@@ -46,11 +46,11 @@ public class ModulView extends AppCompatActivity {
 
                 final Termin t = (Termin) parent.getItemAtPosition(position);
                 String question;
-                if(t.getPeriode() != 0 && t.getIsException() == 0){
+                if (t.getPeriode() != 0 && t.getIsException() == 0) {
                     question = "Are you sure you want to delete this repeated appointment? This will also delete " + di.getCountExceptionsByID(t.getId()) + " exceptions.";
-                }else if (t.getIsException() != 0){
+                } else if (t.getIsException() != 0) {
                     question = "Are you sure you want to delete this exception? The regular appointment the exception is referring to will be restored.";
-                }else{
+                } else {
                     question = "Are you sure you want to delete this appointment?";
                 }
 
@@ -60,8 +60,7 @@ public class ModulView extends AppCompatActivity {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        int terminId = (t.getId());
-                        di.deleteTerminByID(terminId);
+                        t.delete(parent.getContext());
                         updateView();
                         dialog.dismiss();
                     }
@@ -79,11 +78,12 @@ public class ModulView extends AppCompatActivity {
         });
         updateView();
     }
-    public void updateView(){
+
+    public void updateView() {
         termine.clear();
         Termin[] t = di.getTermineByModulID(selectedModule.getId());
-        for (Termin tt : t){
-            if (tt.getModulID() == selectedModule.getId()){
+        for (Termin tt : t) {
+            if (tt.getModulID() == selectedModule.getId()) {
                 termine.add(tt);
             }
         }

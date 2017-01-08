@@ -27,25 +27,25 @@ public class SemesterAdapter extends ArrayAdapter<Plan> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
 
-        if (v == null){
+        if (v == null) {
             LayoutInflater vi = LayoutInflater.from(getContext());
-            v = vi.inflate(viewResource,null);
+            v = vi.inflate(viewResource, null);
         }
 
         Plan s = getItem(position);
 
-        if( s != null) {
+        if (s != null) {
             TextView textName = (TextView) v.findViewById(R.id.textSemesterName);
             TextView textStartDate = (TextView) v.findViewById(R.id.textSemesterStartDate);
             TextView textEndDate = (TextView) v.findViewById(R.id.textSemesterEndDate);
 
-            if (textName != null){
+            if (textName != null) {
                 textName.setText(s.getName());
             }
-            if (textEndDate != null){
+            if (textEndDate != null) {
                 textEndDate.setText(Helper.sqlToGermanDate(s.getEndDate().toString()));
             }
-            if (textStartDate != null){
+            if (textStartDate != null) {
                 textStartDate.setText(Helper.sqlToGermanDate(s.getStartDate().toString()));
             }
         }

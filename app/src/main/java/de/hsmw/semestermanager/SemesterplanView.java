@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +40,28 @@ public class SemesterplanView extends AppCompatActivity {
     TerminAdapterStandard termineListAdapter;
 
     DatabaseInterface di;
+
+    // Copied from http://stackoverflow.com/questions/18367522/android-list-view-inside-a-scroll-view
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,7 +126,7 @@ public class SemesterplanView extends AppCompatActivity {
                         int moduleId = (m.getId());
                         di.deleteMudulByID(moduleId);
                         Termin[] termine = di.getTermineByModulID(moduleId);
-                        for(Termin t : termine){
+                        for (Termin t : termine) {
                             di.deleteTerminByID(t.getId());
                         }
                         updateLists();
@@ -134,11 +155,11 @@ public class SemesterplanView extends AppCompatActivity {
 
                 final Termin t = (Termin) parent.getItemAtPosition(position);
                 String question;
-                if(t.getPeriode() != 0 && t.getIsException() == 0){
+                if (t.getPeriode() != 0 && t.getIsException() == 0) {
                     question = "Are you sure you want to delete this repeated appointment? This will also delete " + di.getCountExceptionsByID(t.getId()) + " exceptions.";
-                }else if (t.getIsException() != 0){
+                } else if (t.getIsException() != 0) {
                     question = "Are you sure you want to delete this exception? The regular appointment the exception is referring to will be restored.";
-                }else{
+                } else {
                     question = "Are you sure you want to delete this appointment?";
                 }
 
@@ -148,8 +169,7 @@ public class SemesterplanView extends AppCompatActivity {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        int terminId = (t.getId());
-                        di.deleteTerminByID(terminId);
+                        t.delete(parent.getContext());
                         updateLists();
                         dialog.dismiss();
                     }
@@ -178,36 +198,13 @@ public class SemesterplanView extends AppCompatActivity {
 
         termine.clear();
         Termin[] t = di.getTermineByPlanID(selectedPlan.getId());
-        for (Termin tt : t){
-            if (tt.getModulID() == 0){
-                 termine.add(tt);
+        for (Termin tt : t) {
+            if (tt.getModulID() == 0) {
+                termine.add(tt);
             }
         }
         setListViewHeightBasedOnChildren(entryList);
         termineListAdapter.notifyDataSetChanged();
-    }
-
-
-    // Copied from http://stackoverflow.com/questions/18367522/android-list-view-inside-a-scroll-view
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
-            return;
-
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0)
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
     }
 
     @Override
@@ -233,7 +230,7 @@ public class SemesterplanView extends AppCompatActivity {
             startActivity(new Intent("de.hsmw.semestermanager.TerminInput"));
             return true;
         }
-        if (id == R.id.action_view_day){
+        if (id == R.id.action_view_day) {
             startActivity(new Intent("de.hsmw.semestermanager.DayView"));
             return true;
         }
@@ -244,5 +241,5 @@ public class SemesterplanView extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         updateLists();
-     }
+    }
 }

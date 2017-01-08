@@ -2,21 +2,20 @@ package de.hsmw.semestermanager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.support.v7.app.AppCompatActivity;
-
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -118,11 +117,11 @@ public class DayView extends AppCompatActivity {
 
                     final Termin t = (Termin) parent.getItemAtPosition(position);
                     String question;
-                    if(t.getPeriode() != 0 && t.getIsException() == 0){
+                    if (t.getPeriode() != 0 && t.getIsException() == 0) {
                         question = "Are you sure you want to delete this repeated appointment? This will also delete " + di.getCountExceptionsByID(t.getId()) + " exceptions.";
-                    }else if (t.getIsException() != 0){
+                    } else if (t.getIsException() != 0) {
                         question = "Are you sure you want to delete this exception? The regular appointment the exception is referring to will be restored.";
-                    }else{
+                    } else {
                         question = "Are you sure you want to delete this appointment?";
                     }
 
@@ -133,9 +132,7 @@ public class DayView extends AppCompatActivity {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            int terminId = (t.getId());
-                            Log.d("DayView", "try to delete termin with ID: " + terminId);
-                            di.deleteTerminByID(terminId);
+                            t.delete(parent.getContext());
                             updateList(af.format(c.getTime()));
                             dialog.dismiss();
                         }
@@ -153,7 +150,8 @@ public class DayView extends AppCompatActivity {
             });
             return rootView;
         }
-        public void updateList(String date){
+
+        public void updateList(String date) {
             termine.clear();
             //TODO: Hardcoded integer entfernen.
             termine.addAll(Arrays.asList(di.getTermineByDate(date, 1, true)));

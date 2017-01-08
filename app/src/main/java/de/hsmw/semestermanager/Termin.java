@@ -10,7 +10,7 @@ import java.util.GregorianCalendar;
  * Created by Benjamin on 02.12.2016.
  */
 
-public class Termin implements DatabaseObject, Comparable<Termin>{
+public class Termin implements DatabaseObject, Comparable<Termin> {
     private int id;
     private String name;
     private Date startDate;
@@ -19,15 +19,36 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
     private Time endTime;
     private String ort;
     private String typ;
+    /**
+     * 0 Wichtig - 1 Normal - 2 Unwichtig
+     */
     private int prioritaet;
     private int planID;
     private int modulID;
-    private int isGanztagsTermin; //0 false; 1 true -> SQLite kann keine Booleans
+    /**
+     * 0 false; 1 true -> SQLite kann keine Booleans.
+     */
+    private int isGanztagsTermin;
     private String dozent;
+    /**
+     * 0 - Wenn sich der Termin nicht wiederholen soll. Wiederholungsintervall in Tagen.
+     */
     private int periode;
+    /**
+     * Gibt an, dass dieser Termin eine Terminwiederholungsausnmahme ist. 0 - Keine Ausnahme.
+     */
     private int isException;
+    /**
+     * ID der Terminwiederholung für den diese Ausnahme gilt.
+     */
     private int exceptionContextID;
+    /**
+     * Der Tag den eine Terminwiederholungsausnahme in der Terminwiederholung ersetzen soll.
+     */
     private Date exceptionTargetDay;
+    /**
+     * Gibt an, dass die Ausnahme "nur" zum löschen des Termins am exceptionTargetday dient.
+     */
     private int isDeleted;
 
     public Termin(int id, String name, String startDate, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int isGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, String exceptionTargetDay, int isDeleted) {
@@ -49,10 +70,9 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
         this.exceptionContextID = exceptionContextID;
         this.exceptionTargetDay = Date.valueOf(exceptionTargetDay);
         this.isDeleted = isDeleted;
-
     }
 
-    public Termin(int id, String name, Date startDate, Date wiederholungsEnde, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int isGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, Date exceptionTargetDay,int isDeleted) {
+    public Termin(int id, String name, Date startDate, Date wiederholungsEnde, Time startTime, Time endTime, String ort, String typ, int prioritaet, int planID, int modulID, int isGanztagsTermin, String dozent, int periode, int isException, int exceptionContextID, Date exceptionTargetDay, int isDeleted) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
@@ -73,17 +93,18 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
         this.isDeleted = isDeleted;
     }
 
-    public String getDateString(){
+    public String getDateString() {
         String returnString;
         String[] temp = startDate.toString().split("-");
         returnString = temp[2] + "." + temp[1];
         return returnString;
     }
-    public String getTimeString(){
+
+    public String getTimeString() {
         String returnString;
-        if (isGanztagsTermin != 0){
+        if (isGanztagsTermin != 0) {
             returnString = "Ganztags";
-        }else {
+        } else {
             String[] temp = startTime.toString().split(":");
             returnString = temp[0] + ":" + temp[1] + " - ";
             temp = endTime.toString().split(":");
@@ -148,27 +169,34 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
         return periode;
     }
 
-    public int getIsException(){return isException ;}
-    public int getExceptionContextID(){return exceptionContextID;}
-    public Date getExceptionTargetDay() {return exceptionTargetDay;}
-    public  int getIsDeleted(){return isDeleted;}
+    public int getIsException() {
+        return isException;
+    }
+
+    public int getExceptionContextID() {
+        return exceptionContextID;
+    }
+
+    public Date getExceptionTargetDay() {
+        return exceptionTargetDay;
+    }
+
+    public int getIsDeleted() {
+        return isDeleted;
+    }
 
     @Override
     public int compareTo(Termin o) {
         int comparedStart = Helper.compareSQLTime(startTime, o.startTime);
-        if(comparedStart == 0){
-            return  Helper.compareSQLTime(endTime, o.endTime);
-        }else{
+        if (comparedStart == 0) {
+            return Helper.compareSQLTime(endTime, o.endTime);
+        } else {
             return comparedStart;
         }
     }
 
-  /*  public Date getDuration(){
-        return new Date(endDate.getTime() - startDate.getTime());
-    }*/
-
-    public Termin getTerminAtDate(Date date){
-        if(isException != 0 || periode == 0){
+    public Termin getTerminAtDate(Date date) {
+        if (isException != 0 || periode == 0) {
             return null;
         }
 
@@ -177,23 +205,32 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
         while (calendar.getTime().compareTo(date) < 0 && calendar.getTime().compareTo(wiederholungsEnde) < 0) {
             calendar.add(GregorianCalendar.DAY_OF_MONTH, periode);
         }
-        if(calendar.getTime().compareTo(date) == 0){
+        if (calendar.getTime().compareTo(date) == 0) {
             Termin returnTermin = this.clone();
-            returnTermin.startDate = new Date (calendar.getTime().getTime());
+            returnTermin.startDate = new Date(calendar.getTime().getTime());
             return returnTermin;
-        }else {
+        } else {
             return null;
+        }
+    }
+
+    public long getDuration() {
+        if (isGanztagsTermin == 0) {
+            return (endTime.getTime() - startTime.getTime());
+        } else {
+            return 0;
         }
     }
 
     /**
      * Berechnet, wie viel Zeit alle Regulären Termine einer Terminwiederholung insgesamt dauern. Terminwiederholungsausnahmen sind von der Berechnung aktiv einbezogen.
+     *
      * @param date Das Datum bis zu dem gezählt werden soll.
      * @param c
      * @return Wie viel Zeit alle Regulären Termine einer Terminwiederholung insgesamt dauern. Terminwiederholungsausnahmen sind von der Berechnung aktiv einbezogen.
      */
-    public long getDurationSumUntil(Date date, Context c){
-        if(isException != 0 || periode == 0){
+    public long getDurationSumUntil(Date date, Context c) {
+        if (isException != 0 || periode == 0) {
             return 0;
         }
 
@@ -204,42 +241,38 @@ public class Termin implements DatabaseObject, Comparable<Termin>{
         calendar.setTime(startDate);
         long returnValue = 0;
         long terminOnce = getDuration();
-        for(Termin exception : exceptions){
-            if (exception.getStartDate().compareTo(date) < 0) {
+        for (Termin exception : exceptions) {
+            if (exception.isDeleted == 0 && exception.getStartDate().compareTo(date) < 0) {
                 returnValue += exception.getDuration();
             }
             if (exception.getExceptionTargetDay().compareTo(date) < 0) {
-                returnValue -= exception.getDuration();
+                returnValue -= terminOnce;
             }
         }
         while (calendar.getTime().compareTo(date) <= 0 && calendar.getTime().compareTo(wiederholungsEnde) <= 0) {
             calendar.add(GregorianCalendar.DAY_OF_MONTH, periode);
             returnValue += terminOnce;
         }
-        returnValue -= (di.getCountExceptionsByID(id) * terminOnce);
         return returnValue;
     }
-    public long getDuration(){
-        if(isGanztagsTermin == 0) {
-            return (endTime.getTime() - startTime.getTime());
-        }else{
-            return 0;
-        }
+
+    public Termin clone() {
+        return new Termin(id, name, startDate, wiederholungsEnde, startTime, endTime, ort, typ, prioritaet, planID, modulID, isGanztagsTermin, dozent, periode, isException, exceptionContextID, exceptionTargetDay, isDeleted);
     }
 
-    public Termin clone(){
-       return new Termin(id,name,startDate,wiederholungsEnde,startTime,endTime,ort,typ,prioritaet,planID,modulID,isGanztagsTermin,dozent,periode,isException,exceptionContextID,exceptionTargetDay, isDeleted);
-    }
-    public Module getModule(Context c){
+    public Module getModule(Context c) {
         DatabaseInterface di = DatabaseInterface.getInstance(c);
         Module returnModule = di.getDataByIDModules(getModulID());
         return returnModule;
     }
-    public void resetModule(){
-        modulID = 0;
-    }
-    public void updateDatabase(Context c){
+
+    /**
+     * Löscht den Termin in der Datenbank und alle zugehörigen Exceptions, wenn vorhanden.
+     *
+     * @param c Context für der Datenbankzugriff.
+     */
+    public void delete(Context c) {
         DatabaseInterface di = DatabaseInterface.getInstance(c);
-        di.updateDataTermine(id,name,startDate.toString(),wiederholungsEnde.toString(),startTime.toString(),endTime.toString(),ort,typ,prioritaet,planID,modulID,isGanztagsTermin,dozent,periode,isException,exceptionContextID,exceptionTargetDay.toString(),isDeleted);
+        di.deleteTerminByID(id);
     }
 }

@@ -13,7 +13,6 @@ import android.widget.TimePicker;
 
 import java.sql.Time;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.List;
  */
 
 public class Helper {
-    public static void pickDate(final Context context, final TextView inputDate, final String title){
+    public static void pickDate(final Context context, final TextView inputDate, final String title) {
         inputDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -32,10 +31,10 @@ public class Helper {
                 int month = mCurrentDate.get(Calendar.MONTH);
                 int year = mCurrentDate.get(Calendar.YEAR);
                 DatePickerDialog mDatePicker;
-                mDatePicker = new DatePickerDialog(context, 0, new DatePickerDialog.OnDateSetListener(){
+                mDatePicker = new DatePickerDialog(context, 0, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                        inputDate.setText(String.format("%02d",dayOfMonth) + "." + String.format("%02d",month+1) + "." + year);
+                        inputDate.setText(String.format("%02d", dayOfMonth) + "." + String.format("%02d", month + 1) + "." + year);
                     }
                 }, year, month, day);
                 mDatePicker.setTitle(title);
@@ -43,8 +42,9 @@ public class Helper {
             }
         });
     }
-    public static void pickTime(final Context context, final TextView inputTime, final String title){
-        inputTime.setOnClickListener(new View.OnClickListener(){
+
+    public static void pickTime(final Context context, final TextView inputTime, final String title) {
+        inputTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar mcurrentTime = Calendar.getInstance();
@@ -54,7 +54,7 @@ public class Helper {
                 mTimePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        inputTime.setText( String.format("%02d", selectedHour) + ":" + String.format("%02d",selectedMinute));
+                        inputTime.setText(String.format("%02d", selectedHour) + ":" + String.format("%02d", selectedMinute));
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle(title);
@@ -63,26 +63,30 @@ public class Helper {
             }
         });
     }
-    public static String dateToSQL(String germanDate){
+
+    public static String dateToSQL(String germanDate) {
         String[] values = germanDate.split("[.]");
         return values[2] + "-" + values[1] + "-" + values[0];
     }
-    public static String sqlToGermanDate(String sqlDate){
+
+    public static String sqlToGermanDate(String sqlDate) {
         String[] vaiues = sqlDate.split("-");
         return vaiues[2] + "." + vaiues[1] + "." + vaiues[0];
     }
-    public static int[] timeToIntArray(Time t){
+
+    public static int[] timeToIntArray(Time t) {
         String[] timeStrings = t.toString().split(":");
         int[] time = new int[3];
-        for(int i = 0; i < timeStrings.length; i++){
+        for (int i = 0; i < timeStrings.length; i++) {
             time[i] = Integer.parseInt(timeStrings[i]);
         }
         return time;
     }
-    public static int compareSQLTime(Time myTime, Time theirTime){
+
+    public static int compareSQLTime(Time myTime, Time theirTime) {
         int[] mys = Helper.timeToIntArray(myTime);
         int[] theirs = Helper.timeToIntArray(theirTime);
-        for(int i = 0; i < mys.length; i++) {
+        for (int i = 0; i < mys.length; i++) {
             int singleCompare = Integer.compare(mys[i], theirs[i]);
             if (singleCompare != 0) {
                 return singleCompare;
@@ -90,14 +94,7 @@ public class Helper {
         }
         return 0;
     }
-    //Brauchen wir vielleicht noch. :)
-    public void showMessage(Context context, String title, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.show();
-    }
+
     public static void fillSpinner(Context context, DatabaseObject[] inputArray, Spinner spinner) {
         List<String> inputNames = new ArrayList();
         for (DatabaseObject inputObject : inputArray) {
@@ -109,19 +106,30 @@ public class Helper {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
+
     public static void fillSpinner(Context context, String[] inputArray, Spinner spinner) {
         ArrayAdapter<String> adapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, inputArray);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
-    public static String formatLong2HourString(long l){
+
+    public static String formatLong2HourString(long l) {
         String returnString = "";
         long hours = (l / 1000 / 60 / 60);
-        long minutes = (l/1000/60) - (hours * 60);
+        long minutes = (l / 1000 / 60) - (hours * 60);
         DecimalFormat df = new DecimalFormat("00");
         returnString = hours + ":" + df.format(minutes);
         return returnString;
+    }
+
+    //Brauchen wir vielleicht noch. :)
+    public void showMessage(Context context, String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
     }
 }
 

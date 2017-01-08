@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Thomas on 04.12.2016.
  */
 
-public class TerminAdapterStandard extends ArrayAdapter <Termin> {
+public class TerminAdapterStandard extends ArrayAdapter<Termin> {
 
     int viewResource;
 
@@ -31,14 +31,14 @@ public class TerminAdapterStandard extends ArrayAdapter <Termin> {
 
         if (v == null) {
             LayoutInflater vi = LayoutInflater.from(getContext());
-            v = vi.inflate(viewResource,null);
+            v = vi.inflate(viewResource, null);
         }
 
         Termin e = getItem(position);
 
-        if(e != null) {
+        if (e != null) {
             TextView semesterview_termin_zeiten = (TextView) v.findViewById(R.id.semesterview_termin_zeiten);
-            TextView semesterview_termin_datum = (TextView) v.findViewById(R.id. semesterview_termin_datum);
+            TextView semesterview_termin_datum = (TextView) v.findViewById(R.id.semesterview_termin_datum);
             TextView semesterview_termin_ort = (TextView) v.findViewById(R.id.semesterview_termin_ort);
             TextView semesterview_termin_modul = (TextView) v.findViewById(R.id.semesterview_termin_modul);
             TextView semesterview_termin_dozenten = (TextView) v.findViewById(R.id.semesterview_termin_dozenten);

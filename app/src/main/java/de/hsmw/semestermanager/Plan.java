@@ -1,18 +1,20 @@
 package de.hsmw.semestermanager;
 
+import android.content.Context;
+
 import java.sql.Date;
 
 /**
  * Created by Benjamin on 30.11.2016.
  */
 
-public class Plan implements DatabaseObject{
+public class Plan implements DatabaseObject {
     private int id;
     private String name;
     private Date startDate;
     private Date endDate;
 
-    public Plan(int id, String name, String startDate, String endDate){
+    public Plan(int id, String name, String startDate, String endDate) {
         this.id = id;
         this.name = name;
         this.startDate = Date.valueOf(startDate);
@@ -35,7 +37,23 @@ public class Plan implements DatabaseObject{
         return id;
     }
 
-    public Date getDuration(){
+    public Date getDuration() {
         return new Date(endDate.getTime() - startDate.getTime());
+    }
+
+    /**
+     * Löscht das Semester mitsamt allen zugewiesenen Modulen und Terminen.
+     */
+    public void delete(Context c) {
+        DatabaseInterface di = DatabaseInterface.getInstance(c);
+        di.deletePlanByID(id);
+        Termin[] termine = di.getTermineByPlanID(id);
+        for (Termin t : termine) {
+            t.delete(c);
+        }
+        Module[] module = di.getModulesByPlanID(id);
+        for (Module m : module) {
+            m.delete(c);
+        }
     }
 }

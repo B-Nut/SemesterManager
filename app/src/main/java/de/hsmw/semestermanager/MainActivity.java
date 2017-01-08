@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -20,7 +19,6 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    DatabaseHandler dh;
     DatabaseInterface di;
 
     ListView listView;
@@ -36,7 +34,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       di = DatabaseInterface.getInstance(this);
+        di = DatabaseInterface.getInstance(this);
 
         listView = (ListView) findViewById(R.id.mainList);
 
@@ -46,7 +44,7 @@ public class MainActivity extends AppCompatActivity
 
         updateList();
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Plan clickedPlan = (Plan) parent.getItemAtPosition(position);
@@ -70,16 +68,7 @@ public class MainActivity extends AppCompatActivity
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        int planId = (p.getId());
-                        di.deletePlanByID(planId);
-                        Termin[] termine = di.getTermineByPlanID(planId);
-                        for(Termin t : termine){
-                            di.deleteTerminByID(t.getId());
-                        }
-                        Module[] module = di.getModulesByPlanID(planId);
-                        for(Module m : module){
-                            di.deleteMudulByID(m.getId());
-                        }
+                        p.delete(parent.getContext());
                         updateList();
                         dialog.dismiss();
                     }

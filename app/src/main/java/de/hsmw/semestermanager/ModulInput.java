@@ -1,19 +1,14 @@
 package de.hsmw.semestermanager;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -40,7 +35,7 @@ public class ModulInput extends AppCompatActivity {
 
         List<String> planNames = new ArrayList();
         List<Integer> planIDs = new ArrayList();
-        for(Plan plan:plans){
+        for (Plan plan : plans) {
             planNames.add(plan.getName());
             planIDs.add(plan.getId());
         }
@@ -56,7 +51,7 @@ public class ModulInput extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                di.insertDataModules(((EditText)findViewById(R.id.new_modul_name)).getText().toString(), plans[spinner.getSelectedItemPosition()].getId());
+                di.insertDataModules(((EditText) findViewById(R.id.new_modul_name)).getText().toString(), plans[spinner.getSelectedItemPosition()].getId());
                 finish();
             }
         });

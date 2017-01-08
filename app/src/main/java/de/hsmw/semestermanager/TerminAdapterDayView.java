@@ -1,7 +1,6 @@
 package de.hsmw.semestermanager;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -16,10 +15,10 @@ import java.util.List;
  * Created by Benjamin on 30.12.2016.
  */
 
-public class TerminAdapterDayView<T> extends ArrayAdapter{
-    
+public class TerminAdapterDayView<T> extends ArrayAdapter {
+
     int viewResource;
-    
+
     public TerminAdapterDayView(Context context, int resource, List<T> objects) {
         super(context, resource, objects);
         viewResource = resource;
@@ -29,14 +28,14 @@ public class TerminAdapterDayView<T> extends ArrayAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        
+
         if (v == null) {
             LayoutInflater vi = LayoutInflater.from(getContext());
-            v = vi.inflate(viewResource,null);
+            v = vi.inflate(viewResource, null);
         }
         Termin t = (Termin) getItem(position);
 
-        if(t != null) {
+        if (t != null) {
             TextView tagesview_termin_zeiten = (TextView) v.findViewById(R.id.tagesview_termin_zeiten);
             TextView tagesview_termin_datum = (TextView) v.findViewById(R.id.tagesview_termin_datum);
             TextView tagesview_termin_ort = (TextView) v.findViewById(R.id.tagesview_termin_ort);
@@ -53,7 +52,7 @@ public class TerminAdapterDayView<T> extends ArrayAdapter{
                 String text;
                 try {
                     text = t.getModule(getContext()).getName();
-                }catch (Exception e){
+                } catch (Exception e) {
                     text = "";
                 }
                 tagesview_termin_datum.setText(text);
@@ -71,7 +70,7 @@ public class TerminAdapterDayView<T> extends ArrayAdapter{
                 tagesview_termin_wiederholung.setText("");
             }
             if (tagesview_termin_prioritätswert != null) {
-                setPrioritaet(tagesview_termin_prioritätswert,t);
+                setPrioritaet(tagesview_termin_prioritätswert, t);
             }
             if (tagesview_termin_termintyp != null) {
                 tagesview_termin_termintyp.setText(t.getTyp());
@@ -79,14 +78,15 @@ public class TerminAdapterDayView<T> extends ArrayAdapter{
         }
         return v;
     }
-    private void setPrioritaet(TextView tv, Termin t){
-        if (t.getPrioritaet() == 0){
+
+    private void setPrioritaet(TextView tv, Termin t) {
+        if (t.getPrioritaet() == 0) {
             tv.setText("Hoch");
             tv.setTextColor(Color.RED);
-        }else if (t.getPrioritaet() == 1){
+        } else if (t.getPrioritaet() == 1) {
             tv.setText("Normal");
             tv.setTextColor(Color.BLACK);
-        }else{
+        } else {
             tv.setText("Niedrig");
             tv.setTextColor(Color.GRAY);
         }
