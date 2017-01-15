@@ -110,7 +110,7 @@ public class DatabaseInterface {
      * @param isdelete           Ein Integer (0 bis 1) welcher beschreibt, ob ein Termin einer Terminwiederholung geloescht wurde. 1 = geloescht, 0 = nicht geloescht
      * @return Die ID des neuen Termins/Terminwiederholung/Terminwiederholungsausnahme wird zurueckgegeben, oder -1, wenn ein Fehler aufgetreten ist.
      */
-    public long insertDataTermine(String name, String startDate, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isExeption, int exceptionContextID, String exceptionTargetDay, int isdelete) {
+    public long insertDataTermine(String name, String startDate, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isExeption, int exceptionContextID, String exceptionTargetDay, int isdelete) throws IllegalArgumentException{
         try {
             if (Date.valueOf(startDate).equals(Date.valueOf(wiederholungsEnde)) || Date.valueOf(startDate).before(Date.valueOf(wiederholungsEnde))) {
                 if (Time.valueOf(startTime).equals(Time.valueOf(endTime)) || Time.valueOf(startTime).before(Time.valueOf(endTime))) {
@@ -144,7 +144,7 @@ public class DatabaseInterface {
                                                 return db.insert("termine", null, values);
                                             } else {
                                                 Log.d("DatabaseInterface", "insertDataTermine_isdelete = fehlerhafte Eingabe: " + isdelete);
-                                                return -1;
+                                                throw new IllegalArgumentException("insertDataTermine_isdelete = fehlerhafte Eingabe: " + isdelete);
                                             }
                                         }
                                     } else {
@@ -421,11 +421,7 @@ public class DatabaseInterface {
         //Query werfen, der mir roh alle Termine eines Tages zurück gibt. -> Diese in das Returnarray schreiben.
         String query = "select * from termine WHERE STARTDATE =  \"" + date + "\" AND " + restrictionExtension;
         Cursor c = db.rawQuery(query, null);
-        boolean b = c.moveToNext();
-        if (b == false) {
-            return null;
-        }
-        while (b == true) {
+        while (c.moveToNext()) {
             int isException = c.getInt(14);
             int isDeleted = c.getInt(17);
             int periode = c.getInt(13);
@@ -438,30 +434,20 @@ public class DatabaseInterface {
                     returnArray.add(cursor2Termin(c));
                 }
             }
-            b = c.moveToNext();
         }
         c.close();
         //Alle Terminwiederholungsausnahme holen, die für der aktuellen Tag gelten
         query = "select * from termine WHERE EXCEPTIONTARGETDAY =  \"" + date + "\" AND " + restrictionExtension;
         c = db.rawQuery(query, null);
-        b = c.moveToNext();
-        if (b == false) {
-            return null;
-        }
-        while (b == true) {
+        while (c.moveToNext()) {
             int exceptionContextID = c.getInt(15);
             TerminwiederholungsIgnorierArray.add(exceptionContextID);
-            b = c.moveToNext();
         }
         c.close();
         //Query werfen, der mir alle Terminwiederholungen gibt.
         query = "select * from termine  WHERE PERIODE<>'0' AND ISEXEPTION='0' AND " + restrictionExtension;
         c = db.rawQuery(query, null);
-        b = c.moveToNext();
-        if (b == false) {
-            return null;
-        }
-        while (b == true) {
+        while (c.moveToNext()) {
             //Für Terminwiederholungen - dessen ID's nicht gemerkt wurden -  getTerminAtDate(date) aufrufen -> Termin anfügen, wenn nicht null.
             int terminId = c.getInt(0);
             //TODO: TESTEN :)
@@ -473,11 +459,14 @@ public class DatabaseInterface {
             if (t != null) {
                 returnArray.add(t);
             }
-            b = c.moveToNext();
         }
         //returnArray Sortieren
         Collections.sort(returnArray);
-        return returnArray.toArray(new Termin[returnArray.size()]);
+        if(returnArray.isEmpty()){
+            return null;
+        }else{
+            return returnArray.toArray(new Termin[returnArray.size()]);
+        }
     }
     //-------------------------searching for---------------------------------------------
 
