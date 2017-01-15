@@ -46,8 +46,8 @@ public class DatabaseInterface {
      * Diese Funktion erstellt einen neuen Plan.
      *
      * @param ANZEIGENAME Der Name des Plans, welcher neu angelegt werden soll.
-     * @param STARTDATE   Das Anfangsdatum, von wann der Plan gelten soll. Das STARTDATE muss gleich, oder vor dem ENDDATE liegen. Das Datum muss im Format jjjj.mm.dd sein.
-     * @param ENDDATE     Das Enddatum, bis wann der Plan gelten soll. Das ENDDATE muss gleich, oder nach dem STARTDATE liegen. Das Datum muss im Format jjjj.mm.dd sein.
+     * @param STARTDATE   Das Anfangsdatum, von wann der Plan gelten soll. Das STARTDATE muss gleich, oder vor dem ENDDATE liegen. Das Datum muss im Format jjjj-mm-dd sein.
+     * @param ENDDATE     Das Enddatum, bis wann der Plan gelten soll. Das ENDDATE muss gleich, oder nach dem STARTDATE liegen. Das Datum muss im Format jjjj-mm-dd sein.
      * @return Die ID des neuen Plans wird zurueckgegeben. Falls diese -1 ist, dann wurde aufgrund eines Fehlers kein neuer Plan erstellt.
      */
     public long insertDataPlans(String ANZEIGENAME, String STARTDATE, String ENDDATE) {
@@ -92,10 +92,10 @@ public class DatabaseInterface {
      * Diese Funktion erstell einen neuen Termin.
      *
      * @param name               Der Name des Termins/Terminwiederholung/Termienwiederholungsausnahme welche neu angelegt werden soll.
-     * @param startDate          Das Datum, an welchem der Termin/Terminwiederholung/Termienwiederholungsausnahme beginnen soll. Das Datum muss im Format jjjj.mm.dd sein.
-     * @param wiederholungsEnde  Fuer die Terminwiederholung wird hier das Ende der Wiederholung festgelegt. Fuer die Termine/Termienwiederholungsausnahmen solle hier das selbe Datum wie in startDate eingetragen werden, da diese Spalte nicht benoetigt wird. Das Datum muss im Format jjjj.mm.dd sein.
-     * @param startTime          Die Uhrzeit bei der der Termin/Terminwiederholung/Termienwiederholungsausnahme starten soll. Die Uhrzeit muss im Format hh.mm.ss sein.
-     * @param endTime            Die Uhrzeit bei der der Termin/Terminwiederholung/Termienwiederholungsausnahme enden soll. Der Termin muss am selben Tag enden an dem er beginnt. Die endTime muss spaeter oder gleich als die startTime sein. Die Uhrzeit muss im Format hh.mm.ss sein.
+     * @param startDate          Das Datum, an welchem der Termin/Terminwiederholung/Termienwiederholungsausnahme beginnen soll. Das Datum muss im Format jjjj-mm-dd sein.
+     * @param wiederholungsEnde  Fuer die Terminwiederholung wird hier das Ende der Wiederholung festgelegt. Fuer die Termine/Termienwiederholungsausnahmen solle hier das selbe Datum wie in startDate eingetragen werden, da diese Spalte nicht benoetigt wird. Das Datum muss im Format jjjj-mm-dd sein.
+     * @param startTime          Die Uhrzeit bei der der Termin/Terminwiederholung/Termienwiederholungsausnahme starten soll. Die Uhrzeit muss im Format hh:mm:ss sein.
+     * @param endTime            Die Uhrzeit bei der der Termin/Terminwiederholung/Termienwiederholungsausnahme enden soll. Der Termin muss am selben Tag enden an dem er beginnt. Die endTime muss spaeter oder gleich als die startTime sein. Die Uhrzeit muss im Format hh:mm:ss sein.
      * @param ort                Der Ort an welchem der Termin stattfindet.
      * @param typ                Der Typ des Termins. Z.B.: Vorlesung, Seminar oder Praktikum
      * @param prioritaet         Die Zahl 0 bis einschliesslich 2. 0 = wichtig, 1 = normal, 2 = unwichtig
@@ -106,7 +106,7 @@ public class DatabaseInterface {
      * @param periode            Ein Integer, welcher beschreibt in welchen Abstaenden ein Termin wiederholt wird. Ist die Periode !=0, dann ist der Termin eine Terminwiederholung oder eine Termienwiederholungsausnahme. Zulaessige Werte sind: 0 fuer keine Wiederholung, 7 fuer Woechentlich, 14 fuer alle 14 Tage und 28 fuer alle 4 Wochen.
      * @param isExeption         Ein Integer (0 bis 1) welcher beschreibt, ob ein Eintrag eine Terminwiederholungsausnahme (isExeption = 1) oder ein Termin, bzw. Terminwiederholung (isExeption = 0) ist.
      * @param exceptionContextID Die ID der Terminwiederholung, wenn eine Termienwiederholungsausnahme erstellt werden soll, oder 0, wenn ein Termin oder eine Terminwiederholung erstellt werden soll.
-     * @param exceptionTargetDay Der Tag auf den sich die Terminwiederholungsausnahme bezieht. Das Datum muss im Format jjjj.mm.dd sein.
+     * @param exceptionTargetDay Der Tag auf den sich die Terminwiederholungsausnahme bezieht. Das Datum muss im Format jjjj-mm-dd sein.
      * @param isdelete           Ein Integer (0 bis 1) welcher beschreibt, ob ein Termin einer Terminwiederholung geloescht wurde. 1 = geloescht, 0 = nicht geloescht
      * @return Die ID des neuen Termins/Terminwiederholung/Terminwiederholungsausnahme wird zurueckgegeben, oder -1, wenn ein Fehler aufgetreten ist.
      */
@@ -403,7 +403,7 @@ public class DatabaseInterface {
     /**
      * Diese Funktion gibt alle Termine zurueck, welche an einem bestimmten Datum stattfinden.
      *
-     * @param date           Das gewuenschte Suchdatum. Das Datum muss im Format jjjj.mm.dd sein.
+     * @param date           Das gewuenschte Suchdatum. Das Datum muss im Format jjjj-mm-dd sein.
      * @param planOrModuleID Die ID des Plans oder Moduls der Termin des gewuenschten Suchdatums.
      * @param isPlan         Ob die gegebene ID eine Plan ID ist. True = PlanID , False = ModulID
      * @return Termin[], wenn kein Termin gefunden wurde, wird null zurueckegegeben.
@@ -451,7 +451,7 @@ public class DatabaseInterface {
         while (b == true) {
             int exceptionContextID = c.getInt(15);
             TerminwiederholungsIgnorierArray.add(exceptionContextID);
-            c.moveToNext();
+            b = c.moveToNext();
         }
         c.close();
         //Query werfen, der mir alle Terminwiederholungen gibt.
@@ -550,8 +550,8 @@ public class DatabaseInterface {
      *
      * @param ID          ID des Plans, welcher geaendert werden soll.
      * @param ANZEIGENAME Der geltende ANZEIGENAME kann hier zum gewuenschten String geaendert werden.
-     * @param STARTDATE   Das geltende Startdatum kann hier zum gewuenschten Startdatum geaendert werden. Das STARTDATE muss gleich oder vor dem ENDDATE liegen. Das Datum muss im Format jjjj.mm.dd sein.
-     * @param ENDDATE     Das geltende Enddatum kann hier zum gewuenschten Enddatum geaendert werden. Das ENDDATE muss gleich oder nach dem STARTDATE liegen. Das Datum muss im Format jjjj.mm.dd sein.
+     * @param STARTDATE   Das geltende Startdatum kann hier zum gewuenschten Startdatum geaendert werden. Das STARTDATE muss gleich oder vor dem ENDDATE liegen. Das Datum muss im Format jjjj-mm-dd sein.
+     * @param ENDDATE     Das geltende Enddatum kann hier zum gewuenschten Enddatum geaendert werden. Das ENDDATE muss gleich oder nach dem STARTDATE liegen. Das Datum muss im Format jjjj-mm-dd sein.
      * @return Es wird die Nummer der geaenderten Felder zurueckgegeben, oder -1, wenn das Enddatum vor dem Startdatum liegt.
      */
     public long updateDataPlans(int ID, String ANZEIGENAME, String STARTDATE, String ENDDATE) {
@@ -604,13 +604,13 @@ public class DatabaseInterface {
             if (Date.valueOf(startDate).equals(Date.valueOf(wiederholungsEnde)) || Date.valueOf(startDate).before(Date.valueOf(wiederholungsEnde))) {
                 if (Time.valueOf(startTime).equals(Time.valueOf(endTime)) || Time.valueOf(startTime).before(Time.valueOf(endTime))) {
                     if (prioritaet == 0 || prioritaet == 1 || prioritaet == 2) {
-                        Cursor c = db.rawQuery("SELECT planID from modules WHERE ID = \"" + modulID + "\"", null);
+                        Cursor c = db.rawQuery("SELECT SEMESTERID from modules WHERE ID = \"" + modulID + "\"", null);
                         c.moveToNext();
                         if (c.getInt(0) == modulID) {
                             if (istGanztagsTermin == 0 || istGanztagsTermin == 1) {
                                 if (periode == 0 || periode == 7 || periode == 14 || periode == 28) {
                                     if (isExeption == 0 || isExeption == 1) {
-                                        if (Date.valueOf(exceptionTargetDay) == Date.valueOf("0001.01.01") || Date.valueOf(exceptionTargetDay) != Date.valueOf("0001.01.01")) { //Pruefung ob der String exceptionTargetDay auch ein Date-String ist.
+                                        if (Date.valueOf(exceptionTargetDay) == Date.valueOf("0001-01-01") || Date.valueOf(exceptionTargetDay) != Date.valueOf("0001-01-01")) { //Pruefung ob der String exceptionTargetDay auch ein Date-String ist.
                                             if (isdelete == 0 || isdelete == 1) {
                                                 ContentValues values = new ContentValues();
                                                 values.put("ANZEIGENAME", name);
@@ -632,36 +632,36 @@ public class DatabaseInterface {
                                                 values.put("ISDELETED", isdelete);
                                                 return db.update("Termine", values, "ID =" + String.valueOf(id), null);
                                             } else {
-                                                Log.d("DatabaseInterface", "updateDataTermine_isdelete = fehlerhafte Eingabe");
+                                                Log.d("DatabaseInterface", "updateDataTermine_isdelete = fehlerhafte Eingabe"+ isdelete);
                                                 return -1;
                                             }
                                         }
                                     } else {
-                                        Log.d("DatabaseInterface", "updateDataTermine_isExeption = fehlerhafte Eingabe");
+                                        Log.d("DatabaseInterface", "updateDataTermine_isExeption = fehlerhafte Eingabe"+ isExeption);
                                         return -1;
                                     }
                                 } else {
-                                    Log.d("DatabaseInterface", "updateDataTermine_periode = fehlerhafte Eingabe");
+                                    Log.d("DatabaseInterface", "updateDataTermine_periode = fehlerhafte Eingabe"+ periode);
                                     return -1;
                                 }
                             } else {
-                                Log.d("DatabaseInterface", "updateDataTermine_istGanztagsTermin = fehlerhafte Eingabe");
+                                Log.d("DatabaseInterface", "updateDataTermine_istGanztagsTermin = fehlerhafte Eingabe"+ istGanztagsTermin);
                                 return -1;
                             }
                         } else {
-                            Log.d("DatabaseInterface", "updateDataTermine_modulID = fehlerhafte Eingabe");
+                            Log.d("DatabaseInterface", "updateDataTermine_modulID = fehlerhafte Eingabe"+ modulID);
                             return -1;
                         }
                     } else {
-                        Log.d("DatabaseInterface", "updateDataTermine_prioritaet = fehlerhafte Eingabe");
+                        Log.d("DatabaseInterface", "updateDataTermine_prioritaet = fehlerhafte Eingabe"+ prioritaet);
                         return -1;
                     }
                 } else {
-                    Log.d("DatabaseInterface", "updateDataTermine_startTime_endTime = fehlerhafte Eingabe");
+                    Log.d("DatabaseInterface", "updateDataTermine_startTime_endTime = fehlerhafte Eingabe" + endTime);
                     return -1;
                 }
             } else {
-                Log.d("DatabaseInterface", "updateDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe");
+                Log.d("DatabaseInterface", "updateDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe"+ wiederholungsEnde);
                 return -1;
             }
         } catch (Exception e) {
