@@ -10,67 +10,67 @@
 
 
     <TextView
-        android:text="Termine"
-        android:layout_marginTop="10dp"
+        android:id="@+id/modulview_termineueberschrift"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Termine"
         android:textColor="@android:color/black"
-        android:id="@+id/modulview_termineueberschrift"
-        android:layout_centerHorizontal="true" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <View
+        android:id="@+id/strich1"
         android:layout_width="match_parent"
         android:layout_height="2dip"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:foreground="@android:color/black"
         android:layout_below="@+id/modulview_termineueberschrift"
-        android:id="@+id/strich1" />
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:foreground="@android:color/black" />
 
     <TextView
-        android:text="Geleistete Stunden:"
-        android:layout_marginStart="20dp"
+        android:id="@+id/modulview_geleistete_Stunden"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:textSize="18sp"
+        android:layout_marginStart="20dp"
+        android:text="Geleistete Stunden:"
         android:textColor="@android:color/black"
-        android:id="@+id/modulview_geleistete_Stunden" />
+        android:textSize="18sp" />
 
     <View
+        android:id="@+id/strich2"
         android:layout_width="match_parent"
         android:layout_height="2dip"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"
         android:layout_above="@id/modulview_geleistete_Stunden"
-        android:foreground="@android:color/black"
-        android:id="@+id/strich2" />
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:foreground="@android:color/black" />
 
     <ListView
+        android:id="@+id/list_termin_modulview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:id="@+id/list_termin_modulview"
+        android:layout_above="@id/strich2"
         android:layout_below="@+id/strich1"
-        android:layout_above="@id/strich2" />
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp" />
 
     <TextView
-        android:text="0:00 / 0:00"
-        android:layout_marginStart="20dp"
+        android:id="@+id/modulview_stunden"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:id="@+id/modulview_stunden"
+        android:layout_alignBaseline="@id/modulview_geleistete_Stunden"
+        android:layout_marginStart="20dp"
         android:layout_toEndOf="@id/modulview_geleistete_Stunden"
-        android:layout_alignBaseline="@id/modulview_geleistete_Stunden"/>
+        android:text="0:00 / 0:00"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
 
 </RelativeLayout>
 

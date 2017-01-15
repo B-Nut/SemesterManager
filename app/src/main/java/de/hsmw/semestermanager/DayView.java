@@ -143,9 +143,17 @@ public class DayView extends AppCompatActivity {
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            super.onCreateContextMenu(menu, v, menuInfo);
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            int terminID = Integer.valueOf(info.targetView.findViewById(R.id.tagesview_termin_zeiten).getContentDescription().toString());
+            final Termin t = DatabaseInterface.getInstance(getContext()).getTerminByID(terminID);
+
             if (v.getId() == R.id.list_termin_dayview) {
                 menu.add("bearbeiten");
+                if(t.getPeriode() > 0 && t.getIsException() == 0){
+                    menu.add("erstelle Ausnahme");
+                }else if(t.getIsException() != 0){
+                    menu.add("bearbeite Ausnahme");
+                }
                 menu.add("löschen");
             }
         }
@@ -195,7 +203,15 @@ public class DayView extends AppCompatActivity {
                 getActivity().getIntent().putExtra("page", page - 1);
                 t.edit(getContext());
                 return true;
-            } else {
+            } else if(item.getTitle() == "erstelle Ausnahme") {
+                getActivity().getIntent().putExtra("page", page - 1);
+                t.createException(getContext());
+                return true;
+            }else if(item.getTitle() == "bearbeite Ausnahme"){
+                getActivity().getIntent().putExtra("page", page - 1);
+                t.editException(getContext());
+                return true;
+            }else{
                 return false;
             }
         }

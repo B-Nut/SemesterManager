@@ -117,7 +117,7 @@ public class DatabaseInterface {
         }
         Cursor c = db.rawQuery("SELECT SEMESTERID from modules WHERE ID = \"" + modulID + "\"", null);
         c.moveToNext();
-        if (c.getInt(0) != modulID) {
+        if (modulID != 0 && c.getInt(0) != planID) {
             c.close();
             Log.d("DatabaseInterface", "insertDataTermine_modulID = fehlerhafte Eingabe: " + modulID);
             throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_modulID = fehlerhafte Eingabe: " + modulID);
@@ -451,7 +451,6 @@ public class DatabaseInterface {
         while (c.moveToNext()) {
             //Für Terminwiederholungen - dessen ID's nicht gemerkt wurden -  getTerminAtDate(date) aufrufen -> Termin anfügen, wenn nicht null.
             int terminId = c.getInt(0);
-            //TODO: TESTEN :)
             if (TerminwiederholungsIgnorierArray.contains(terminId)) {
                 continue;
             }
@@ -547,7 +546,7 @@ public class DatabaseInterface {
      * @param ANZEIGENAME Der geltende ANZEIGENAME kann hier zum gewuenschten String geaendert werden.
      * @param STARTDATE   Das geltende Startdatum kann hier zum gewuenschten Startdatum geaendert werden. Das STARTDATE muss gleich oder vor dem ENDDATE liegen. Das Datum muss im Format jjjj-mm-dd sein.
      * @param ENDDATE     Das geltende Enddatum kann hier zum gewuenschten Enddatum geaendert werden. Das ENDDATE muss gleich oder nach dem STARTDATE liegen. Das Datum muss im Format jjjj-mm-dd sein.
-     * @return Es wird die Nummer der geaenderten Felder zurueckgegeben, oder -1 bei einem unvorhergesehenen Fehler.
+     * @return Es wird die Nummer der geaenderten Felder zurueckgegeben.
      * @throws IllegalArgumentException Wenn eines der Argumente nicht den Vorgaben entspricht.
      */
     public long updateDataPlans(int ID, String ANZEIGENAME, String STARTDATE, String ENDDATE) {
@@ -569,7 +568,7 @@ public class DatabaseInterface {
      * @param ID          ID des Moduls welches geaendert werden soll.
      * @param ANZEIGENAME Der geltende ANZEIGENAME kann hier zum gewuenschten String geaendert werden.
      * @param SEMESTERID  ID des Plans, zu dem das Modul gehoeren soll.
-     * @return Es wird die Nummer der geaenderten Felder zurueckgegeben, oder -1 bei einem unvorhergesehenen Fehler.
+     * @return Es wird die Nummer der geaenderten Felder zurueckgegeben.
      */
     public long updateDataModules(int ID, String ANZEIGENAME, int SEMESTERID) {
         ContentValues values = new ContentValues();
@@ -583,7 +582,7 @@ public class DatabaseInterface {
      * An einem Termin werden die gewuenscheten Aenderungen vorgenommen. Saemtliche Parameter entsprechen den Parametern der Funktion "insertDataTermine". Die ID muss zusaetzlich angegeben werden.
      *
      * @param id ID des Termins welcher geaendert werden soll.
-     * @return Es wird die Nummer der geaenderten Felder zurueckgegeben, oder -1 bei einem unvorhergesehenen Fehler.
+     * @return Es wird die Nummer der geaenderten Felder zurueckgegeben.
      * @throws IllegalArgumentException Wenn eines der Argumente nicht den Vorgaben entspricht.
      */
     public long updateDataTermine(int id, String name, String startDate, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isExeption, int exceptionContextID, String exceptionTargetDay, int isdelete) {
@@ -601,7 +600,7 @@ public class DatabaseInterface {
         }
         Cursor c = db.rawQuery("SELECT SEMESTERID from modules WHERE ID = \"" + modulID + "\"", null);
         c.moveToNext();
-        if (c.getInt(0) != modulID) {
+        if (modulID != 0 && c.getInt(0) != planID) {
             c.close();
             Log.d("DatabaseInterface", "insertDataTermine_modulID = fehlerhafte Eingabe: " + modulID);
             throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_modulID = fehlerhafte Eingabe: " + modulID);

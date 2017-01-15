@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,42 +54,8 @@ public class ModulView extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        terminList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
 
-                final Termin t = (Termin) parent.getItemAtPosition(position);
-                String question;
-                if (t.getPeriode() != 0 && t.getIsException() == 0) {
-                    question = "Are you sure you want to delete this repeated appointment? This will also delete " + di.getCountExceptionsByID(t.getId()) + " exceptions.";
-                } else if (t.getIsException() != 0) {
-                    question = "Are you sure you want to delete this exception? The regular appointment the exception is referring to will be restored.";
-                } else {
-                    question = "Are you sure you want to delete this appointment?";
-                }
-
-                AlertDialog.Builder alert = new AlertDialog.Builder(terminList.getContext());
-                alert.setMessage(question);
-                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        t.delete(parent.getContext());
-                        updateView();
-                        dialog.dismiss();
-                    }
-                });
-                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-                alert.show();
-                return true;
-            }
-        });
+        registerForContextMenu(terminList);
         updateView();
     }
 
@@ -155,5 +122,55 @@ public class ModulView extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.databaseobject, menu);
         return true;
+    }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId() == R.id.list_termin_modulview) {
+            menu.add("bearbeiten");
+            menu.add("löschen");
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final Termin t = termineListAdapter.getItem(info.position);
+        if (item.getTitle() == "löschen") {
+            String question;
+            if (t.getPeriode() != 0 && t.getIsException() == 0) {
+                question = "Are you sure you want to delete this repeated appointment? This will also delete " + di.getCountExceptionsByID(t.getId()) + " exceptions.";
+            } else if (t.getIsException() != 0) {
+                question = "Are you sure you want to delete this exception? The regular appointment the exception is referring to will be restored.";
+            } else {
+                question = "Are you sure you want to delete this appointment?";
+            }
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setMessage(question);
+            alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    t.delete(info.targetView.getContext());
+                    updateView();
+                    dialog.dismiss();
+                }
+            });
+            alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            alert.show();
+            return true;
+        } else if (item.getTitle() == "bearbeiten") {
+            t.edit(this);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

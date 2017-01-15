@@ -1,44 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:id="@+id/overview"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/overview">
+    android:orientation="horizontal">
+
     <TextView
-        android:text="20.03.2016"
+        android:id="@+id/textSemesterStartDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:paddingTop="5dp"
         android:layout_marginEnd="20dp"
-        android:id="@+id/textSemesterStartDate"
+        android:paddingTop="5dp"
+        android:text="20.03.2016"
         android:textColor="@android:color/black" />
 
     <TextView
-        android:text="07.07.2016"
-        android:layout_below="@id/textSemesterStartDate"
-        android:layout_alignStart="@id/textSemesterStartDate"
-        android:layout_width="wrap_content"
         android:id="@+id/textSemesterEndDate"
-        android:textColor="@android:color/black"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@id/textSemesterStartDate"
+        android:layout_below="@id/textSemesterStartDate"
         android:layout_marginTop="1dp"
-        android:paddingBottom="5dp"/>
+        android:paddingBottom="5dp"
+        android:text="07.07.2016"
+        android:textColor="@android:color/black" />
 
     <TextView
-        android:text="Test"
+        android:id="@+id/textSemesterName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_alignTop="@id/textSemesterStartDate"
         android:layout_alignBottom="@id/textSemesterEndDate"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@id/textSemesterStartDate"
+        android:layout_alignTop="@id/textSemesterStartDate"
         android:layout_marginEnd="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_toStartOf="@id/textSemesterStartDate"
+        android:ellipsize="end"
         android:gravity="center_vertical"
-        android:id="@+id/textSemesterName"
-        android:textColor="@android:color/black"
         android:maxLines="1"
-        android:ellipsize="end"/>
+        android:text="Test"
+        android:textColor="@android:color/black" />
 
 </RelativeLayout>

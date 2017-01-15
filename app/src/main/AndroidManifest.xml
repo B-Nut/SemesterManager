@@ -67,17 +67,26 @@
             android:name=".DayView"
             android:label="Tagesview"
             android:theme="@style/AppTheme.SwypeBar">
-        <intent-filter>
-            <action android:name="de.hsmw.semestermanager.DayView" />
+            <intent-filter>
+                <action android:name="de.hsmw.semestermanager.DayView" />
 
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".TerminView"
             android:label="TerminView">
             <intent-filter>
                 <action android:name="de.hsmw.semestermanager.TerminView" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ExceptionInput"
+            android:label="Wer das liest ist doof.">
+            <intent-filter>
+                <action android:name="de.hsmw.semestermanager.ExceptionInput" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

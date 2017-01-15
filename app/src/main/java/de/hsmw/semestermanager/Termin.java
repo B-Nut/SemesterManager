@@ -315,4 +315,71 @@ public class Termin implements DatabaseObject, Comparable<Termin> {
         i.putExtra("ID", getId());
         c.startActivity(i);
     }
+
+    /**
+     * Startet einen Intent, um eine Terminwiederholungsausnahme zu erstellen.
+     * Die Funktion läuft ins Leere, wenn der Termin keine Wiederholung ist.
+     * @param c Context für Datenbankzugriffe.
+     */
+    public void createException(Context c){
+
+        if(periode < 1){
+            return;
+        }
+
+        Intent i = new Intent("de.hsmw.semestermanager.ExceptionInput");
+        i.putExtra("terminName", getName());
+        i.putExtra("startDate", Helper.sqlToGermanDate(getStartDate().toString()));
+        i.putExtra("wiederholungsEnde", Helper.sqlToGermanDate(getWiederholungsEnde().toString()));
+        i.putExtra("startZeit", getStartTime().toString().substring(0,5));
+        i.putExtra("endZeit", getEndTime().toString().substring(0,5));
+        i.putExtra("ort", getOrt());
+        i.putExtra("typ", getTyp());
+        i.putExtra("priorität", getPrioritaet());
+        i.putExtra("planID", getPlanID());
+        i.putExtra("modulID", getModulID());
+        i.putExtra("isGanztagsTermin", getIsGanztagsTermin());
+        i.putExtra("dozent", getDozent());
+        i.putExtra("periode", getPeriode());
+
+        i.putExtra("exceptionContextID", getId());
+        i.putExtra("targetDay", Helper.sqlToGermanDate(getStartDate().toString()));
+
+        c.startActivity(i);
+    }
+
+    /**
+     * Startet einen Intent, um eine Terminwiederholungsausnahme zu bearbeiten.
+     * Die Funktion läuft ins Leere, wenn der Termin keine Wiederholung ist.
+     * @param c Context für Datenbankzugriffe.
+     */
+    public void editException(Context c){
+
+        if(periode < 1){
+            return;
+        }
+
+        Intent i = new Intent("de.hsmw.semestermanager.ExceptionInput");
+        i.putExtra("ID", getId());
+
+        i.putExtra("terminName", getName());
+        i.putExtra("startDate", Helper.sqlToGermanDate(getStartDate().toString()));
+        i.putExtra("wiederholungsEnde", Helper.sqlToGermanDate(getWiederholungsEnde().toString()));
+        i.putExtra("startZeit", getStartTime().toString().substring(0,5));
+        i.putExtra("endZeit", getEndTime().toString().substring(0,5));
+        i.putExtra("ort", getOrt());
+        i.putExtra("typ", getTyp());
+        i.putExtra("priorität", getPrioritaet());
+        i.putExtra("planID", getPlanID());
+        i.putExtra("modulID", getModulID());
+        i.putExtra("isGanztagsTermin", getIsGanztagsTermin());
+        i.putExtra("dozent", getDozent());
+        i.putExtra("periode", getPeriode());
+
+        i.putExtra("exceptionContextID", getExceptionContextID());
+        i.putExtra("targetDay", Helper.sqlToGermanDate(getExceptionTargetDay().toString()));
+        i.putExtra("isDeleted", getIsDeleted());
+
+        c.startActivity(i);
+    }
 }

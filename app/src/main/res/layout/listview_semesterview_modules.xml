@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:text="Hier könnte Ihr Modul stehen!"
+    android:id="@+id/listentry_module_name"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="5dp"
     android:layout_marginEnd="5dp"
-    android:paddingTop="15dp"
+    android:layout_marginStart="5dp"
     android:paddingBottom="15dp"
-    android:id="@+id/listentry_module_name"
+    android:paddingTop="15dp"
+    android:text="Hier könnte Ihr Modul stehen!"
     android:textColor="@android:color/black">
 
 </TextView>

@@ -27,7 +27,10 @@ public class SemesterplanInput extends AppCompatActivity {
         Helper.pickDate(this, inputStartDate, "Wähle Semesterbeginn");
         Helper.pickDate(this, inputEndDate, "Wähle Semesterende");
 
-        int editID = getIntent().getExtras().getInt("ID", -1);
+        int editID = -1;
+        if(getIntent().getExtras() != null) {
+            editID = getIntent().getExtras().getInt("ID", -1);
+        }
         if (editID == -1) {
             b.setOnClickListener(new View.OnClickListener() {
                 @Override

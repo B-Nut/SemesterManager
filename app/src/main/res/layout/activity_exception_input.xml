@@ -5,7 +5,7 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/activity_semesterplan_input"
+        android:id="@+id/activity_exception_input"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -14,7 +14,17 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:scrollbars="vertical"
-        tools:context="de.hsmw.semestermanager.TerminInput">
+        tools:context="de.hsmw.semestermanager.ExceptionInput">
+
+        <CheckBox
+            android:id="@+id/new_exception_delete_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="Ausnahme löscht Termin"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
@@ -30,10 +40,9 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/new_termin_name"
+            android:id="@+id/new_exception_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:gravity="left"
             android:hint="Geben Sie einen Terminnamen an."
             android:paddingBottom="5dp"
@@ -41,7 +50,7 @@
             android:textSize="20sp" />
 
         <CheckBox
-            android:id="@+id/new_termin_ganztags_checkbox"
+            android:id="@+id/new_exception_ganztags_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="5dp"
@@ -55,7 +64,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/new_termin_label_terminzeitraum"
+                android:id="@+id/new_exception_label_terminzeitraum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="5dp"
@@ -66,49 +75,10 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/new_termin_date_trenner"
+                android:id="@+id/new_exception_time_trenner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/new_termin_label_terminzeitraum"
-                android:layout_centerHorizontal="true"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:text="-"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/new_termin_date_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/new_termin_label_terminzeitraum"
-                android:layout_toStartOf="@id/new_termin_date_trenner"
-                android:clickable="false"
-                android:gravity="center"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:text="Startdatum"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/new_termin_date_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@id/new_termin_label_terminzeitraum"
-                android:layout_toEndOf="@id/new_termin_date_trenner"
-                android:clickable="false"
-                android:gravity="center"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:text="Enddatum"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/new_termin_time_trenner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/new_termin_date_trenner"
+                android:layout_below="@id/new_exception_label_terminzeitraum"
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
                 android:paddingBottom="5dp"
@@ -117,12 +87,12 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/new_termin_time_start"
+                android:id="@+id/new_exception_time_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@id/new_termin_date_trenner"
-                android:layout_toStartOf="@id/new_termin_time_trenner"
+                android:layout_below="@id/new_exception_label_terminzeitraum"
+                android:layout_toStartOf="@id/new_exception_time_trenner"
                 android:clickable="false"
                 android:gravity="center"
                 android:paddingBottom="5dp"
@@ -131,79 +101,32 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/new_termin_time_end"
+                android:id="@+id/new_exception_time_end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@id/new_termin_date_trenner"
-                android:layout_toEndOf="@id/new_termin_time_trenner"
+                android:layout_below="@id/new_exception_label_terminzeitraum"
+                android:layout_toEndOf="@id/new_exception_time_trenner"
                 android:clickable="false"
                 android:gravity="center"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
                 android:text="Endzeit"
                 android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/new_exception_date_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignStart="@id/new_exception_time_end"
+                android:clickable="false"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="Startdatum"
+                android:textSize="20sp" />
         </RelativeLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:scrollbarAlwaysDrawHorizontalTrack="true"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:text="Periode"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/new_termin_periodisch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Periodisch"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:scrollbarAlwaysDrawHorizontalTrack="true"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:text="Semesterzugehörigkeit"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/new_termin_semesterzugehörigkeit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Periodisch"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:scrollbarAlwaysDrawHorizontalTrack="true"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:text="Modulname"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <Spinner
-            android:id="@+id/new_termin_modulauswahl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Semesterzeitraum"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -219,7 +142,7 @@
             android:textStyle="bold" />
 
         <Spinner
-            android:id="@+id/new_termin_termintypauswahl"
+            android:id="@+id/new_exception_termintypauswahl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Termintyp"
@@ -240,7 +163,7 @@
             android:textStyle="bold" />
 
         <Spinner
-            android:id="@+id/new_termin_priorityauswahl"
+            android:id="@+id/new_exception_priorityauswahl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="5dp"
@@ -260,7 +183,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/new_termin_dozent"
+            android:id="@+id/new_exception_dozent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Geben Sie einen Dozenten an."
@@ -282,7 +205,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/new_termin_ort"
+            android:id="@+id/new_exception_ort"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -293,7 +216,7 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/new_termin_submit"
+            android:id="@+id/new_exception_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"

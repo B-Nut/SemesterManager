@@ -51,8 +51,11 @@ public class ModulInput extends AppCompatActivity {
         b = (Button) findViewById(R.id.new_modul_submit);
         inputName = (EditText) findViewById(R.id.new_modul_name);
 
-        int editID = getIntent().getExtras().getInt("ID", -1);
-        if (editID == -1) {
+        int editID = -1;
+        if (getIntent().getExtras() != null) {
+            editID = getIntent().getExtras().getInt("ID", -1);
+        }
+            if (editID == -1) {
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

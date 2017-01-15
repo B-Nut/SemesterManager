@@ -1,50 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
-        android:text="Modulname"
+        android:id="@+id/eingabemaske_modul_modulname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/eingabemaske_modul_modulname"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:textSize="20sp"
         android:scrollbarAlwaysDrawHorizontalTrack="true"
-        android:scrollbarAlwaysDrawVerticalTrack="true" />
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:text="Modulname"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <EditText
+        android:id="@+id/eingabemaske_modul_modulnameeingabe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Bitte Modulname eingeben"
+        android:cursorVisible="true"
         android:ems="10"
-        android:id="@+id/eingabemaske_modul_modulnameeingabe"
-        android:cursorVisible="true" />
+        android:inputType="textPersonName"
+        android:text="Bitte Modulname eingeben" />
 
     <TextView
-        android:text="Semesterzeitraum"
-        android:layout_marginTop="20dp"
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2"
+        android:layout_marginTop="20dp"
+        android:text="Semesterzeitraum"
         android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <Spinner
+        android:id="@+id/eingabemaske_modul_Semesterzeitraumauswahl"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:id="@+id/eingabemaske_modul_Semesterzeitraumauswahl"
         android:layout_marginTop="20dp" />
 
     <Button
-        android:text="Bestätigen"
+        android:id="@+id/eingabemaske_modul_eingabebestätigung"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/eingabemaske_modul_eingabebestätigung"
+        android:layout_marginTop="40dp"
+        android:text="Bestätigen"
         android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:layout_marginTop="40dp" />
+        android:textStyle="bold" />
 </LinearLayout>
