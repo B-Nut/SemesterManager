@@ -1,6 +1,7 @@
 package de.hsmw.semestermanager;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,10 +63,31 @@ public class TerminAdapterStandard extends ArrayAdapter<Termin> {
                 semesterview_termin_dozenten.setText(e.getDozent());
             }
             if (semesterview_termin_wiederholung != null) {
-                semesterview_termin_wiederholung.setText("");
+                if (e.getPeriode() == 0) {
+                    semesterview_termin_wiederholung.setText("");
+                } else {
+                    semesterview_termin_wiederholung.setText(e.getWiederholungsString());
+                }
             }
             if (semesterview_termin_prioritätswert != null) {
-                semesterview_termin_prioritätswert.setText(String.valueOf(e.getPrioritaet()));
+                switch (e.getPrioritaet()) {
+                    case 0:
+                        semesterview_termin_prioritätswert.setText("Hoch");
+                        semesterview_termin_prioritätswert.setTextColor(Color.RED);
+                        break;
+                    case 1:
+                        semesterview_termin_prioritätswert.setText("Normal");
+                        semesterview_termin_prioritätswert.setTextColor(Color.BLACK);
+                        break;
+                    case 2:
+                        semesterview_termin_prioritätswert.setText("Niedrig");
+                        semesterview_termin_prioritätswert.setTextColor(Color.GRAY);
+                        break;
+                    default:
+                        semesterview_termin_prioritätswert.setText("Priorität korrupt.");
+                        semesterview_termin_prioritätswert.setTextColor(Color.BLACK);
+                        break;
+                }
             }
             if (semesterview_termin_termintyp != null) {
                 semesterview_termin_termintyp.setText(e.getTyp());

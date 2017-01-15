@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,11 +73,6 @@ public class SemesterplanView extends AppCompatActivity {
 
         di = DatabaseInterface.getInstance(this);
 
-        int i = getIntent().getExtras().getInt("ID");
-        selectedPlan = di.getDataByIDPlans(i);
-
-        setTitle(selectedPlan.getName());
-
         //TextView id = (TextView) findViewById(R.id.semesterview_name);
         //id.setText("Der Name ist: " + selectedPlan.getName());
 
@@ -108,100 +104,42 @@ public class SemesterplanView extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-        moduleList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
-
-                final Module m = (Module) parent.getItemAtPosition(position);
-                String question;
-                question = "Are you sure you want to delete this module? All appointments associated with it are going to be deleted too";
-
-                AlertDialog.Builder alert = new AlertDialog.Builder(moduleList.getContext());
-                alert.setMessage(question);
-                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        int moduleId = (m.getId());
-                        di.deleteMudulByID(moduleId);
-                        Termin[] termine = di.getTermineByModulID(moduleId);
-                        for (Termin t : termine) {
-                            di.deleteTerminByID(t.getId());
-                        }
-                        updateLists();
-                        dialog.dismiss();
-                    }
-                });
-                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-                alert.show();
-                return true;
-            }
-        });
+        registerForContextMenu(moduleList);
 
         entryList = (ListView) findViewById(R.id.list_semesterview_termine);
         termine = new ArrayList<>();
         termineListAdapter = new TerminAdapterStandard(this, R.layout.listview_semesterview_termine, termine);
         entryList.setAdapter(termineListAdapter);
-        entryList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        entryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
-
-                final Termin t = (Termin) parent.getItemAtPosition(position);
-                String question;
-                if (t.getPeriode() != 0 && t.getIsException() == 0) {
-                    question = "Are you sure you want to delete this repeated appointment? This will also delete " + di.getCountExceptionsByID(t.getId()) + " exceptions.";
-                } else if (t.getIsException() != 0) {
-                    question = "Are you sure you want to delete this exception? The regular appointment the exception is referring to will be restored.";
-                } else {
-                    question = "Are you sure you want to delete this appointment?";
-                }
-
-                AlertDialog.Builder alert = new AlertDialog.Builder(entryList.getContext());
-                alert.setMessage(question);
-                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        t.delete(parent.getContext());
-                        updateLists();
-                        dialog.dismiss();
-                    }
-                });
-                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-                alert.show();
-                return true;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int terminID = ((Termin) parent.getItemAtPosition(position)).getId();
+                Intent i = new Intent("de.hsmw.semestermanager.TerminView");
+                i.putExtra("ID", terminID);
+                startActivity(i);
             }
         });
-
-        updateLists();
-        scrollView.fullScroll(View.FOCUS_UP);
+        registerForContextMenu(entryList);
     }
 
+    /**
+     * Aktualisiert beide Listen, durch eine erneute Datenbankabfrage.
+     */
     public void updateLists() {
         modules.clear();
-        modules.addAll(Arrays.asList(di.getModulesByPlanID(selectedPlan.getId())));
+        try {
+            modules.addAll(Arrays.asList(di.getModulesByPlanID(selectedPlan.getId())));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         setListViewHeightBasedOnChildren(moduleList);
         modulesListAdapter.notifyDataSetChanged();
 
         termine.clear();
-        Termin[] t = di.getTermineByPlanID(selectedPlan.getId());
-        for (Termin tt : t) {
-            if (tt.getModulID() == 0) {
-                termine.add(tt);
-            }
+        try {
+            termine.addAll(Arrays.asList(di.getTermineByPlanIDButNotModulID(selectedPlan.getId())));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
         setListViewHeightBasedOnChildren(entryList);
         termineListAdapter.notifyDataSetChanged();
@@ -231,15 +169,141 @@ public class SemesterplanView extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_view_day) {
-            startActivity(new Intent("de.hsmw.semestermanager.DayView"));
+            Intent i = new Intent("de.hsmw.semestermanager.DayView");
+            i.putExtra("page", 21);
+            i.putExtra("ID", selectedPlan.getId());
+            startActivity(i);
+            return true;
+        }
+        if (id == R.id.action_edit_object) {
+            selectedPlan.edit(this);
+            return true;
+        }
+        if (id == R.id.action_delete_object) {
+            String question;
+            question = "Are you sure you want to delete this semester? All appointments and modules associated with it are going to be deleted too.";
+
+            android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(this);
+            alert.setMessage(question);
+            alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    selectedPlan.delete(getParent());
+                    finish();
+                    dialog.dismiss();
+                }
+            });
+            alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            alert.show();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId() == R.id.list_semesterview_termine || v.getId() == R.id.list_semesterview_module) {
+            menu.add("bearbeiten");
+            menu.add("löschen");
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        if (info.targetView.getParent().equals(entryList)) {
+            final Termin t = termineListAdapter.getItem(info.position);
+            if (item.getTitle() == "löschen") {
+                String question;
+                if (t.getPeriode() != 0 && t.getIsException() == 0) {
+                    question = "Are you sure you want to delete this repeated appointment? This will also delete " + di.getCountExceptionsByID(t.getId()) + " exceptions.";
+                } else if (t.getIsException() != 0) {
+                    question = "Are you sure you want to delete this exception? The regular appointment the exception is referring to will be restored.";
+                } else {
+                    question = "Are you sure you want to delete this appointment?";
+                }
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(entryList.getContext());
+                alert.setMessage(question);
+                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        t.delete(info.targetView.getContext());
+                        updateLists();
+                        dialog.dismiss();
+                    }
+                });
+                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+                return true;
+            } else if (item.getTitle() == "bearbeiten") {
+                t.edit(this);
+                return true;
+            } else {
+                return false;
+            }
+        } else if (info.targetView.getParent().equals(moduleList)) {
+            final Module m = modulesListAdapter.getItem(info.position);
+            if (item.getTitle() == "löschen") {
+                String question;
+                question = "Are you sure you want to delete this module? All appointments associated with it are going to be deleted too";
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(moduleList.getContext());
+                alert.setMessage(question);
+                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        m.delete(getParent());
+                        updateLists();
+                        dialog.dismiss();
+                    }
+                });
+                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+                return true;
+            } else if (item.getTitle() == "bearbeiten") {
+                m.edit(this);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     protected void onStart() {
+
+        int i = getIntent().getExtras().getInt("ID");
+        selectedPlan = di.getPlanByID(i);
+
+        setTitle(selectedPlan.getName());
+
         super.onStart();
         updateLists();
+        scrollView.fullScroll(View.FOCUS_UP);
     }
 }

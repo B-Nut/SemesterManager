@@ -1,6 +1,7 @@
 package de.hsmw.semestermanager;
 
 import android.content.Context;
+import android.content.Intent;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -97,6 +98,11 @@ public class Termin implements DatabaseObject, Comparable<Termin> {
         String returnString;
         String[] temp = startDate.toString().split("-");
         returnString = temp[2] + "." + temp[1];
+        if (!startDate.equals(wiederholungsEnde) && periode != 0) {
+            returnString += " - ";
+            temp = wiederholungsEnde.toString().split("-");
+            returnString += temp[2] + "." + temp[1];
+        }
         return returnString;
     }
 
@@ -111,6 +117,21 @@ public class Termin implements DatabaseObject, Comparable<Termin> {
             returnString += temp[0] + ":" + temp[1];
         }
         return returnString;
+    }
+
+    public String getWiederholungsString() {
+        switch (periode) {
+            case 0:
+                return "Keine";
+            case 7:
+                return "Wöchentlich";
+            case 14:
+                return "Zweiwöchentlich";
+            case 28:
+                return "Vierwöchentlich";
+            default:
+                return "PERIODE KORRUPT";
+        }
     }
 
     public int getId() {
@@ -241,12 +262,14 @@ public class Termin implements DatabaseObject, Comparable<Termin> {
         calendar.setTime(startDate);
         long returnValue = 0;
         long terminOnce = getDuration();
-        for (Termin exception : exceptions) {
-            if (exception.isDeleted == 0 && exception.getStartDate().compareTo(date) < 0) {
-                returnValue += exception.getDuration();
-            }
-            if (exception.getExceptionTargetDay().compareTo(date) < 0) {
-                returnValue -= terminOnce;
+        if (exceptions != null) {
+            for (Termin exception : exceptions) {
+                if (exception.isDeleted == 0 && exception.getStartDate().compareTo(date) < 0) {
+                    returnValue += exception.getDuration();
+                }
+                if (exception.getExceptionTargetDay().compareTo(date) < 0) {
+                    returnValue -= terminOnce;
+                }
             }
         }
         while (calendar.getTime().compareTo(date) <= 0 && calendar.getTime().compareTo(wiederholungsEnde) <= 0) {
@@ -260,9 +283,15 @@ public class Termin implements DatabaseObject, Comparable<Termin> {
         return new Termin(id, name, startDate, wiederholungsEnde, startTime, endTime, ort, typ, prioritaet, planID, modulID, isGanztagsTermin, dozent, periode, isException, exceptionContextID, exceptionTargetDay, isDeleted);
     }
 
+    /**
+     * Gibt die Instanz des zu dem Termin gehörigen Moduls zurück.
+     *
+     * @param c Context für den Datenbankzugriff.
+     * @return Null, wenn kein Modul angegeben.
+     */
     public Module getModule(Context c) {
         DatabaseInterface di = DatabaseInterface.getInstance(c);
-        Module returnModule = di.getDataByIDModules(getModulID());
+        Module returnModule = di.getModuleByID(getModulID());
         return returnModule;
     }
 
@@ -274,5 +303,16 @@ public class Termin implements DatabaseObject, Comparable<Termin> {
     public void delete(Context c) {
         DatabaseInterface di = DatabaseInterface.getInstance(c);
         di.deleteTerminByID(id);
+    }
+
+    /**
+     * Startet einen Intent, um den Termin zu bearbeiten.
+     *
+     * @param c Context für Datenbankzugriffe.
+     */
+    public void edit(Context c) {
+        Intent i = new Intent("de.hsmw.semestermanager.TerminInput");
+        i.putExtra("ID", getId());
+        c.startActivity(i);
     }
 }

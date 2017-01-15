@@ -1,291 +1,285 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:id="@+id/overview"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/overview">
+    android:orientation="horizontal">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_height="match_parent"
-    android:weightSum="1"
-    tools:visibility="visible"
-    android:layout_width="200dp">
-
-
-    <TextView
-        android:text="Uhrzeit"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/leftList"
         android:layout_width="180dp"
-        android:layout_height="40dp"
-        android:textStyle="bold"
-        tools:visibility="visible"
-        tools:text="Uhrzeit"
-        android:autoText="false"
-        tools:textColor="@android:color/black"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:layout_marginLeft="20dp"
-        android:id="@+id/terminview_uhrzeit" />
-
-    <TextView
-        android:text="Datum/Zeitraum"
-        android:layout_width="180dp"
-        android:layout_height="40dp"
-        tools:text="Datum/Zeitraum"
-        tools:visibility="visible"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        android:layout_marginLeft="20dp"
-        android:id="@+id/terminview_datum_zeitraum" />
-
-    <TextView
-        android:text="Wiederholung"
-        android:layout_width="180dp"
-        android:layout_height="40dp"
-        tools:visibility="visible"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        tools:text="Wiederholung"
-        android:textColor="@android:color/black"
-        android:layout_marginLeft="20dp"
-        android:id="@+id/terminview_wiederholung" />
-
-    <TextView
-        android:text="Priorität"
-        android:layout_width="180dp"
-        android:layout_height="40dp"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        tools:textColor="@android:color/black"
-        tools:visibility="visible"
-        tools:text="Priorität"
-        android:layout_marginLeft="20dp"
-        android:id="@+id/terminview_priorität" />
-
-    <View android:layout_width="180dp"
-        android:layout_height="2dip"
-        android:layout_marginLeft="20dp"
-        android:visibility="visible"
-        android:foreground="@android:color/black"
-        android:id="@+id/strich1" />
-
-    <TextView
-        android:text="Modul"
-        android:layout_marginTop="20dp"
-        android:layout_width="180dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        tools:textColor="@android:color/black"
-        android:layout_marginLeft="20dp"
-        android:id="@+id/terminview_modul" />
-
-    <TextView
-android:text="Termintyp"
-android:layout_width="180dp"
-android:layout_height="40dp"
-android:visibility="visible"
-android:textStyle="bold"
-android:textSize="20sp"
-android:textColor="@android:color/black"
-android:layout_marginLeft="20dp"
-android:id="@+id/terminview_termintyp" />
-
-    <View android:layout_width="180dp"
-        android:layout_height="2dip"
-        android:layout_marginLeft="20dp"
-        android:visibility="visible"
-        android:foreground="@android:color/black"
-        android:id="@+id/strich3" />
-
-    <TextView
-        android:text="Dozent"
-        android:layout_marginTop="20dp"
-        android:layout_width="180dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        android:layout_marginLeft="20dp"
-        android:id="@+id/terminview_dozent" />
-
-
-    <TextView
-        android:text="Ort"
-        android:layout_width="180dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        android:layout_marginLeft="20dp"
-        android:id="@+id/terminview_ort" />
-
-    <View android:layout_width="180dp"
-        android:layout_height="2dip"
-        android:layout_marginLeft="20dp"
-        android:visibility="visible"
-        android:foreground="@android:color/black"
-        android:id="@+id/strich5" />
-
-    <TextView
-        android:text="Ausnahmen"
-        android:layout_marginTop="20dp"
-        android:layout_width="180dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        android:layout_marginLeft="20dp"
-        android:id="@+id/terminview_ausnahmen" />
-
-
-</LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
         android:layout_height="match_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_width="100pt"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="200dp">
+        android:orientation="vertical"
+        tools:visibility="visible">
+
 
         <TextView
-            android:text="8:00-9:00 Uhr"
-            android:layout_width="180dp"
+            android:id="@+id/terminview_uhrzeit"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:visibility="visible"
-            android:textStyle="bold"
-            android:textSize="20sp"
+            android:layout_marginLeft="20dp"
+            android:autoText="false"
+            android:text="Uhrzeit"
             android:textColor="@android:color/black"
-            android:layout_marginRight="20dp"
-            android:id="@+id/terminview_zeiten"/>
-
-        <TextView
-        android:text="20.03.16-07.07.16"
-        android:layout_width="180dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        android:layout_marginRight="20dp"
-        android:id="@+id/terminview_datum"/>
-
-        <TextView
-            android:text="Wöchentlich"
-            android:layout_width="180dp"
-            android:layout_height="40dp"
-            android:visibility="visible"
-            android:textStyle="bold"
             android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="Uhrzeit"
+            tools:textColor="@android:color/black"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/terminview_datum_zeitraum"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:text="Datum/Zeitraum"
             android:textColor="@android:color/black"
-            android:layout_marginRight="20dp"
-            android:id="@+id/terminview_wiederholungsbezeichnung"/>
-
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="Datum/Zeitraum"
+            tools:visibility="visible" />
 
         <TextView
-            android:text="Hoch"
-            android:layout_width="180dp"
+            android:id="@+id/terminview_wiederholung"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:visibility="visible"
-            android:textStyle="bold"
+            android:layout_marginLeft="20dp"
+            android:text="Wiederholung"
+            android:textColor="@android:color/black"
             android:textSize="20sp"
-            android:textColor="@android:color/holo_red_light"
-            android:layout_marginRight="20dp"
-            android:id="@+id/terminview_prioritätwert"/>
+            android:textStyle="bold"
+            tools:text="Wiederholung"
+            tools:visibility="visible" />
 
-        <View android:layout_width="180dp"
+        <TextView
+            android:id="@+id/terminview_priorität"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:text="Priorität"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="Priorität"
+            tools:textColor="@android:color/black"
+            tools:visibility="visible" />
+
+        <View
+            android:id="@+id/strich1"
+            android:layout_width="match_parent"
             android:layout_height="2dip"
-            android:layout_marginRight="20dp"
-            android:visibility="visible"
+            android:layout_marginLeft="20dp"
             android:foreground="@android:color/black"
-            android:id="@+id/strich2" />
+            android:visibility="visible" />
 
         <TextView
-        android:text="SW-Projekt"
-            android:layout_marginTop="20dp"
-        android:layout_width="180dp"
-        android:layout_height="40dp"
-        android:visibility="visible"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        android:layout_marginRight="20dp"
-        android:id="@+id/terminview_modulbezeichnung"/>
-
-        <TextView
-            android:text="Seminar"
-            android:layout_width="180dp"
+            android:id="@+id/terminview_modul"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:visibility="visible"
-            android:textStyle="bold"
-            android:textSize="20sp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Modul"
             android:textColor="@android:color/black"
-            android:layout_marginRight="20dp"
-            android:id="@+id/terminview_termintypbezeichnung"/>
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            tools:textColor="@android:color/black" />
 
-        <View android:layout_width="180dp"
+        <TextView
+            android:id="@+id/terminview_termintyp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:text="Termintyp"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <View
+            android:id="@+id/strich3"
+            android:layout_width="match_parent"
             android:layout_height="2dip"
-            android:layout_marginRight="20dp"
-            android:visibility="visible"
+            android:layout_marginLeft="20dp"
             android:foreground="@android:color/black"
-            android:id="@+id/strich4" />
+            android:visibility="visible" />
 
         <TextView
-            android:text="Schubert"
+            android:id="@+id/terminview_dozent"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:layout_width="180dp"
-            android:layout_height="40dp"
-            android:visibility="visible"
-            android:textStyle="bold"
-            android:textSize="20sp"
+            android:text="Dozent"
             android:textColor="@android:color/black"
-            android:layout_marginRight="20dp"
-            android:id="@+id/terminview_dozentenbezeichnung"/>
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
 
 
         <TextView
-            android:text="8-103"
-            android:layout_width="180dp"
+            android:id="@+id/terminview_ort"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:visibility="visible"
-            android:textStyle="bold"
-            android:textSize="20sp"
+            android:layout_marginLeft="20dp"
+            android:text="Ort"
             android:textColor="@android:color/black"
-            android:layout_marginRight="20dp"
-            android:id="@+id/terminview_ortsbezeichnung"/>
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
 
-        <View android:layout_width="180dp"
+        <View
+            android:id="@+id/strich5"
+            android:layout_width="match_parent"
             android:layout_height="2dip"
-            android:layout_marginRight="20dp"
-            android:visibility="visible"
+            android:layout_marginLeft="20dp"
             android:foreground="@android:color/black"
-            android:id="@+id/strich6" />
+            android:visibility="visible" />
 
         <TextView
-            android:text="0"
-            android:layout_marginTop="20dp"
-            android:layout_width="180dp"
+            android:id="@+id/terminview_ausnahmen"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:visibility="visible"
-            android:textStyle="bold"
-            android:textSize="20sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Ausnahmen"
             android:textColor="@android:color/black"
-            android:layout_marginRight="20dp"
-            android:id="@+id/terminview_ausnahmenbezeichnung"/>
-
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
 
 
     </LinearLayout>
 
-    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/leftList"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/terminview_zeiten"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="8:00-9:00 Uhr"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/terminview_datum"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="20.03.16-07.07.16"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/terminview_wiederholungsbezeichnung"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Wöchentlich"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+
+        <TextView
+            android:id="@+id/terminview_prioritätwert"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Hoch"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <View
+            android:id="@+id/strich2"
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:foreground="@android:color/black"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/terminview_modulbezeichnung"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:text="SW-Projekt"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/terminview_termintypbezeichnung"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Seminar"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+
+            android:visibility="visible" />
+
+        <View
+            android:id="@+id/strich4"
+            android:layout_width="match_parent"
+
+            android:layout_height="2dip"
+            android:foreground="@android:color/black"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/terminview_dozentenbezeichnung"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:text="Schubert"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+
+        <TextView
+            android:id="@+id/terminview_ortsbezeichnung"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="8-103"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <View
+            android:id="@+id/strich6"
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:foreground="@android:color/black"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/terminview_ausnahmenbezeichnung"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:text="0"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>
 

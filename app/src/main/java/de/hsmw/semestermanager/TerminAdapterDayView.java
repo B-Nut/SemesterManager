@@ -47,6 +47,7 @@ public class TerminAdapterDayView<T> extends ArrayAdapter {
 
             if (tagesview_termin_zeiten != null) {
                 tagesview_termin_zeiten.setText(t.getTimeString());
+                tagesview_termin_zeiten.setContentDescription(Integer.toString(t.getId()));
             }
             if (tagesview_termin_datum != null) {
                 String text;

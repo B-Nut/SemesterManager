@@ -48,25 +48,20 @@ public class DatabaseInterface {
      * @param ANZEIGENAME Der Name des Plans, welcher neu angelegt werden soll.
      * @param STARTDATE   Das Anfangsdatum, von wann der Plan gelten soll. Das STARTDATE muss gleich, oder vor dem ENDDATE liegen. Das Datum muss im Format jjjj-mm-dd sein.
      * @param ENDDATE     Das Enddatum, bis wann der Plan gelten soll. Das ENDDATE muss gleich, oder nach dem STARTDATE liegen. Das Datum muss im Format jjjj-mm-dd sein.
-     * @return Die ID des neuen Plans wird zurueckgegeben, oder -1 bei einem unvorhergesehenen Fehler.
-     * @throws IllegalArgumentException Wenn eines der Argumente nicht den Vorgaben entspricht.
+     * @return Die ID des neuen Plans wird zurueckgegeben.
+     * @throws IllegalArgumentException Wenn das Startdatum hinter dem Enddatum liegt.
      */
     public long insertDataPlans(String ANZEIGENAME, String STARTDATE, String ENDDATE) {
-        try {
-            if ((Date.valueOf(STARTDATE).before(Date.valueOf(ENDDATE)) || (Date.valueOf(STARTDATE).equals(Date.valueOf(ENDDATE))))) {
-                ContentValues values = new ContentValues();
-                values.put("ANZEIGENAME", ANZEIGENAME);
-                values.put("STARTTIME", STARTDATE);
-                values.put("ENDTIME", ENDDATE);
-                return db.insert("plans", null, values);
-            } else {
-                Log.d("DatabaseInterface", "insertDataPlans_STARTDATE_ENDDATE = fehlerhafte Eingabe: " + STARTDATE + " ; " + ENDDATE);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataPlans_STARTDATE_ENDDATE = fehlerhafte Eingabe: " + STARTDATE + " ; " + ENDDATE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if ((Date.valueOf(STARTDATE).before(Date.valueOf(ENDDATE)) || (Date.valueOf(STARTDATE).equals(Date.valueOf(ENDDATE))))) {
+            ContentValues values = new ContentValues();
+            values.put("ANZEIGENAME", ANZEIGENAME);
+            values.put("STARTTIME", STARTDATE);
+            values.put("ENDTIME", ENDDATE);
+            return db.insert("plans", null, values);
+        } else {
+            Log.d("DatabaseInterface", "insertDataPlans_STARTDATE_ENDDATE = fehlerhafte Eingabe: " + STARTDATE + " ; " + ENDDATE);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataPlans_STARTDATE_ENDDATE = fehlerhafte Eingabe: " + STARTDATE + " ; " + ENDDATE);
         }
-        return -1;
     }
 
     /**
@@ -74,19 +69,14 @@ public class DatabaseInterface {
      *
      * @param ANZEIGENAME Der Name des Moduls, welches neu angelegt werden soll.
      * @param SEMESTERID  Die ID des Semesterplans, welchem das neue Modul zugeordnet werden soll.
-     * @return Die ID des neuen Modul wird zurueckgegeben, oder -1 bei einem unvorhergesehenen Fehler.
+     * @return Die ID des neuen Modul wird zurueckgegeben
      */
     public long insertDataModules(String ANZEIGENAME, int SEMESTERID) {
-        try {
-            ContentValues values = new ContentValues();
+        ContentValues values = new ContentValues();
 
-            values.put("ANZEIGENAME", ANZEIGENAME);
-            values.put("SEMESTERID", SEMESTERID);
-            return db.insert("modules", null, values);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
+        values.put("ANZEIGENAME", ANZEIGENAME);
+        values.put("SEMESTERID", SEMESTERID);
+        return db.insert("modules", null, values);
     }
 
     /**
@@ -109,74 +99,74 @@ public class DatabaseInterface {
      * @param exceptionContextID Die ID der Terminwiederholung, wenn eine Termienwiederholungsausnahme erstellt werden soll, oder 0, wenn ein Termin oder eine Terminwiederholung erstellt werden soll.
      * @param exceptionTargetDay Der Tag auf den sich die Terminwiederholungsausnahme bezieht. Das Datum muss im Format jjjj-mm-dd sein.
      * @param isdelete           Ein Integer (0 bis 1) welcher beschreibt, ob ein Termin einer Terminwiederholung geloescht wurde. 1 = geloescht, 0 = nicht geloescht
-     * @return Die ID des neuen Termins/Terminwiederholung/Terminwiederholungsausnahme wird zurueckgegeben, oder -1 bei einem unvorhergesehenen Fehler.
+     * @return Die ID des neuen Termins/Terminwiederholung/Terminwiederholungsausnahme wird zurueckgegeben.
      * @throws IllegalArgumentException Wenn eines der Argumente nicht den Vorgaben entspricht.
      */
     public long insertDataTermine(String name, String startDate, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isExeption, int exceptionContextID, String exceptionTargetDay, int isdelete) throws IllegalArgumentException {
-        try {
-            if (Date.valueOf(wiederholungsEnde).before(Date.valueOf(startDate))) {
-                Log.d("DatabaseInterface", "insertDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe: " + startDate + ";" + wiederholungsEnde);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe: " + startDate + ";" + wiederholungsEnde);
-            }
-            if (Time.valueOf(endTime).before(Time.valueOf(startTime))) {
-                Log.d("DatabaseInterface", "insertDataTermine_startTime_endTime = fehlerhafte Eingabe: " + startTime + ";" + endTime);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_startTime_endTime = fehlerhafte Eingabe: " + startTime + ";" + endTime);
-            }
-            if (prioritaet != 0 || prioritaet != 1 || prioritaet != 2) {
-                Log.d("DatabaseInterface", "insertDataTermine_prioritaet = fehlerhafte Eingabe: " + prioritaet);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_prioritaet = fehlerhafte Eingabe: " + prioritaet);
-            }
-            Cursor c = db.rawQuery("SELECT SEMESTERID from modules WHERE ID = \"" + modulID + "\"", null);
-            c.moveToNext();
-            if (c.getInt(0) != modulID) {
-                c.close();
-                Log.d("DatabaseInterface", "insertDataTermine_modulID = fehlerhafte Eingabe: " + modulID);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_modulID = fehlerhafte Eingabe: " + modulID);
-            }
-            c.close();
-            if (istGanztagsTermin != 0 || istGanztagsTermin != 1) {
-                Log.d("DatabaseInterface", "insertDataTermine_istGanztagsTermin = fehlerhafte Eingabe: " + istGanztagsTermin);
-                throw new IllegalArgumentException("DatabaseInterface:: insertDataTermine_istGanztagsTermin = fehlerhafte Eingabe: " + istGanztagsTermin);
-            }
-            if (periode != 0 || periode != 7 || periode != 14 || periode != 28) {
-                Log.d("DatabaseInterface", "insertDataTermine_periode = fehlerhafte Eingabe: " + periode);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_periode = fehlerhafte Eingabe: " + periode);
-            }
-            if (isExeption != 0 || isExeption != 1) {
-                Log.d("DatabaseInterface", "insertDataTermine_isExeption = fehlerhafte Eingabe: " + isExeption);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_isExeption = fehlerhafte Eingabe: " + isExeption);
-            }
-            //TODO : Soll benni schoen machen :D
-            if (Date.valueOf(exceptionTargetDay) == Date.valueOf("01-01-0001") || Date.valueOf(exceptionTargetDay) != Date.valueOf("01-01-0001")) {
-            }//Pruefung ob der String exceptionTargetDay auch ein Date-String ist.
-            if (isdelete != 0 || isdelete != 1) {
-                Log.d("DatabaseInterface", "insertDataTermine_isdelete = fehlerhafte Eingabe: " + isdelete);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_isExeption = fehlerhafte Eingabe: " + isExeption);
-            }
-
-            ContentValues values = new ContentValues();
-            values.put("ANZEIGENAME", name);
-            values.put("STARTDATE", startDate);
-            values.put("wiederholungsEnde", wiederholungsEnde);
-            values.put("STARTTIME", startTime);
-            values.put("ENDTIME", endTime);
-            values.put("ORT", ort);
-            values.put("TERMINTYP", typ);
-            values.put("PRIORITAET", prioritaet);
-            values.put("SEMESTERID", planID);
-            values.put("MODULID", modulID);
-            values.put("ISTGANZTAGSTERMIN", istGanztagsTermin);
-            values.put("DOZENT", dozent);
-            values.put("PERIODE", periode);
-            values.put("ISEXEPTION", isExeption);
-            values.put("EXCEPTIONCONTEXTID", exceptionContextID);
-            values.put("EXCEPTIONTARGETDAY", exceptionTargetDay);
-            values.put("ISDELETED", isdelete);
-            return db.insert("termine", null, values);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (Date.valueOf(wiederholungsEnde).before(Date.valueOf(startDate))) {
+            Log.d("DatabaseInterface", "insertDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe: " + startDate + ";" + wiederholungsEnde);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe: " + startDate + ";" + wiederholungsEnde);
         }
-        return -1;
+        if (Time.valueOf(endTime).before(Time.valueOf(startTime))) {
+            Log.d("DatabaseInterface", "insertDataTermine_startTime_endTime = fehlerhafte Eingabe: " + startTime + ";" + endTime);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_startTime_endTime = fehlerhafte Eingabe: " + startTime + ";" + endTime);
+        }
+        if (prioritaet != 0 && prioritaet != 1 && prioritaet != 2) {
+            Log.d("DatabaseInterface", "insertDataTermine_prioritaet = fehlerhafte Eingabe: " + prioritaet);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_prioritaet = fehlerhafte Eingabe: " + prioritaet);
+        }
+        Cursor c = db.rawQuery("SELECT SEMESTERID from modules WHERE ID = \"" + modulID + "\"", null);
+        c.moveToNext();
+        if (c.getInt(0) != modulID) {
+            c.close();
+            Log.d("DatabaseInterface", "insertDataTermine_modulID = fehlerhafte Eingabe: " + modulID);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_modulID = fehlerhafte Eingabe: " + modulID);
+        }
+        c.close();
+        if (istGanztagsTermin != 0 && istGanztagsTermin != 1) {
+            Log.d("DatabaseInterface", "insertDataTermine_istGanztagsTermin = fehlerhafte Eingabe: " + istGanztagsTermin);
+            throw new IllegalArgumentException("DatabaseInterface:: insertDataTermine_istGanztagsTermin = fehlerhafte Eingabe: " + istGanztagsTermin);
+        }
+        if (periode != 0 && periode != 7 && periode != 14 && periode != 28) {
+            Log.d("DatabaseInterface", "insertDataTermine_periode = fehlerhafte Eingabe: " + periode);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_periode = fehlerhafte Eingabe: " + periode);
+        }
+        if (isExeption != 0 && isExeption != 1) {
+            Log.d("DatabaseInterface", "insertDataTermine_isExeption = fehlerhafte Eingabe: " + isExeption);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_isExeption = fehlerhafte Eingabe: " + isExeption);
+        }
+
+        //Pruefung ob der String exceptionTargetDay auch ein Date-String ist.
+        try {
+            Date.valueOf(exceptionTargetDay);
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
+
+        if (isdelete != 0 && isdelete != 1) {
+            Log.d("DatabaseInterface", "insertDataTermine_isdelete = fehlerhafte Eingabe: " + isdelete);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_isExeption = fehlerhafte Eingabe: " + isExeption);
+        }
+
+        ContentValues values = new ContentValues();
+        values.put("ANZEIGENAME", name);
+        values.put("STARTDATE", startDate);
+        values.put("wiederholungsEnde", wiederholungsEnde);
+        values.put("STARTTIME", startTime);
+        values.put("ENDTIME", endTime);
+        values.put("ORT", ort);
+        values.put("TERMINTYP", typ);
+        values.put("PRIORITAET", prioritaet);
+        values.put("SEMESTERID", planID);
+        values.put("MODULID", modulID);
+        values.put("ISTGANZTAGSTERMIN", istGanztagsTermin);
+        values.put("DOZENT", dozent);
+        values.put("PERIODE", periode);
+        values.put("ISEXEPTION", isExeption);
+        values.put("EXCEPTIONCONTEXTID", exceptionContextID);
+        values.put("EXCEPTIONTARGETDAY", exceptionTargetDay);
+        values.put("ISDELETED", isdelete);
+        return db.insert("termine", null, values);
     }
     //------------------------------Get All Data-----------------------------------------
 
@@ -561,21 +551,16 @@ public class DatabaseInterface {
      * @throws IllegalArgumentException Wenn eines der Argumente nicht den Vorgaben entspricht.
      */
     public long updateDataPlans(int ID, String ANZEIGENAME, String STARTDATE, String ENDDATE) {
-        try {
-            if ((Date.valueOf(STARTDATE).before(Date.valueOf(ENDDATE)) || (Date.valueOf(STARTDATE).equals(Date.valueOf(ENDDATE))))) {
-                ContentValues values = new ContentValues();
-                values.put("ANZEIGENAME", ANZEIGENAME);
-                values.put("STARTTIME", STARTDATE);
-                values.put("ENDTIME", ENDDATE);
-                return db.update("plans", values, "ID =" + String.valueOf(ID), null);
-            } else {
-                Log.d("DatabaseInterface", "updateDataPlans_STARTDATE_ENDDATE = fehlerhafte Eingabe: " + STARTDATE + " ; " + ENDDATE);
-                throw new IllegalArgumentException("DatabaseInterface: updateDataPlans_STARTDATE_ENDDATE = fehlerhafte Eingabe: " + STARTDATE + " ; " + ENDDATE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if ((Date.valueOf(STARTDATE).before(Date.valueOf(ENDDATE)) || (Date.valueOf(STARTDATE).equals(Date.valueOf(ENDDATE))))) {
+            ContentValues values = new ContentValues();
+            values.put("ANZEIGENAME", ANZEIGENAME);
+            values.put("STARTTIME", STARTDATE);
+            values.put("ENDTIME", ENDDATE);
+            return db.update("plans", values, "ID =" + String.valueOf(ID), null);
+        } else {
+            Log.d("DatabaseInterface", "updateDataPlans_STARTDATE_ENDDATE = fehlerhafte Eingabe: " + STARTDATE + " ; " + ENDDATE);
+            throw new IllegalArgumentException("DatabaseInterface: updateDataPlans_STARTDATE_ENDDATE = fehlerhafte Eingabe: " + STARTDATE + " ; " + ENDDATE);
         }
-        return -1;
     }
 
     /**
@@ -587,16 +572,11 @@ public class DatabaseInterface {
      * @return Es wird die Nummer der geaenderten Felder zurueckgegeben, oder -1 bei einem unvorhergesehenen Fehler.
      */
     public long updateDataModules(int ID, String ANZEIGENAME, int SEMESTERID) {
-        try {
-            ContentValues values = new ContentValues();
+        ContentValues values = new ContentValues();
 
-            values.put("ANZEIGENAME", ANZEIGENAME);
-            values.put("SEMESTERID", SEMESTERID);
-            return db.update("Modules", values, "ID =" + String.valueOf(ID), null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
+        values.put("ANZEIGENAME", ANZEIGENAME);
+        values.put("SEMESTERID", SEMESTERID);
+        return db.update("Modules", values, "ID =" + String.valueOf(ID), null);
     }
 
     /**
@@ -607,68 +587,70 @@ public class DatabaseInterface {
      * @throws IllegalArgumentException Wenn eines der Argumente nicht den Vorgaben entspricht.
      */
     public long updateDataTermine(int id, String name, String startDate, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isExeption, int exceptionContextID, String exceptionTargetDay, int isdelete) {
-        try {
-            if (Date.valueOf(wiederholungsEnde).before(Date.valueOf(startDate))) {
-                Log.d("DatabaseInterface", "insertDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe: " + startDate + ";" + wiederholungsEnde);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe: " + startDate + ";" + wiederholungsEnde);
-            }
-            if (Time.valueOf(endTime).before(Time.valueOf(startTime))) {
-                Log.d("DatabaseInterface", "insertDataTermine_startTime_endTime = fehlerhafte Eingabe: " + startTime + ";" + endTime);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_startTime_endTime = fehlerhafte Eingabe: " + startTime + ";" + endTime);
-            }
-            if (prioritaet != 0 || prioritaet != 1 || prioritaet != 2) {
-                Log.d("DatabaseInterface", "insertDataTermine_prioritaet = fehlerhafte Eingabe: " + prioritaet);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_prioritaet = fehlerhafte Eingabe: " + prioritaet);
-            }
-            Cursor c = db.rawQuery("SELECT SEMESTERID from modules WHERE ID = \"" + modulID + "\"", null);
-            c.moveToNext();
-            if (c.getInt(0) != modulID) {
-                c.close();
-                Log.d("DatabaseInterface", "insertDataTermine_modulID = fehlerhafte Eingabe: " + modulID);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_modulID = fehlerhafte Eingabe: " + modulID);
-            }
-            if (istGanztagsTermin != 0 || istGanztagsTermin != 1) {
-                Log.d("DatabaseInterface", "insertDataTermine_istGanztagsTermin = fehlerhafte Eingabe: " + istGanztagsTermin);
-                throw new IllegalArgumentException("DatabaseInterface:: insertDataTermine_istGanztagsTermin = fehlerhafte Eingabe: " + istGanztagsTermin);
-            }
-            if (periode != 0 || periode != 7 || periode != 14 || periode != 28) {
-                Log.d("DatabaseInterface", "insertDataTermine_periode = fehlerhafte Eingabe: " + periode);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_periode = fehlerhafte Eingabe: " + periode);
-            }
-            if (isExeption != 0 || isExeption != 1) {
-                Log.d("DatabaseInterface", "insertDataTermine_isExeption = fehlerhafte Eingabe: " + isExeption);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_isExeption = fehlerhafte Eingabe: " + isExeption);
-            }
-            if (Date.valueOf(exceptionTargetDay) == Date.valueOf("01-01-0001") || Date.valueOf(exceptionTargetDay) != Date.valueOf("01-01-0001")) {
-            }//Pruefung ob der String exceptionTargetDay auch ein Date-String ist.
-            if (isdelete != 0 || isdelete != 1) {
-                Log.d("DatabaseInterface", "insertDataTermine_isdelete = fehlerhafte Eingabe: " + isdelete);
-                throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_isExeption = fehlerhafte Eingabe: " + isExeption);
-            }
-            ContentValues values = new ContentValues();
-            values.put("ANZEIGENAME", name);
-            values.put("STARTDATE", startDate);
-            values.put("wiederholungsEnde", wiederholungsEnde);
-            values.put("STARTTIME", startTime);
-            values.put("ENDTIME", endTime);
-            values.put("ORT", ort);
-            values.put("TERMINTYP", typ);
-            values.put("PRIORITAET", prioritaet);
-            values.put("SEMESTERID", planID);
-            values.put("MODULID", modulID);
-            values.put("ISTGANZTAGSTERMIN", istGanztagsTermin);
-            values.put("DOZENT", dozent);
-            values.put("PERIODE", periode);
-            values.put("ISEXEPTION", isExeption);
-            values.put("EXCEPTIONCONTEXTID", exceptionContextID);
-            values.put("EXCEPTIONTARGETDAY", exceptionTargetDay);
-            values.put("ISDELETED", isdelete);
-            return db.update("Termine", values, "ID =" + String.valueOf(id), null);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (Date.valueOf(wiederholungsEnde).before(Date.valueOf(startDate))) {
+            Log.d("DatabaseInterface", "insertDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe: " + startDate + ";" + wiederholungsEnde);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe: " + startDate + ";" + wiederholungsEnde);
         }
-        return -1;
+        if (Time.valueOf(endTime).before(Time.valueOf(startTime))) {
+            Log.d("DatabaseInterface", "insertDataTermine_startTime_endTime = fehlerhafte Eingabe: " + startTime + ";" + endTime);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_startTime_endTime = fehlerhafte Eingabe: " + startTime + ";" + endTime);
+        }
+        if (prioritaet != 0 && prioritaet != 1 && prioritaet != 2) {
+            Log.d("DatabaseInterface", "insertDataTermine_prioritaet = fehlerhafte Eingabe: " + prioritaet);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_prioritaet = fehlerhafte Eingabe: " + prioritaet);
+        }
+        Cursor c = db.rawQuery("SELECT SEMESTERID from modules WHERE ID = \"" + modulID + "\"", null);
+        c.moveToNext();
+        if (c.getInt(0) != modulID) {
+            c.close();
+            Log.d("DatabaseInterface", "insertDataTermine_modulID = fehlerhafte Eingabe: " + modulID);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_modulID = fehlerhafte Eingabe: " + modulID);
+        }
+        c.close();
+        if (istGanztagsTermin != 0 && istGanztagsTermin != 1) {
+            Log.d("DatabaseInterface", "insertDataTermine_istGanztagsTermin = fehlerhafte Eingabe: " + istGanztagsTermin);
+            throw new IllegalArgumentException("DatabaseInterface:: insertDataTermine_istGanztagsTermin = fehlerhafte Eingabe: " + istGanztagsTermin);
+        }
+        if (periode != 0 && periode != 7 && periode != 14 && periode != 28) {
+            Log.d("DatabaseInterface", "insertDataTermine_periode = fehlerhafte Eingabe: " + periode);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_periode = fehlerhafte Eingabe: " + periode);
+        }
+        if (isExeption != 0 && isExeption != 1) {
+            Log.d("DatabaseInterface", "insertDataTermine_isExeption = fehlerhafte Eingabe: " + isExeption);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_isExeption = fehlerhafte Eingabe: " + isExeption);
+        }
+
+        //Pruefung ob der String exceptionTargetDay auch ein Date-String ist.
+        try {
+            Date.valueOf(exceptionTargetDay);
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
+
+        if (isdelete != 0 && isdelete != 1) {
+            Log.d("DatabaseInterface", "insertDataTermine_isdelete = fehlerhafte Eingabe: " + isdelete);
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_isExeption = fehlerhafte Eingabe: " + isExeption);
+        }
+
+        ContentValues values = new ContentValues();
+        values.put("ANZEIGENAME", name);
+        values.put("STARTDATE", startDate);
+        values.put("wiederholungsEnde", wiederholungsEnde);
+        values.put("STARTTIME", startTime);
+        values.put("ENDTIME", endTime);
+        values.put("ORT", ort);
+        values.put("TERMINTYP", typ);
+        values.put("PRIORITAET", prioritaet);
+        values.put("SEMESTERID", planID);
+        values.put("MODULID", modulID);
+        values.put("ISTGANZTAGSTERMIN", istGanztagsTermin);
+        values.put("DOZENT", dozent);
+        values.put("PERIODE", periode);
+        values.put("ISEXEPTION", isExeption);
+        values.put("EXCEPTIONCONTEXTID", exceptionContextID);
+        values.put("EXCEPTIONTARGETDAY", exceptionTargetDay);
+        values.put("ISDELETED", isdelete);
+        return db.update("Termine", values, "ID =" + String.valueOf(id), null);
     }
     //_________________Delete_____________________
 
@@ -678,12 +660,8 @@ public class DatabaseInterface {
      * @param ID ID der zuloeschende Zeile.
      */
     public void deletePlanByID(int ID) {
-        try {
-            db.delete("PLANS", "ID =  \"" + ID + "\" ", null);
-            Log.d("DatabaseInterface", "Plan_geloescht: " + ID);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        db.delete("PLANS", "ID =  \"" + ID + "\" ", null);
+        Log.d("DatabaseInterface", "Plan_geloescht: " + ID);
     }
 
     /**
@@ -692,12 +670,8 @@ public class DatabaseInterface {
      * @param ID ID der zuloeschende Zeile.
      */
     public void deleteMudulByID(int ID) {
-        try {
-            db.delete("MODULES", "ID =  \"" + ID + "\" ", null);
-            Log.d("DatabaseInterface", "Modul_geloescht: " + ID);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        db.delete("MODULES", "ID =  \"" + ID + "\" ", null);
+        Log.d("DatabaseInterface", "Modul_geloescht: " + ID);
     }
 
     /**
@@ -706,14 +680,10 @@ public class DatabaseInterface {
      * @param ID ID der zuloeschende Zeile.
      */
     public void deleteTerminByID(int ID) {
-        try {
-            db.delete("TERMINE", "ID =  \"" + ID + "\" ", null);
-            Log.d("DatabaseInterface", "Termin_geloescht: " + ID);
-            int deletedItems = db.delete("TERMINE", "EXCEPTIONCONTEXTID =  \"" + ID + "\" ", null);
-            Log.d("DatabaseInterface", deletedItems + " Wiederholungsausnahmen im Kontext der ID " + ID + " gelöscht.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        db.delete("TERMINE", "ID =  \"" + ID + "\" ", null);
+        Log.d("DatabaseInterface", "Termin_geloescht: " + ID);
+        int deletedItems = db.delete("TERMINE", "EXCEPTIONCONTEXTID =  \"" + ID + "\" ", null);
+        Log.d("DatabaseInterface", deletedItems + " Wiederholungsausnahmen im Kontext der ID " + ID + " gelöscht.");
     }
     //___________________SonderFunktionen_________________
 
@@ -721,19 +691,14 @@ public class DatabaseInterface {
      * Diese Funktion gibt die Anzahl der Ausnahmen zu einer Terminwiederholung zurueck.
      *
      * @param ID Die ID der Terminwiederholung, zu welcher die Ausnahmen gesucht werden sollen.
-     * @return Long, oder -1 bei einem unvorhergesehenen Fehler.
+     * @return Long
      */
     public long getCountExceptionsByID(int ID) {
-        try {
-            Cursor c = db.rawQuery("SELECT * from TERMINE WHERE EXCEPTIONCONTEXTID = \"" + ID + "\"", null);
+        Cursor c = db.rawQuery("SELECT * from TERMINE WHERE EXCEPTIONCONTEXTID = \"" + ID + "\"", null);
 
-            long returnValue = c.getCount();
-            c.close();
-            return returnValue;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
+        long returnValue = c.getCount();
+        c.close();
+        return returnValue;
     }
 
     /**

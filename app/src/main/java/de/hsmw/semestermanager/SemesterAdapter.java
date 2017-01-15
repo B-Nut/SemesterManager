@@ -41,6 +41,7 @@ public class SemesterAdapter extends ArrayAdapter<Plan> {
 
             if (textName != null) {
                 textName.setText(s.getName());
+                textName.setContentDescription(Integer.toString(s.getId()));
             }
             if (textEndDate != null) {
                 textEndDate.setText(Helper.sqlToGermanDate(s.getEndDate().toString()));

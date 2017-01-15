@@ -1,6 +1,7 @@
 package de.hsmw.semestermanager;
 
 import android.content.Context;
+import android.content.Intent;
 
 import java.util.Calendar;
 
@@ -31,12 +32,22 @@ public class Module implements DatabaseObject {
         return planID;
     }
 
-    public String getProgressString(Context c) {
+    /**
+     * Erzeugt einen Fortschrittsstring.
+     *
+     * @param c Context zur Datenbankabfrage
+     * @return Einen String, der den Fortschritt in dem Modul anzeigt im Format " Vergangene Stunden / Gesamtstunden "
+     * @throws NullPointerException Wenn keine Termine zu diesem Modul gehören.
+     */
+    public String getProgressString(Context c) throws NullPointerException {
         DatabaseInterface di = DatabaseInterface.getInstance(c);
 
         long sumUntilNow = 0;
         long sumTotal = 0;
         Termin[] termine = di.getTermineByModulID(id);
+        if (termine == null) {
+            throw new NullPointerException("Keine Termine gehören zum Modul");
+        }
         for (Termin t : termine) {
             if (t.getPeriode() == 0 || t.getIsException() != 0) {
                 sumTotal += t.getDuration();
@@ -55,8 +66,17 @@ public class Module implements DatabaseObject {
         DatabaseInterface di = DatabaseInterface.getInstance(c);
         di.deleteMudulByID(id);
         Termin[] termine = di.getTermineByModulID(id);
-        for (Termin t : termine) {
-            t.delete(c);
+        if (termine != null) {
+            for (Termin t : termine) {
+                t.delete(c);
+            }
         }
+    }
+
+    @Override
+    public void edit(Context c) {
+        Intent i = new Intent("de.hsmw.semestermanager.ModulInput");
+        i.putExtra("ID", getId());
+        c.startActivity(i);
     }
 }

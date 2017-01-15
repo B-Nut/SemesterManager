@@ -63,7 +63,7 @@ public class TerminInput extends AppCompatActivity {
         final Plan[] allPlans = di.getAllPlans();
         Helper.fillSpinner(this, allPlans, semester);
 
-        Module[] allModules = di.getAllDataModules();
+        Module[] allModules = di.getAllModules();
         //TODO: ModulListe noch  richtig machen.
         Helper.fillSpinner(this, allModules, modul);
 

@@ -16,11 +16,14 @@ import java.util.List;
  */
 
 public class ModulInput extends AppCompatActivity {
-    DatabaseHandler dh;
     DatabaseInterface di;
 
     Plan[] plans;
     Spinner spinner;
+
+    Button b;
+    EditText inputName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,6 @@ public class ModulInput extends AppCompatActivity {
 
 
         di = DatabaseInterface.getInstance(this);
-
         // you need to have a list of data that you want the spinner to display
         plans = di.getAllPlans();
 
@@ -40,20 +42,37 @@ public class ModulInput extends AppCompatActivity {
             planIDs.add(plan.getId());
         }
         //k
-
         ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, planNames);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner = (Spinner) findViewById(R.id.new_modul_semester);
         spinner.setAdapter(adapter);
 
-        Button b = (Button) findViewById(R.id.new_modul_submit);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                di.insertDataModules(((EditText) findViewById(R.id.new_modul_name)).getText().toString(), plans[spinner.getSelectedItemPosition()].getId());
-                finish();
-            }
-        });
+        b = (Button) findViewById(R.id.new_modul_submit);
+        inputName = (EditText) findViewById(R.id.new_modul_name);
+
+        int editID = getIntent().getExtras().getInt("ID", -1);
+        if (editID == -1) {
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    di.insertDataModules(inputName.getText().toString(), plans[spinner.getSelectedItemPosition()].getId());
+                    finish();
+                }
+            });
+        } else {
+            final Module editModul = di.getModuleByID(editID);
+            b.setText("Änderungen schreiben");
+            setTitle("Bearbeite " + editModul.getName());
+            inputName.setText(editModul.getName());
+            spinner.setSelection(editModul.getPlanID() - 1);
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    di.updateDataModules(editModul.getId(), inputName.getText().toString(), plans[spinner.getSelectedItemPosition()].getId());
+                    finish();
+                }
+            });
+        }
     }
 }

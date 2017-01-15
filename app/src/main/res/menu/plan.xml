@@ -3,19 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_view_day"
+        android:title="Tagesansicht"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_add_new_modul"
-        android:orderInCategory="100"
         android:title="Neues Modul"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_add_new_entry"
-        android:orderInCategory="200"
         android:title="Neuer Termin"
         app:showAsAction="never" />
-
     <item
-        android:id="@+id/action_view_day"
-        android:orderInCategory="300"
-        android:title="Tagesansicht"
+        android:id="@+id/action_edit_object"
+        android:title="Plan Bearbeiten"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_delete_object"
+        android:title="Plan Löschen"
+        app:showAsAction="never" />
+
+
 </menu>

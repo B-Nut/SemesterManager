@@ -2,6 +2,7 @@ package de.hsmw.semestermanager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,7 +10,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -50,13 +53,14 @@ public class DayView extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setCurrentItem(21);
+        mViewPager.setCurrentItem(getIntent().getExtras().getInt("page", 1));
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        mViewPager.setCurrentItem(21);
+    protected void onRestart() {
+        super.onRestart();
+        mViewPager.setCurrentItem(getIntent().getExtras().getInt("page", 1));
+        recreate();
     }
 
     /**
@@ -68,6 +72,7 @@ public class DayView extends AppCompatActivity {
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        final int scrollOffset = 22;
         private ListView listView;
         private ArrayList<Termin> termine;
         private TerminAdapterDayView<Termin> terminListAdapter;
@@ -91,7 +96,6 @@ public class DayView extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                                  final Bundle savedInstanceState) {
-            int scrollOffset = 22;
             final int currentPage = getArguments().getInt(ARG_SECTION_NUMBER) - scrollOffset;
             final View rootView = inflater.inflate(R.layout.fragment_day_view, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
@@ -100,7 +104,11 @@ public class DayView extends AppCompatActivity {
             SimpleDateFormat df = new SimpleDateFormat("EEEE - dd.MM.yyyy");
             String formattedDate = df.format(c.getTime());
             Log.d("onCreateView", formattedDate);
+            Log.d("onCreateView", Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
             textView.setText(formattedDate);
+
+            //Speichere die aktuelle Seitennummer in die View, um nach dem Aufruf des Contextmenuclicklisteners die Activity an der richtigen Stelle neu zu starten.
+            textView.setContentDescription(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
 
             di = DatabaseInterface.getInstance(rootView.getContext());
 
@@ -108,55 +116,88 @@ public class DayView extends AppCompatActivity {
             termine = new ArrayList<>();
             terminListAdapter = new TerminAdapterDayView<>(rootView.getContext(), R.layout.listview_tagesview_termine, termine);
             listView.setAdapter(terminListAdapter);
-
-            final SimpleDateFormat af = new SimpleDateFormat("yyyy-MM-dd");
-            updateList(af.format(c.getTime()));
-            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
-
-                    final Termin t = (Termin) parent.getItemAtPosition(position);
-                    String question;
-                    if (t.getPeriode() != 0 && t.getIsException() == 0) {
-                        question = "Are you sure you want to delete this repeated appointment? This will also delete " + di.getCountExceptionsByID(t.getId()) + " exceptions.";
-                    } else if (t.getIsException() != 0) {
-                        question = "Are you sure you want to delete this exception? The regular appointment the exception is referring to will be restored.";
-                    } else {
-                        question = "Are you sure you want to delete this appointment?";
-                    }
-
-                    AlertDialog.Builder alert = new AlertDialog.Builder(listView.getContext());
-                    //alert.setTitle(question);
-                    alert.setMessage(question);
-                    alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            t.delete(parent.getContext());
-                            updateList(af.format(c.getTime()));
-                            dialog.dismiss();
-                        }
-                    });
-                    alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    alert.show();
-                    return true;
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    int terminID = ((Termin) parent.getItemAtPosition(position)).getId();
+                    Intent i = new Intent("de.hsmw.semestermanager.TerminView");
+                    i.putExtra("ID", terminID);
+                    startActivity(i);
                 }
             });
+            //Aktualisiere die Terminliste
+            final SimpleDateFormat af = new SimpleDateFormat("yyyy-MM-dd");
+            String date = af.format(c.getTime());
+            int semesterID = getActivity().getIntent().getExtras().getInt("ID", 1);
+            termine.clear();
+            try {
+                termine.addAll(Arrays.asList(di.getTermineByDate(date, semesterID, true)));
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            terminListAdapter.notifyDataSetChanged();
+            registerForContextMenu(listView);
+
             return rootView;
         }
 
-        public void updateList(String date) {
-            termine.clear();
-            //TODO: Hardcoded integer entfernen.
-            termine.addAll(Arrays.asList(di.getTermineByDate(date, 1, true)));
-            //Log.d("database",di.getTermineByDate(date)[0].getName());
-            terminListAdapter.notifyDataSetChanged();
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            super.onCreateContextMenu(menu, v, menuInfo);
+            if (v.getId() == R.id.list_termin_dayview) {
+                menu.add("bearbeiten");
+                menu.add("löschen");
+            }
+        }
+
+        @Override
+        public boolean onContextItemSelected(MenuItem item) {
+            final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            int terminID = Integer.valueOf(info.targetView.findViewById(R.id.tagesview_termin_zeiten).getContentDescription().toString());
+            final Termin t = DatabaseInterface.getInstance(getContext()).getTerminByID(terminID);
+
+            final int page = Integer.valueOf(((View) info.targetView.getParent().getParent()).findViewById(R.id.section_label).getContentDescription().toString());
+
+            if (item.getTitle() == "löschen") {
+                String question;
+                if (t.getPeriode() != 0 && t.getIsException() == 0) {
+                    question = "Are you sure you want to delete this repeated appointment? This will also delete " + di.getCountExceptionsByID(t.getId()) + " exceptions.";
+                } else if (t.getIsException() != 0) {
+                    question = "Are you sure you want to delete this exception? The regular appointment the exception is referring to will be restored.";
+                } else {
+                    question = "Are you sure you want to delete this appointment?";
+                }
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setMessage(question);
+                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        t.delete(info.targetView.getContext());
+                        //Nachdem ich 3 Stunden probiert habe den FragmentManager zu aktualisieren, habe ich entschlossen die ganze Activity neu zu starten!
+                        getActivity().getIntent().putExtra("page", page - 1);
+                        getActivity().recreate();
+
+                        dialog.dismiss();
+                    }
+                });
+                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+                return true;
+            } else if (item.getTitle() == "bearbeiten") {
+                getActivity().getIntent().putExtra("page", page - 1);
+                t.edit(getContext());
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
@@ -179,23 +220,7 @@ public class DayView extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return 100;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
-                case 3:
-                    return "Section 4";
-            }
-            return null;
         }
     }
 }

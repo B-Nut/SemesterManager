@@ -1,6 +1,7 @@
 package de.hsmw.semestermanager;
 
 import android.content.Context;
+import android.content.Intent;
 
 import java.sql.Date;
 
@@ -42,7 +43,7 @@ public class Plan implements DatabaseObject {
     }
 
     /**
-     * Löscht das Semester mitsamt allen zugewiesenen Modulen und Terminen.
+     * Löscht das Semester mitsamt allen zugewiesenen Modulen und Terminen in der Datenbank.
      */
     public void delete(Context c) {
         DatabaseInterface di = DatabaseInterface.getInstance(c);
@@ -55,5 +56,12 @@ public class Plan implements DatabaseObject {
         for (Module m : module) {
             m.delete(c);
         }
+    }
+
+    @Override
+    public void edit(Context c) {
+        Intent i = new Intent("de.hsmw.semestermanager.SemesterplanInput");
+        i.putExtra("ID", getId());
+        c.startActivity(i);
     }
 }
