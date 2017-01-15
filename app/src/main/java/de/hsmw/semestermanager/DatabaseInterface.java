@@ -40,7 +40,6 @@ public class DatabaseInterface {
         }
         return di;
     }
-
     //---------------------------Add Data----------------------------------------------
 
     /**
@@ -181,7 +180,6 @@ public class DatabaseInterface {
         }
         return -1;
     }
-
     //------------------------------Get All Data-----------------------------------------
 
     /**
@@ -245,7 +243,6 @@ public class DatabaseInterface {
 
         return returnTermin;
     }
-
     //----------------------------Get Data By ID---------------------------
 
     /**
@@ -254,7 +251,6 @@ public class DatabaseInterface {
      * @param id ID des Plans welcher zurueckgegeben werden soll.
      * @return Plan, wenn kein Plan gefunden wurde, wird null zurueckegegeben.
      */
-
     public Plan getPlanByID(int id) {
         String[] columns = {"*"};
         String query = SQLiteQueryBuilder.buildQueryString(false, "plans", columns, "ID = " + id, "", "", "", "");
@@ -327,7 +323,7 @@ public class DatabaseInterface {
         if (b == false) {
             return null;
         }
-        while (b = true) {
+        while (b == true) {
             returnArray[c.getPosition()] = cursor2Termin(c);
             b = c.moveToNext();
         }
@@ -350,9 +346,9 @@ public class DatabaseInterface {
         if (b == false) {
             return null;
         }
-        while (b = true) {
+        while (b == true) {
             returnArray[c.getPosition()] = cursor2Module(c);
-            c.moveToNext();
+            b = c.moveToNext();
         }
         c.close();
         return returnArray;
@@ -373,9 +369,9 @@ public class DatabaseInterface {
         if (b == false) {
             return null;
         }
-        while (b = true) {
+        while (b == true) {
             returnArray[c.getPosition()] = cursor2Termin(c);
-            c.moveToNext();
+            b = c.moveToNext();
         }
         c.close();
         return returnArray;
@@ -396,9 +392,9 @@ public class DatabaseInterface {
         if (b == false) {
             return null;
         }
-        while (b = true) {
+        while (b == true) {
             returnArray[c.getPosition()] = cursor2Termin(c);
-            c.moveToNext();
+            b = c.moveToNext();
         }
         c.close();
         return returnArray;
@@ -483,7 +479,6 @@ public class DatabaseInterface {
         Collections.sort(returnArray);
         return returnArray.toArray(new Termin[returnArray.size()]);
     }
-
     //-------------------------searching for---------------------------------------------
 
     /**
@@ -499,9 +494,9 @@ public class DatabaseInterface {
         if (b == false) {
             return null;
         }
-        while (b = true) {
+        while (b == true) {
             returnPlan[c.getPosition()] = cursor2Plan(c);
-            c.moveToNext();
+            b = c.moveToNext();
         }
         c.close();
         return returnPlan;
@@ -520,9 +515,9 @@ public class DatabaseInterface {
         if (b == false) {
             return null;
         }
-        while (b = true) {
+        while (b == true) {
             returnModules[c.getPosition()] = cursor2Module(c);
-            c.moveToNext();
+            b = c.moveToNext();
         }
         c.close();
         return returnModules;
@@ -541,14 +536,13 @@ public class DatabaseInterface {
         if (b == false) {
             return null;
         }
-        while (b = true) {
+        while (b == true) {
             returnTermine[c.getPosition()] = cursor2Termin(c);
-            c.moveToNext();
+            b = c.moveToNext();
         }
         c.close();
         return returnTermine;
     }
-
     //----------------------Update------------------------------------------------------
 
     /**
@@ -675,7 +669,6 @@ public class DatabaseInterface {
         }
         return -1;
     }
-
     //_________________Delete_____________________
 
     /**
@@ -721,7 +714,6 @@ public class DatabaseInterface {
             e.printStackTrace();
         }
     }
-
     //___________________SonderFunktionen_________________
 
     /**
@@ -762,7 +754,6 @@ public class DatabaseInterface {
         }
         return returnArray;
     }
-
     //____________________________________________________
 
     /**
