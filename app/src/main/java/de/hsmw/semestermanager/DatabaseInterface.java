@@ -115,13 +115,13 @@ public class DatabaseInterface {
             if (Date.valueOf(startDate).equals(Date.valueOf(wiederholungsEnde)) || Date.valueOf(startDate).before(Date.valueOf(wiederholungsEnde))) {
                 if (Time.valueOf(startTime).equals(Time.valueOf(endTime)) || Time.valueOf(startTime).before(Time.valueOf(endTime))) {
                     if (prioritaet == 0 || prioritaet == 1 || prioritaet == 2) {
-                        Cursor c = db.rawQuery("SELECT planID from modules WHERE ID = \"" + modulID + "\"", null);
+                        Cursor c = db.rawQuery("SELECT SEMESTERID from modules WHERE ID = \"" + modulID + "\"", null);
                         c.moveToNext();
                         if (c.getInt(0) == modulID) {
                             if (istGanztagsTermin == 0 || istGanztagsTermin == 1) {
                                 if (periode == 0 || periode == 7 || periode == 14 || periode == 28) {
                                     if (isExeption == 0 || isExeption == 1) {
-                                        if (Date.valueOf(exceptionTargetDay) == Date.valueOf("0001.01.01") || Date.valueOf(exceptionTargetDay) != Date.valueOf("0001.01.01")) { //Pruefung ob der String exceptionTargetDay auch ein Date-String ist.
+                                        if (Date.valueOf(exceptionTargetDay) == Date.valueOf("01-01-0001") || Date.valueOf(exceptionTargetDay) != Date.valueOf("01-01-0001")) { //Pruefung ob der String exceptionTargetDay auch ein Date-String ist.
                                             if (isdelete == 0 || isdelete == 1) {
                                                 ContentValues values = new ContentValues();
                                                 values.put("ANZEIGENAME", name);
@@ -143,36 +143,36 @@ public class DatabaseInterface {
                                                 values.put("ISDELETED", isdelete);
                                                 return db.insert("termine", null, values);
                                             } else {
-                                                Log.d("DatabaseInterface", "insertDataTermine_isdelete = fehlerhafte Eingabe");
+                                                Log.d("DatabaseInterface", "insertDataTermine_isdelete = fehlerhafte Eingabe: " + isdelete);
                                                 return -1;
                                             }
                                         }
                                     } else {
-                                        Log.d("DatabaseInterface", "insertDataTermine_isExeption = fehlerhafte Eingabe");
+                                        Log.d("DatabaseInterface", "insertDataTermine_isExeption = fehlerhafte Eingabe: " + isExeption);
                                         return -1;
                                     }
                                 } else {
-                                    Log.d("DatabaseInterface", "insertDataTermine_periode = fehlerhafte Eingabe");
+                                    Log.d("DatabaseInterface", "insertDataTermine_periode = fehlerhafte Eingabe: "+ periode);
                                     return -1;
                                 }
                             } else {
-                                Log.d("DatabaseInterface", "insertDataTermine_istGanztagsTermin = fehlerhafte Eingabe");
+                                Log.d("DatabaseInterface", "insertDataTermine_istGanztagsTermin = fehlerhafte Eingabe: " + istGanztagsTermin);
                                 return -1;
                             }
                         } else {
-                            Log.d("DatabaseInterface", "insertDataTermine_modulID = fehlerhafte Eingabe");
+                            Log.d("DatabaseInterface", "insertDataTermine_modulID = fehlerhafte Eingabe: " + modulID);
                             return -1;
                         }
                     } else {
-                        Log.d("DatabaseInterface", "insertDataTermine_prioritaet = fehlerhafte Eingabe");
+                        Log.d("DatabaseInterface", "insertDataTermine_prioritaet = fehlerhafte Eingabe: " + prioritaet);
                         return -1;
                     }
                 } else {
-                    Log.d("DatabaseInterface", "insertDataTermine_startTime_endTime = fehlerhafte Eingabe");
+                    Log.d("DatabaseInterface", "insertDataTermine_startTime_endTime = fehlerhafte Eingabe: " + startTime + ";" + endTime);
                     return -1;
                 }
             } else {
-                Log.d("DatabaseInterface", "insertDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe");
+                Log.d("DatabaseInterface", "insertDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe: " + startDate + ";" + wiederholungsEnde);
                 return -1;
             }
         } catch (Exception e) {
