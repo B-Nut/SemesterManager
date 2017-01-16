@@ -8,6 +8,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ExceptionInput extends AppCompatActivity {
     DatabaseInterface di;
@@ -96,7 +97,11 @@ public class ExceptionInput extends AppCompatActivity {
             submit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    di.insertDataTermine(terminName.getText().toString(),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(startDate.getText().toString()),startTime.getText().toString() + ":00",endTime.getText().toString() + ":00", ort.getText().toString(),typen[typ.getSelectedItemPosition()],priorität.getSelectedItemPosition(),planID,modulID,ganztagsTermin.isChecked() ? 1:0,dozent.getText().toString(),periode,1,x.getInt("exceptionContextID"),Helper.dateToSQL(x.getString("targetDay")),deleteTermin.isChecked() ? 1 : 0);
+                    try {
+                        di.insertDataTermine(terminName.getText().toString(),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(startDate.getText().toString()),startTime.getText().toString() + ":00",endTime.getText().toString() + ":00", ort.getText().toString(),typen[typ.getSelectedItemPosition()],priorität.getSelectedItemPosition(),planID,modulID,ganztagsTermin.isChecked() ? 1:0,dozent.getText().toString(),periode,1,x.getInt("exceptionContextID"),Helper.dateToSQL(x.getString("targetDay")),deleteTermin.isChecked() ? 1 : 0);
+                    }catch (IllegalArgumentException iae){
+                        Toast.makeText(getApplicationContext(),iae.getMessage(),Toast.LENGTH_LONG).show();
+                    }
                     finish();
                 }
             });
@@ -106,7 +111,11 @@ public class ExceptionInput extends AppCompatActivity {
             submit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    di.updateDataTermine(editID, terminName.getText().toString(),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(startDate.getText().toString()),startTime.getText().toString() + ":00",endTime.getText().toString() + ":00", ort.getText().toString(),typen[typ.getSelectedItemPosition()],priorität.getSelectedItemPosition(),planID,modulID,ganztagsTermin.isChecked() ? 1:0,dozent.getText().toString(),periode,1,x.getInt("exceptionContextID"),Helper.dateToSQL(x.getString("targetDay")),deleteTermin.isChecked() ? 1 : 0);
+                    try {
+                        di.updateDataTermine(editID, terminName.getText().toString(),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(startDate.getText().toString()),startTime.getText().toString() + ":00",endTime.getText().toString() + ":00", ort.getText().toString(),typen[typ.getSelectedItemPosition()],priorität.getSelectedItemPosition(),planID,modulID,ganztagsTermin.isChecked() ? 1:0,dozent.getText().toString(),periode,1,x.getInt("exceptionContextID"),Helper.dateToSQL(x.getString("targetDay")),deleteTermin.isChecked() ? 1 : 0);
+                    }catch (IllegalArgumentException iae){
+                        Toast.makeText(getApplicationContext(),iae.getMessage(),Toast.LENGTH_LONG).show();
+                    }
                     finish();
                 }
             });

@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SemesterplanInput extends AppCompatActivity {
 
@@ -36,7 +37,11 @@ public class SemesterplanInput extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     DatabaseInterface di = DatabaseInterface.getInstance(SemesterplanInput.this);
-                    di.insertDataPlans(inputName.getText().toString(), Helper.dateToSQL(inputStartDate.getText().toString()), Helper.dateToSQL(inputEndDate.getText().toString()));
+                    try {
+                        di.insertDataPlans(inputName.getText().toString(), Helper.dateToSQL(inputStartDate.getText().toString()), Helper.dateToSQL(inputEndDate.getText().toString()));
+                    }catch (IllegalArgumentException iae){
+                        Toast.makeText(getApplicationContext(),iae.getMessage(),Toast.LENGTH_LONG).show();
+                    }
                     finish();
                 }
             });
@@ -54,7 +59,11 @@ public class SemesterplanInput extends AppCompatActivity {
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    di.updateDataPlans(editPlan.getId(), inputName.getText().toString(), Helper.dateToSQL(inputStartDate.getText().toString()), Helper.dateToSQL(inputEndDate.getText().toString()));
+                    try {
+                        di.updateDataPlans(editPlan.getId(), inputName.getText().toString(), Helper.dateToSQL(inputStartDate.getText().toString()), Helper.dateToSQL(inputEndDate.getText().toString()));
+                    }catch (IllegalArgumentException iae){
+                        Toast.makeText(getApplicationContext(),iae.getMessage(),Toast.LENGTH_LONG).show();
+                    }
                     finish();
                 }
             });

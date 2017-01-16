@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,11 @@ public class ModulInput extends AppCompatActivity {
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    di.insertDataModules(inputName.getText().toString(), plans[spinner.getSelectedItemPosition()].getId());
+                    try {
+                        di.insertDataModules(inputName.getText().toString(), plans[spinner.getSelectedItemPosition()].getId());
+                    }catch (IllegalArgumentException iae){
+                        Toast.makeText(getApplicationContext(),iae.getMessage(),Toast.LENGTH_LONG).show();
+                    }
                     finish();
                 }
             });
@@ -72,7 +77,11 @@ public class ModulInput extends AppCompatActivity {
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    di.updateDataModules(editModul.getId(), inputName.getText().toString(), plans[spinner.getSelectedItemPosition()].getId());
+                    try {
+                        di.updateDataModules(editModul.getId(), inputName.getText().toString(), plans[spinner.getSelectedItemPosition()].getId());
+                    }catch (IllegalArgumentException iae){
+                        Toast.makeText(getApplicationContext(),iae.getMessage(),Toast.LENGTH_LONG).show();
+                    }
                     finish();
                 }
             });

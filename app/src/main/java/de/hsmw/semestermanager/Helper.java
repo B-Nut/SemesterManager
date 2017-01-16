@@ -3,6 +3,8 @@ package de.hsmw.semestermanager;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -138,7 +140,7 @@ public class Helper {
     }
 
     //Brauchen wir vielleicht noch. :)
-    public void showMessage(Context context, String title, String message) {
+    public static void showMessage(final Context context, String title, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
         builder.setTitle(title);
@@ -146,4 +148,3 @@ public class Helper {
         builder.show();
     }
 }
-
