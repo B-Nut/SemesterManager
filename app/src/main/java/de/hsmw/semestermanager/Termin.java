@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
  * Created by Benjamin on 02.12.2016.
  */
 
-public class Termin implements DatabaseObject, Comparable<Termin> {
+public class Termin implements DatabaseObject, Comparable<Termin>, Cloneable {
     private int id;
     private String name;
     private Date startDate;
@@ -206,16 +206,24 @@ public class Termin implements DatabaseObject, Comparable<Termin> {
         return isDeleted;
     }
 
+    /**
+     * Vergleicht nur die Startzeit der Termine.
+     */
     @Override
     public int compareTo(Termin o) {
-        int comparedStart = Helper.compareSQLTime(startTime, o.startTime);
-        if (comparedStart == 0) {
-            return Helper.compareSQLTime(endTime, o.endTime);
-        } else {
+        int comparedStart = startTime.compareTo(o.startTime);
+        if (comparedStart == 0){
+            return  endTime.compareTo(o.endTime);
+        }else{
             return comparedStart;
         }
     }
 
+    /**
+     * Gibt eine neue Termininstanz für eine Terminwiederholung zurück, die am gesuchten Tag stattfindet.
+     * @param date Datum für das ein Termin gesucht wird.
+     * @return Null, wenn dieser Termin keine Terminwiederholung ist, oder zu dem gegebenen Datum kein Termin für die Wiederholung stattfindet.
+     */
     public Termin getTerminAtDate(Date date) {
         if (isException != 0 || periode == 0) {
             return null;
@@ -279,6 +287,7 @@ public class Termin implements DatabaseObject, Comparable<Termin> {
         return returnValue;
     }
 
+    @Override
     public Termin clone() {
         return new Termin(id, name, startDate, wiederholungsEnde, startTime, endTime, ort, typ, prioritaet, planID, modulID, isGanztagsTermin, dozent, periode, isException, exceptionContextID, exceptionTargetDay, isDeleted);
     }
@@ -306,13 +315,39 @@ public class Termin implements DatabaseObject, Comparable<Termin> {
     }
 
     /**
-     * Startet einen Intent, um den Termin zu bearbeiten.
+     * Startet einen Intent, um den Termin zu bearbeiten. Unterscheidet dabei zwischen normalen Terminen und Wiederholungsausnahmen.
      *
      * @param c Context für Datenbankzugriffe.
      */
     public void edit(Context c) {
-        Intent i = new Intent("de.hsmw.semestermanager.TerminInput");
+        if(periode < 1 || isException < 1){
+            Intent i = new Intent("de.hsmw.semestermanager.TerminInput");
+            i.putExtra("ID", getId());
+            c.startActivity(i);
+            return;
+        }
+
+        Intent i = new Intent("de.hsmw.semestermanager.ExceptionInput");
         i.putExtra("ID", getId());
+
+        i.putExtra("terminName", getName());
+        i.putExtra("startDate", Helper.sqlToGermanDate(getStartDate().toString()));
+        i.putExtra("wiederholungsEnde", Helper.sqlToGermanDate(getWiederholungsEnde().toString()));
+        i.putExtra("startZeit", getStartTime().toString().substring(0,5));
+        i.putExtra("endZeit", getEndTime().toString().substring(0,5));
+        i.putExtra("ort", getOrt());
+        i.putExtra("typ", getTyp());
+        i.putExtra("priorität", getPrioritaet());
+        i.putExtra("planID", getPlanID());
+        i.putExtra("modulID", getModulID());
+        i.putExtra("isGanztagsTermin", getIsGanztagsTermin());
+        i.putExtra("dozent", getDozent());
+        i.putExtra("periode", getPeriode());
+
+        i.putExtra("exceptionContextID", getExceptionContextID());
+        i.putExtra("targetDay", Helper.sqlToGermanDate(getExceptionTargetDay().toString()));
+        i.putExtra("isDeleted", getIsDeleted());
+
         c.startActivity(i);
     }
 
@@ -344,41 +379,6 @@ public class Termin implements DatabaseObject, Comparable<Termin> {
 
         i.putExtra("exceptionContextID", getId());
         i.putExtra("targetDay", Helper.sqlToGermanDate(getStartDate().toString()));
-
-        c.startActivity(i);
-    }
-
-    /**
-     * Startet einen Intent, um eine Terminwiederholungsausnahme zu bearbeiten.
-     * Die Funktion läuft ins Leere, wenn der Termin keine Wiederholung ist.
-     * @param c Context für Datenbankzugriffe.
-     */
-    public void editException(Context c){
-
-        if(periode < 1){
-            return;
-        }
-
-        Intent i = new Intent("de.hsmw.semestermanager.ExceptionInput");
-        i.putExtra("ID", getId());
-
-        i.putExtra("terminName", getName());
-        i.putExtra("startDate", Helper.sqlToGermanDate(getStartDate().toString()));
-        i.putExtra("wiederholungsEnde", Helper.sqlToGermanDate(getWiederholungsEnde().toString()));
-        i.putExtra("startZeit", getStartTime().toString().substring(0,5));
-        i.putExtra("endZeit", getEndTime().toString().substring(0,5));
-        i.putExtra("ort", getOrt());
-        i.putExtra("typ", getTyp());
-        i.putExtra("priorität", getPrioritaet());
-        i.putExtra("planID", getPlanID());
-        i.putExtra("modulID", getModulID());
-        i.putExtra("isGanztagsTermin", getIsGanztagsTermin());
-        i.putExtra("dozent", getDozent());
-        i.putExtra("periode", getPeriode());
-
-        i.putExtra("exceptionContextID", getExceptionContextID());
-        i.putExtra("targetDay", Helper.sqlToGermanDate(getExceptionTargetDay().toString()));
-        i.putExtra("isDeleted", getIsDeleted());
 
         c.startActivity(i);
     }

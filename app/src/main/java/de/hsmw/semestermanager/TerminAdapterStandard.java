@@ -35,9 +35,9 @@ public class TerminAdapterStandard extends ArrayAdapter<Termin> {
             v = vi.inflate(viewResource, null);
         }
 
-        Termin e = getItem(position);
+        Termin t = getItem(position);
 
-        if (e != null) {
+        if (t != null) {
             TextView semesterview_termin_zeiten = (TextView) v.findViewById(R.id.semesterview_termin_zeiten);
             TextView semesterview_termin_datum = (TextView) v.findViewById(R.id.semesterview_termin_datum);
             TextView semesterview_termin_ort = (TextView) v.findViewById(R.id.semesterview_termin_ort);
@@ -48,29 +48,31 @@ public class TerminAdapterStandard extends ArrayAdapter<Termin> {
             TextView semesterview_termin_termintyp = (TextView) v.findViewById(R.id.semesterview_termin_termintyp);
 
             if (semesterview_termin_zeiten != null) {
-                semesterview_termin_zeiten.setText(e.getTimeString());
+                semesterview_termin_zeiten.setText(t.getTimeString());
             }
             if (semesterview_termin_datum != null) {
-                semesterview_termin_datum.setText(e.getDateString());
+                semesterview_termin_datum.setText(t.getDateString());
             }
             if (semesterview_termin_ort != null) {
-                semesterview_termin_ort.setText(e.getOrt());
+                semesterview_termin_ort.setText(t.getOrt());
             }
             if (semesterview_termin_modul != null) {
-                semesterview_termin_modul.setText(e.getName());
+                semesterview_termin_modul.setText(t.getName());
             }
             if (semesterview_termin_dozenten != null) {
-                semesterview_termin_dozenten.setText(e.getDozent());
+                semesterview_termin_dozenten.setText(t.getDozent());
             }
             if (semesterview_termin_wiederholung != null) {
-                if (e.getPeriode() == 0) {
-                    semesterview_termin_wiederholung.setText("");
+                if (t.getPeriode() != 0 && t.getIsException() == 0) {
+                    semesterview_termin_wiederholung.setText(t.getWiederholungsString());
+                } else if (t.getIsException() != 0) {
+                    semesterview_termin_wiederholung.setText("Ausnahme");
                 } else {
-                    semesterview_termin_wiederholung.setText(e.getWiederholungsString());
+                    semesterview_termin_wiederholung.setText("");
                 }
             }
             if (semesterview_termin_prioritätswert != null) {
-                switch (e.getPrioritaet()) {
+                switch (t.getPrioritaet()) {
                     case 0:
                         semesterview_termin_prioritätswert.setText("Hoch");
                         semesterview_termin_prioritätswert.setTextColor(Color.RED);
@@ -90,7 +92,7 @@ public class TerminAdapterStandard extends ArrayAdapter<Termin> {
                 }
             }
             if (semesterview_termin_termintyp != null) {
-                semesterview_termin_termintyp.setText(e.getTyp());
+                semesterview_termin_termintyp.setText(t.getTyp());
             }
         }
         return v;

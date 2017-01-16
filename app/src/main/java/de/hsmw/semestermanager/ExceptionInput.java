@@ -90,7 +90,7 @@ public class ExceptionInput extends AppCompatActivity {
         ganztagsTermin.setChecked(x.getInt("isGanztagsTermin") != 0);
         dozent.setText(x.getString("dozent", ""));
 
-        int editID = getIntent().getExtras().getInt("ID", -1);
+        final int editID = getIntent().getExtras().getInt("ID", -1);
         if(editID == -1){
             setTitle("Statt " + terminName.getText().toString() + " am " + x.getString("targetDay"));
             submit.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +106,7 @@ public class ExceptionInput extends AppCompatActivity {
             submit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    di.insertDataTermine(terminName.getText().toString(),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(startDate.getText().toString()),startTime.getText().toString() + ":00",endTime.getText().toString() + ":00", ort.getText().toString(),typen[typ.getSelectedItemPosition()],priorität.getSelectedItemPosition(),planID,modulID,ganztagsTermin.isChecked() ? 1:0,dozent.getText().toString(),periode,1,x.getInt("exceptionContextID"),Helper.dateToSQL(x.getString("targetDay")),deleteTermin.isChecked() ? 1 : 0);
+                    di.updateDataTermine(editID, terminName.getText().toString(),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(startDate.getText().toString()),startTime.getText().toString() + ":00",endTime.getText().toString() + ":00", ort.getText().toString(),typen[typ.getSelectedItemPosition()],priorität.getSelectedItemPosition(),planID,modulID,ganztagsTermin.isChecked() ? 1:0,dozent.getText().toString(),periode,1,x.getInt("exceptionContextID"),Helper.dateToSQL(x.getString("targetDay")),deleteTermin.isChecked() ? 1 : 0);
                     finish();
                 }
             });

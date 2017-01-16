@@ -68,7 +68,13 @@ public class TerminAdapterDayView<T> extends ArrayAdapter {
                 tagesview_termin_dozenten.setText(t.getDozent());
             }
             if (tagesview_termin_wiederholung != null) {
-                tagesview_termin_wiederholung.setText("");
+                if (t.getPeriode() != 0 && t.getIsException() == 0) {
+                    tagesview_termin_wiederholung.setText(t.getWiederholungsString());
+                } else if (t.getIsException() != 0) {
+                    tagesview_termin_wiederholung.setText("Ausnahme");
+                } else {
+                    tagesview_termin_wiederholung.setText("");
+                }
             }
             if (tagesview_termin_prioritätswert != null) {
                 setPrioritaet(tagesview_termin_prioritätswert, t);

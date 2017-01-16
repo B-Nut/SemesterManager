@@ -36,7 +36,9 @@ public class TerminInput extends AppCompatActivity {
     private void refreshModuleSpinner(Module[] m){
         ArrayList<Module> am = new ArrayList<>();
         am.add(new Module(0,"Kein Modul",0));
-        am.addAll(Arrays.asList(m));
+        if (m != null) {
+            am.addAll(Arrays.asList(m));
+        }
         currentModuleSelection = am.toArray(new Module[am.size()]);
         Helper.fillSpinner(this, currentModuleSelection, modul);
     }

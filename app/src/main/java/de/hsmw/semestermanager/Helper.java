@@ -18,10 +18,16 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
+ * Hilfsklasse mit - Erfahrungsgemäß - Hilfreichen Funktionen, die aber eigentlich woanders stehen sollten.
  * Created by Benjamin on 06.12.2016.
  */
 
 public class Helper {
+    /**
+     * Erzeugt einen DatePicker, der nach der Auswahl das Ergebnis in die übergebene TextView schreibt.
+     * @param inputDate TextView, in das die Auswahl gespeichert werden soll.
+     * @param title String der als Titel für den Picker dient.
+     */
     public static void pickDate(final Context context, final TextView inputDate, final String title) {
         inputDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +49,11 @@ public class Helper {
         });
     }
 
+    /**
+     * Erzeugt einen TimePicker, der nach der Auswahl das Ergebnis in die übergebene TextView schreibt.
+     * @param inputTime TextView, in das die Auswahl gespeichert werden soll.
+     * @param title String der als Titel für den Picker dient.
+     */
     public static void pickTime(final Context context, final TextView inputTime, final String title) {
         inputTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,37 +75,31 @@ public class Helper {
         });
     }
 
+    /**
+     * Im Rückblick wäre eine DateFormat-Instanz sauberer, aber so gehts auch.
+     *
+     * @param germanDate Einen DateString im Format DD.MM.YYYY
+     * @return Einen DateString im Format YYYY-MM-DD zur sicheren Verwendung von Date.valueOf().
+     */
     public static String dateToSQL(String germanDate) {
         String[] values = germanDate.split("[.]");
         return values[2] + "-" + values[1] + "-" + values[0];
     }
 
+    /**
+     * Im Rückblick wäre eine DateFormat-Instanz sauberer, aber so gehts auch.
+     *
+     * @param sqlDate Einen DateString im Format YYYY-MM-DD
+     * @return Einen DateString im Format DD.MM.YYYY
+     * */
     public static String sqlToGermanDate(String sqlDate) {
         String[] vaiues = sqlDate.split("-");
         return vaiues[2] + "." + vaiues[1] + "." + vaiues[0];
     }
 
-    public static int[] timeToIntArray(Time t) {
-        String[] timeStrings = t.toString().split(":");
-        int[] time = new int[3];
-        for (int i = 0; i < timeStrings.length; i++) {
-            time[i] = Integer.parseInt(timeStrings[i]);
-        }
-        return time;
-    }
-
-    public static int compareSQLTime(Time myTime, Time theirTime) {
-        int[] mys = Helper.timeToIntArray(myTime);
-        int[] theirs = Helper.timeToIntArray(theirTime);
-        for (int i = 0; i < mys.length; i++) {
-            int singleCompare = Integer.compare(mys[i], theirs[i]);
-            if (singleCompare != 0) {
-                return singleCompare;
-            }
-        }
-        return 0;
-    }
-
+    /**
+     * Quasi ein MiniSpinnerAdapter...
+     */
     public static void fillSpinner(Context context, DatabaseObject[] inputArray, Spinner spinner) {
         List<String> inputNames = new ArrayList();
         for (DatabaseObject inputObject : inputArray) {
@@ -107,6 +112,9 @@ public class Helper {
         spinner.setAdapter(adapter);
     }
 
+    /**
+     * Quasi ein MiniSpinnerAdapter...
+     */
     public static void fillSpinner(Context context, String[] inputArray, Spinner spinner) {
         ArrayAdapter<String> adapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, inputArray);
 
@@ -114,6 +122,12 @@ public class Helper {
         spinner.setAdapter(adapter);
     }
 
+    /**
+     * Hier als Ausnahme ist eine TimeFormat-Instanz nicht hilfreich gewesen.
+     *
+     * @param l Zeit in ms
+     * @return Zeit im Format HH:MM wobei die Stunden zwischen einer und vielen Stellen variiert, die Minuten aber immer mit 2 Stellen angegeben ist.
+     */
     public static String formatLong2HourString(long l) {
         String returnString = "";
         long hours = (l / 1000 / 60 / 60);

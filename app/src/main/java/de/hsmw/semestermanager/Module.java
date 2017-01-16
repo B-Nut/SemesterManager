@@ -37,24 +37,23 @@ public class Module implements DatabaseObject {
      *
      * @param c Context zur Datenbankabfrage
      * @return Einen String, der den Fortschritt in dem Modul anzeigt im Format " Vergangene Stunden / Gesamtstunden "
-     * @throws NullPointerException Wenn keine Termine zu diesem Modul gehören.
      */
-    public String getProgressString(Context c) throws NullPointerException {
+    public String getProgressString(Context c){
         DatabaseInterface di = DatabaseInterface.getInstance(c);
 
         long sumUntilNow = 0;
         long sumTotal = 0;
         Termin[] termine = di.getTermineByModulID(id);
         if (termine == null) {
-            throw new NullPointerException("Keine Termine gehören zum Modul");
+            return "0:00 / 0:00";
         }
         for (Termin t : termine) {
-            if (t.getPeriode() == 0 || t.getIsException() != 0) {
+            if (t.getPeriode() == 0) {
                 sumTotal += t.getDuration();
                 if (Calendar.getInstance().getTime().compareTo(t.getStartDate()) >= 0) {
                     sumUntilNow += t.getDuration();
                 }
-            } else {
+            } else if (t.getIsException() == 0){
                 sumTotal += t.getDurationSumUntil(t.getWiederholungsEnde(), c);
                 sumUntilNow += t.getDurationSumUntil(new java.sql.Date(Calendar.getInstance().getTime().getTime()), c);
             }

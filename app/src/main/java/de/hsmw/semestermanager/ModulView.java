@@ -66,12 +66,7 @@ public class ModulView extends AppCompatActivity {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        try {
-            progress.setText(selectedModule.getProgressString(this));
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            progress.setText("0:00 / 0:00");
-        }
+        progress.setText(selectedModule.getProgressString(this));
         termineListAdapter.notifyDataSetChanged();
     }
 
