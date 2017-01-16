@@ -109,7 +109,8 @@ public class DatabaseInterface {
             c.close();
             Log.d("DatabaseInterface", "insertDataTermine_planID = fehlerhafte Eingabe: Mindestens eins der angegebenen Daten liegt außerhalb das angegebenen Semesters.");
             throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_planID = fehlerhafte Eingabe: Mindestens eins der angegebenen Daten liegt außerhalb das angegebenen Semesters.");
-        } else if (Date.valueOf(startDate).before(Date.valueOf(c.getString(0)))||Date.valueOf(startDate).after(Date.valueOf(c.getString(1)))) {
+        }
+        if (Date.valueOf(startDate).before(Date.valueOf(c.getString(0))) || Date.valueOf(startDate).after(Date.valueOf(c.getString(1)))) {
             c.close();
             Log.d("DatabaseInterface", "insertDataTermine_planID = fehlerhafte Eingabe: Mindestens eins der angegebenen Daten liegt außerhalb das angegebenen Semesters.");
             throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_planID = fehlerhafte Eingabe: Mindestens eins der angegebenen Daten liegt außerhalb das angegebenen Semesters.");
