@@ -596,6 +596,19 @@ public class DatabaseInterface {
      * @throws IllegalArgumentException Wenn eines der Argumente nicht den Vorgaben entspricht.
      */
     public long updateDataTermine(int id, String name, String startDate, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isExeption, int exceptionContextID, String exceptionTargetDay, int isdelete) {
+        Cursor c = db.rawQuery("SELECT STARTTIME, ENDTIME from PLANS WHERE ID = \"" + planID + "\"", null);
+        c.moveToNext();
+        if (periode != 0 && Date.valueOf(wiederholungsEnde).after(Date.valueOf(c.getString(1)))) {
+            c.close();
+            Log.d("DatabaseInterface", "insertDataTermine_planID = fehlerhafte Eingabe: Mindestens eins der angegebenen Daten liegt außerhalb das angegebenen Semesters.");
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_planID = fehlerhafte Eingabe: Mindestens eins der angegebenen Daten liegt außerhalb das angegebenen Semesters.");
+        }
+        if (Date.valueOf(startDate).before(Date.valueOf(c.getString(0))) || Date.valueOf(startDate).after(Date.valueOf(c.getString(1)))) {
+            c.close();
+            Log.d("DatabaseInterface", "insertDataTermine_planID = fehlerhafte Eingabe: Mindestens eins der angegebenen Daten liegt außerhalb das angegebenen Semesters.");
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_planID = fehlerhafte Eingabe: Mindestens eins der angegebenen Daten liegt außerhalb das angegebenen Semesters.");
+        }
+        c.close();
         if (Date.valueOf(wiederholungsEnde).before(Date.valueOf(startDate))) {
             Log.d("DatabaseInterface", "insertDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe: " + startDate + ";" + wiederholungsEnde);
             throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe: " + startDate + ";" + wiederholungsEnde);
