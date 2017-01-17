@@ -29,7 +29,7 @@ public class SemesterplanInput extends AppCompatActivity {
         Helper.pickDate(this, inputEndDate, "Wähle Semesterende");
 
         int editID = -1;
-        if(getIntent().getExtras() != null) {
+        if (getIntent().getExtras() != null) {
             editID = getIntent().getExtras().getInt("ID", -1);
         }
         if (editID == -1) {
@@ -39,8 +39,8 @@ public class SemesterplanInput extends AppCompatActivity {
                     DatabaseInterface di = DatabaseInterface.getInstance(SemesterplanInput.this);
                     try {
                         di.insertDataPlans(inputName.getText().toString(), Helper.dateToSQL(inputStartDate.getText().toString()), Helper.dateToSQL(inputEndDate.getText().toString()));
-                    }catch (IllegalArgumentException iae){
-                        Toast.makeText(getApplicationContext(),iae.getMessage(),Toast.LENGTH_LONG).show();
+                    } catch (IllegalArgumentException iae) {
+                        Toast.makeText(getApplicationContext(), iae.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     finish();
                 }
@@ -61,8 +61,8 @@ public class SemesterplanInput extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         di.updateDataPlans(editPlan.getId(), inputName.getText().toString(), Helper.dateToSQL(inputStartDate.getText().toString()), Helper.dateToSQL(inputEndDate.getText().toString()));
-                    }catch (IllegalArgumentException iae){
-                        Toast.makeText(getApplicationContext(),iae.getMessage(),Toast.LENGTH_LONG).show();
+                    } catch (IllegalArgumentException iae) {
+                        Toast.makeText(getApplicationContext(), iae.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     finish();
                 }

@@ -38,7 +38,7 @@ public class Module implements DatabaseObject {
      * @param c Context zur Datenbankabfrage
      * @return Einen String, der den Fortschritt in dem Modul anzeigt im Format " Vergangene Stunden / Gesamtstunden "
      */
-    public String getProgressString(Context c){
+    public String getProgressString(Context c) {
         DatabaseInterface di = DatabaseInterface.getInstance(c);
 
         long sumUntilNow = 0;
@@ -53,7 +53,7 @@ public class Module implements DatabaseObject {
                 if (Calendar.getInstance().getTime().compareTo(t.getStartDate()) >= 0) {
                     sumUntilNow += t.getDuration();
                 }
-            } else if (t.getIsException() == 0){
+            } else if (t.getIsException() == 0) {
                 sumTotal += t.getDurationSumUntil(t.getWiederholungsEnde(), c);
                 sumUntilNow += t.getDurationSumUntil(new java.sql.Date(Calendar.getInstance().getTime().getTime()), c);
             }

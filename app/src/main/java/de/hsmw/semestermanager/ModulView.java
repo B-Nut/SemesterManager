@@ -118,6 +118,7 @@ public class ModulView extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.databaseobject, menu);
         return true;
     }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);

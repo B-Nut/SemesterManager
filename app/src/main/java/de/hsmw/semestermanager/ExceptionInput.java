@@ -58,7 +58,7 @@ public class ExceptionInput extends AppCompatActivity {
         endTime.setText(x.getString("endZeit", "Wähle EndZeit"));
         ort.setText(x.getString("ort", "Schreibe Ort"));
         int selection = 0;
-        switch (x.getString("typ")){
+        switch (x.getString("typ")) {
             case "Kein Typ":
                 selection = 0;
                 break;
@@ -92,29 +92,29 @@ public class ExceptionInput extends AppCompatActivity {
         dozent.setText(x.getString("dozent", ""));
 
         final int editID = getIntent().getExtras().getInt("ID", -1);
-        if(editID == -1){
+        if (editID == -1) {
             setTitle("Statt " + terminName.getText().toString() + " am " + x.getString("targetDay"));
             submit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
-                        di.insertDataTermine(terminName.getText().toString(),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(startDate.getText().toString()),startTime.getText().toString() + ":00",endTime.getText().toString() + ":00", ort.getText().toString(),typen[typ.getSelectedItemPosition()],priorität.getSelectedItemPosition(),planID,modulID,ganztagsTermin.isChecked() ? 1:0,dozent.getText().toString(),periode,1,x.getInt("exceptionContextID"),Helper.dateToSQL(x.getString("targetDay")),deleteTermin.isChecked() ? 1 : 0);
-                    }catch (IllegalArgumentException iae){
-                        Toast.makeText(getApplicationContext(),iae.getMessage(),Toast.LENGTH_LONG).show();
+                        di.insertDataTermine(terminName.getText().toString(), Helper.dateToSQL(startDate.getText().toString()), Helper.dateToSQL(startDate.getText().toString()), startTime.getText().toString() + ":00", endTime.getText().toString() + ":00", ort.getText().toString(), typen[typ.getSelectedItemPosition()], priorität.getSelectedItemPosition(), planID, modulID, ganztagsTermin.isChecked() ? 1 : 0, dozent.getText().toString(), periode, 1, x.getInt("exceptionContextID"), Helper.dateToSQL(x.getString("targetDay")), deleteTermin.isChecked() ? 1 : 0);
+                    } catch (IllegalArgumentException iae) {
+                        Toast.makeText(getApplicationContext(), iae.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     finish();
                 }
             });
-        }else{
+        } else {
             setTitle("Statt " + di.getTerminByID(x.getInt("exceptionContextID")).getName() + " am " + x.getString("targetDay"));
             deleteTermin.setChecked(x.getInt("isDeleted") != 0);
             submit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
-                        di.updateDataTermine(editID, terminName.getText().toString(),Helper.dateToSQL(startDate.getText().toString()),Helper.dateToSQL(startDate.getText().toString()),startTime.getText().toString() + ":00",endTime.getText().toString() + ":00", ort.getText().toString(),typen[typ.getSelectedItemPosition()],priorität.getSelectedItemPosition(),planID,modulID,ganztagsTermin.isChecked() ? 1:0,dozent.getText().toString(),periode,1,x.getInt("exceptionContextID"),Helper.dateToSQL(x.getString("targetDay")),deleteTermin.isChecked() ? 1 : 0);
-                    }catch (IllegalArgumentException iae){
-                        Toast.makeText(getApplicationContext(),iae.getMessage(),Toast.LENGTH_LONG).show();
+                        di.updateDataTermine(editID, terminName.getText().toString(), Helper.dateToSQL(startDate.getText().toString()), Helper.dateToSQL(startDate.getText().toString()), startTime.getText().toString() + ":00", endTime.getText().toString() + ":00", ort.getText().toString(), typen[typ.getSelectedItemPosition()], priorität.getSelectedItemPosition(), planID, modulID, ganztagsTermin.isChecked() ? 1 : 0, dozent.getText().toString(), periode, 1, x.getInt("exceptionContextID"), Helper.dateToSQL(x.getString("targetDay")), deleteTermin.isChecked() ? 1 : 0);
+                    } catch (IllegalArgumentException iae) {
+                        Toast.makeText(getApplicationContext(), iae.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     finish();
                 }

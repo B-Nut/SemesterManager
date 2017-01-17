@@ -36,17 +36,19 @@ public class TerminInput extends AppCompatActivity {
     /**
      * Der Modulspinner ist dahingehend besonders, weil dieser anhand des Semesters aktualisiert werden muss.
      * Diese Funktion vereinfacht es den Spinner zu aktualisieren, zu wissen was gerade drinsteht und die Auswahl "Kein Modul" konsistent in der Auswahl zu lassen.
+     *
      * @param m Liste der Module (außer "Kein Modul") die in den Spinner geladen werden soll.
      */
-    private void refreshModuleSpinner(Module[] m){
+    private void refreshModuleSpinner(Module[] m) {
         ArrayList<Module> am = new ArrayList<>();
-        am.add(new Module(0,"Kein Modul",0));
+        am.add(new Module(0, "Kein Modul", 0));
         if (m != null) {
             am.addAll(Arrays.asList(m));
         }
         currentModuleSelection = am.toArray(new Module[am.size()]);
         Helper.fillSpinner(this, currentModuleSelection, modul);
     }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +90,7 @@ public class TerminInput extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (endDate.getText().toString().compareTo("Enddatum") == 0){
+                if (endDate.getText().toString().compareTo("Enddatum") == 0) {
                     endDate.setText(startDate.getText());
                 }
             }
@@ -128,7 +130,7 @@ public class TerminInput extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int s = modul.getSelectedItemPosition();
                 Module[] oldModuleSelection = currentModuleSelection;
-                refreshModuleSpinner(di.getModulesByPlanID(position +1));
+                refreshModuleSpinner(di.getModulesByPlanID(position + 1));
                 boolean isthesame = true;
                 if (oldModuleSelection.length == currentModuleSelection.length) {
                     for (int i = 0; i < oldModuleSelection.length; i++) {
@@ -136,15 +138,17 @@ public class TerminInput extends AppCompatActivity {
                             isthesame = false;
                         }
                     }
-                }else {
+                } else {
                     isthesame = false;
                 }
-                if(isthesame){
+                if (isthesame) {
                     modul.setSelection(s);
                 }
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         refreshModuleSpinner(di.getAllModules());
@@ -159,13 +163,13 @@ public class TerminInput extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         di.insertDataTermine(terminName.getText().toString(), Helper.dateToSQL(startDate.getText().toString()), Helper.dateToSQL(endDate.getText().toString()), startTime.getText().toString() + ":00", endTime.getText().toString() + ":00", ort.getText().toString(), typen[typ.getSelectedItemPosition()], priorität.getSelectedItemPosition(), semester.getSelectedItemPosition() + 1, currentModuleSelection[modul.getSelectedItemPosition()].getId(), ganztagstermin.isChecked() ? 1 : 0, dozent.getText().toString(), periodenSelectiontToPeriode(periode.getSelectedItemPosition()), 0, 0, "2016-01-01", 0);
-                    }catch (IllegalArgumentException iae){
-                        Toast.makeText(getApplicationContext(),iae.getMessage(),Toast.LENGTH_LONG).show();
+                    } catch (IllegalArgumentException iae) {
+                        Toast.makeText(getApplicationContext(), iae.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                        finish();
+                    finish();
                 }
             });
-        }else {
+        } else {
             final Termin editTermin = di.getTerminByID(editID);
             setTitle("Bearbeite " + editTermin.getName());
 
@@ -173,11 +177,11 @@ public class TerminInput extends AppCompatActivity {
             ganztagstermin.setChecked(editTermin.getIsGanztagsTermin() == 1);
             startDate.setText(Helper.sqlToGermanDate(editTermin.getStartDate().toString()));
             endDate.setText(Helper.sqlToGermanDate(editTermin.getWiederholungsEnde().toString()));
-            startTime.setText(editTermin.getStartTime().toString().substring(0,5));
-            endTime.setText(editTermin.getEndTime().toString().substring(0,5));
+            startTime.setText(editTermin.getStartTime().toString().substring(0, 5));
+            endTime.setText(editTermin.getEndTime().toString().substring(0, 5));
             int p = editTermin.getPeriode();
             int selection;
-            switch (p){
+            switch (p) {
                 case 0:
                     selection = 0;
                     break;
@@ -195,10 +199,10 @@ public class TerminInput extends AppCompatActivity {
                     break;
             }
             periode.setSelection(selection);
-            semester.setSelection(editTermin.getPlanID()-1);
+            semester.setSelection(editTermin.getPlanID() - 1);
             refreshModuleSpinner(di.getModulesByPlanID(editTermin.getPlanID()));
             selection = 0;
-            if(currentModuleSelection != null) {
+            if (currentModuleSelection != null) {
                 for (int i = 0; i < currentModuleSelection.length; i++) {
                     Module m = currentModuleSelection[i];
                     if (m.getId() == editTermin.getModulID()) {
@@ -209,7 +213,7 @@ public class TerminInput extends AppCompatActivity {
             }
             modul.setSelection(selection);
 
-            switch (editTermin.getTyp()){
+            switch (editTermin.getTyp()) {
                 case "Kein Typ":
                     selection = 0;
                     break;
@@ -242,18 +246,19 @@ public class TerminInput extends AppCompatActivity {
             submit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try{
+                    try {
                         di.updateDataTermine(editTermin.getId(), terminName.getText().toString(), Helper.dateToSQL(startDate.getText().toString()), Helper.dateToSQL(endDate.getText().toString()), startTime.getText().toString() + ":00", endTime.getText().toString() + ":00", ort.getText().toString(), typen[typ.getSelectedItemPosition()], priorität.getSelectedItemPosition(), semester.getSelectedItemPosition() + 1, currentModuleSelection[modul.getSelectedItemPosition()].getId(), ganztagstermin.isChecked() ? 1 : 0, dozent.getText().toString(), periodenSelectiontToPeriode(periode.getSelectedItemPosition()), 0, 0, "2016-01-01", 0);
-                    }catch (IllegalArgumentException iae){
-                        Toast.makeText(getApplicationContext(),iae.getMessage(),Toast.LENGTH_LONG).show();
+                    } catch (IllegalArgumentException iae) {
+                        Toast.makeText(getApplicationContext(), iae.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     finish();
                 }
             });
         }
     }
-    private int periodenSelectiontToPeriode(int s){
-       switch (s){
+
+    private int periodenSelectiontToPeriode(int s) {
+        switch (s) {
             case 0:
                 return 0;
             case 1:

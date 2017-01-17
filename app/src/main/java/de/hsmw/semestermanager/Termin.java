@@ -212,15 +212,16 @@ public class Termin implements DatabaseObject, Comparable<Termin>, Cloneable {
     @Override
     public int compareTo(Termin o) {
         int comparedStart = startTime.compareTo(o.startTime);
-        if (comparedStart == 0){
-            return  endTime.compareTo(o.endTime);
-        }else{
+        if (comparedStart == 0) {
+            return endTime.compareTo(o.endTime);
+        } else {
             return comparedStart;
         }
     }
 
     /**
      * Gibt eine neue Termininstanz für eine Terminwiederholung zurück, die am gesuchten Tag stattfindet.
+     *
      * @param date Datum für das ein Termin gesucht wird.
      * @return Null, wenn dieser Termin keine Terminwiederholung ist, oder zu dem gegebenen Datum kein Termin für die Wiederholung stattfindet.
      */
@@ -320,7 +321,7 @@ public class Termin implements DatabaseObject, Comparable<Termin>, Cloneable {
      * @param c Context für Datenbankzugriffe.
      */
     public void edit(Context c) {
-        if(periode < 1 || isException < 1){
+        if (periode < 1 || isException < 1) {
             Intent i = new Intent("de.hsmw.semestermanager.TerminInput");
             i.putExtra("ID", getId());
             c.startActivity(i);
@@ -333,8 +334,8 @@ public class Termin implements DatabaseObject, Comparable<Termin>, Cloneable {
         i.putExtra("terminName", getName());
         i.putExtra("startDate", Helper.sqlToGermanDate(getStartDate().toString()));
         i.putExtra("wiederholungsEnde", Helper.sqlToGermanDate(getWiederholungsEnde().toString()));
-        i.putExtra("startZeit", getStartTime().toString().substring(0,5));
-        i.putExtra("endZeit", getEndTime().toString().substring(0,5));
+        i.putExtra("startZeit", getStartTime().toString().substring(0, 5));
+        i.putExtra("endZeit", getEndTime().toString().substring(0, 5));
         i.putExtra("ort", getOrt());
         i.putExtra("typ", getTyp());
         i.putExtra("priorität", getPrioritaet());
@@ -354,11 +355,12 @@ public class Termin implements DatabaseObject, Comparable<Termin>, Cloneable {
     /**
      * Startet einen Intent, um eine Terminwiederholungsausnahme zu erstellen.
      * Die Funktion läuft ins Leere, wenn der Termin keine Wiederholung ist.
+     *
      * @param c Context für Datenbankzugriffe.
      */
-    public void createException(Context c){
+    public void createException(Context c) {
 
-        if(periode < 1){
+        if (periode < 1) {
             return;
         }
 
@@ -366,8 +368,8 @@ public class Termin implements DatabaseObject, Comparable<Termin>, Cloneable {
         i.putExtra("terminName", getName());
         i.putExtra("startDate", Helper.sqlToGermanDate(getStartDate().toString()));
         i.putExtra("wiederholungsEnde", Helper.sqlToGermanDate(getWiederholungsEnde().toString()));
-        i.putExtra("startZeit", getStartTime().toString().substring(0,5));
-        i.putExtra("endZeit", getEndTime().toString().substring(0,5));
+        i.putExtra("startZeit", getStartTime().toString().substring(0, 5));
+        i.putExtra("endZeit", getEndTime().toString().substring(0, 5));
         i.putExtra("ort", getOrt());
         i.putExtra("typ", getTyp());
         i.putExtra("priorität", getPrioritaet());

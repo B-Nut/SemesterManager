@@ -56,14 +56,14 @@ public class ModulInput extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             editID = getIntent().getExtras().getInt("ID", -1);
         }
-            if (editID == -1) {
+        if (editID == -1) {
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
                         di.insertDataModules(inputName.getText().toString(), plans[spinner.getSelectedItemPosition()].getId());
-                    }catch (IllegalArgumentException iae){
-                        Toast.makeText(getApplicationContext(),iae.getMessage(),Toast.LENGTH_LONG).show();
+                    } catch (IllegalArgumentException iae) {
+                        Toast.makeText(getApplicationContext(), iae.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     finish();
                 }
@@ -79,8 +79,8 @@ public class ModulInput extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         di.updateDataModules(editModul.getId(), inputName.getText().toString(), plans[spinner.getSelectedItemPosition()].getId());
-                    }catch (IllegalArgumentException iae){
-                        Toast.makeText(getApplicationContext(),iae.getMessage(),Toast.LENGTH_LONG).show();
+                    } catch (IllegalArgumentException iae) {
+                        Toast.makeText(getApplicationContext(), iae.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     finish();
                 }

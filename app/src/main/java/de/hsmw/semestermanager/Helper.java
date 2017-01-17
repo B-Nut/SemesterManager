@@ -3,8 +3,6 @@ package de.hsmw.semestermanager;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,16 +11,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.sql.Time;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.FieldPosition;
 import java.text.ParseException;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,8 +26,9 @@ import java.util.List;
 public class Helper {
     /**
      * Erzeugt einen DatePicker, der nach der Auswahl das Ergebnis in die übergebene TextView schreibt.
+     *
      * @param inputDate TextView, in das die Auswahl gespeichert werden soll.
-     * @param title String der als Titel für den Picker dient.
+     * @param title     String der als Titel für den Picker dient.
      */
     public static void pickDate(final Context context, final TextView inputDate, final String title) {
         inputDate.setOnClickListener(new View.OnClickListener() {
@@ -59,8 +53,9 @@ public class Helper {
 
     /**
      * Erzeugt einen TimePicker, der nach der Auswahl das Ergebnis in die übergebene TextView schreibt.
+     *
      * @param inputTime TextView, in das die Auswahl gespeichert werden soll.
-     * @param title String der als Titel für den Picker dient.
+     * @param title     String der als Titel für den Picker dient.
      */
     public static void pickTime(final Context context, final TextView inputTime, final String title) {
         inputTime.setOnClickListener(new View.OnClickListener() {
@@ -86,15 +81,14 @@ public class Helper {
     /**
      * @param germanDate Einen DateString im Format DD.MM.YYYY
      * @return Einen DateString im Format YYYY-MM-DD zur sicheren Verwendung von java.sql.Date.valueOf().
-     *
      * @throws IllegalArgumentException Wenn der gegebene String nicht zu einem gültigen SQL-String formatiert werden kann.
      */
-    public static String dateToSQL(String germanDate) throws IllegalArgumentException{
+    public static String dateToSQL(String germanDate) throws IllegalArgumentException {
 
         final SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         try {
             return df.parse(germanDate).toString();
-        }catch (ParseException pe){
+        } catch (ParseException pe) {
             throw new IllegalArgumentException(pe.getMessage());
         }
     }
@@ -102,14 +96,13 @@ public class Helper {
     /**
      * @param sqlDate Einen DateString im Format YYYY-MM-DD
      * @return Einen DateString im Format DD.MM.YYYY
-     *
      * @throws IllegalArgumentException Wenn der gegebene String nicht zu einem gültigen String formatiert werden kann.
-     * */
+     */
     public static String sqlToGermanDate(String sqlDate) throws IllegalArgumentException {
         final SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         try {
             return df.format(java.sql.Date.valueOf(sqlDate));
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw e;
         }
     }

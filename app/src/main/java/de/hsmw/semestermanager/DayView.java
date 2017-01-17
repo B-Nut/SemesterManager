@@ -157,7 +157,7 @@ public class DayView extends AppCompatActivity {
 
             if (v.getId() == R.id.list_termin_dayview) {
                 menu.add("bearbeiten");
-                if(t.getPeriode() > 0 && t.getIsException() == 0){
+                if (t.getPeriode() > 0 && t.getIsException() == 0) {
                     menu.add("erstelle Ausnahme");
                 }
                 menu.add("löschen");
@@ -218,7 +218,7 @@ public class DayView extends AppCompatActivity {
                 getActivity().getIntent().putExtra("page", page - 1);
                 t.edit(getContext());
                 return true;
-            } else if(item.getTitle() == "erstelle Ausnahme") {
+            } else if (item.getTitle() == "erstelle Ausnahme") {
                 //Ich möchte nicht den Termin haben, sondern die Terminwiederholungsausnahme an dem Tag.
                 //Weil ich aber nur die TerminID übertrage, erzeuge ich mir damit und mit dem Datum aus dem Titel der View NOCHMAL das Terminwiederholungsobjekt für den besagten Tag.
                 //Ich bin so ziemlich am Ende...
@@ -228,7 +228,7 @@ public class DayView extends AppCompatActivity {
                 getActivity().getIntent().putExtra("page", page - 1);
                 terminwiederholung.createException(getContext());
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
