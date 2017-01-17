@@ -83,8 +83,8 @@ public class DatabaseInterface {
      * Diese Funktion erstell einen neuen Termin.
      *
      * @param name               Der Name des Termins/Terminwiederholung/Termienwiederholungsausnahme welche neu angelegt werden soll.
-     * @param startDate          Das Datum, an welchem der Termin/Terminwiederholung/Termienwiederholungsausnahme beginnen soll. Das Datum muss im Format jjjj-mm-dd sein.
-     * @param wiederholungsEnde  Fuer die Terminwiederholung wird hier das Ende der Wiederholung festgelegt. Fuer die Termine/Termienwiederholungsausnahmen solle hier das selbe Datum wie in startDate eingetragen werden, da diese Spalte nicht benoetigt wird. Das Datum muss im Format jjjj-mm-dd sein.
+     * @param startDate          Das Datum, an welchem der Termin/Terminwiederholung/Termienwiederholungsausnahme beginnen soll. Es ist wichtig, dass dieses auch im Zeitraum des angegebenen Semesters ist. Das Datum muss im Format jjjj-mm-dd sein.
+     * @param wiederholungsEnde  Fuer die Terminwiederholung wird hier das Ende der Wiederholung festgelegt. Fuer die Termine/Termienwiederholungsausnahmen solle hier das selbe Datum wie in startDate eingetragen werden, da diese Spalte nicht benoetigt wird. Es ist wichtig, dass dieses auch im Zeitraum des angegebenen Semesters ist. Das Datum muss im Format jjjj-mm-dd sein.
      * @param startTime          Die Uhrzeit bei der der Termin/Terminwiederholung/Termienwiederholungsausnahme starten soll. Die Uhrzeit muss im Format hh:mm:ss sein.
      * @param endTime            Die Uhrzeit bei der der Termin/Terminwiederholung/Termienwiederholungsausnahme enden soll. Der Termin muss am selben Tag enden an dem er beginnt. Die endTime muss spaeter oder gleich als die startTime sein. Die Uhrzeit muss im Format hh:mm:ss sein.
      * @param ort                Der Ort an welchem der Termin stattfindet.
@@ -103,6 +103,19 @@ public class DatabaseInterface {
      * @throws IllegalArgumentException Wenn eines der Argumente nicht den Vorgaben entspricht.
      */
     public long insertDataTermine(String name, String startDate, String wiederholungsEnde, String startTime, String endTime, String ort, String typ, int prioritaet, int planID, int modulID, int istGanztagsTermin, String dozent, int periode, int isExeption, int exceptionContextID, String exceptionTargetDay, int isdelete) throws IllegalArgumentException {
+        Cursor c = db.rawQuery("SELECT STARTTIME, ENDTIME from PLANS WHERE ID = \"" + planID + "\"", null);
+        c.moveToNext();
+        if (periode != 0 && Date.valueOf(wiederholungsEnde).after(Date.valueOf(c.getString(1)))) {
+            c.close();
+            Log.d("DatabaseInterface", "insertDataTermine_planID = fehlerhafte Eingabe: Mindestens eins der angegebenen Daten liegt außerhalb das angegebenen Semesters.");
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_planID = fehlerhafte Eingabe: Mindestens eins der angegebenen Daten liegt außerhalb das angegebenen Semesters.");
+        }
+        if (Date.valueOf(startDate).before(Date.valueOf(c.getString(0))) || Date.valueOf(startDate).after(Date.valueOf(c.getString(1)))) {
+            c.close();
+            Log.d("DatabaseInterface", "insertDataTermine_planID = fehlerhafte Eingabe: Mindestens eins der angegebenen Daten liegt außerhalb das angegebenen Semesters.");
+            throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_planID = fehlerhafte Eingabe: Mindestens eins der angegebenen Daten liegt außerhalb das angegebenen Semesters.");
+        }
+        c.close();
         if (Date.valueOf(wiederholungsEnde).before(Date.valueOf(startDate))) {
             Log.d("DatabaseInterface", "insertDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe: " + startDate + ";" + wiederholungsEnde);
             throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_startDate_wiederholungsEnde = fehlerhafte Eingabe: " + startDate + ";" + wiederholungsEnde);
@@ -115,7 +128,7 @@ public class DatabaseInterface {
             Log.d("DatabaseInterface", "insertDataTermine_prioritaet = fehlerhafte Eingabe: " + prioritaet);
             throw new IllegalArgumentException("DatabaseInterface: insertDataTermine_prioritaet = fehlerhafte Eingabe: " + prioritaet);
         }
-        Cursor c = db.rawQuery("SELECT SEMESTERID from modules WHERE ID = \"" + modulID + "\"", null);
+        c = db.rawQuery("SELECT SEMESTERID from modules WHERE ID = \"" + modulID + "\"", null);
         c.moveToNext();
         if (modulID != 0 && c.getInt(0) != planID) {
             c.close();
