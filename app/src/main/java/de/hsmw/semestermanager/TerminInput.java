@@ -33,6 +33,11 @@ public class TerminInput extends AppCompatActivity {
 
     Module[] currentModuleSelection;
 
+    /**
+     * Der Modulspinner ist dahingehend besonders, weil dieser anhand des Semesters aktualisiert werden muss.
+     * Diese Funktion vereinfacht es den Spinner zu aktualisieren, zu wissen was gerade drinsteht und die Auswahl "Kein Modul" konsistent in der Auswahl zu lassen.
+     * @param m Liste der Module (außer "Kein Modul") die in den Spinner geladen werden soll.
+     */
     private void refreshModuleSpinner(Module[] m){
         ArrayList<Module> am = new ArrayList<>();
         am.add(new Module(0,"Kein Modul",0));
@@ -69,6 +74,7 @@ public class TerminInput extends AppCompatActivity {
         Helper.pickTime(this, startTime, "Wähle Beginn des Termins");
         Helper.pickTime(this, endTime, "Wähle Ende des Termins");
 
+        //Der Listener ist dafür Verantwortlich, dass das Enddatum mit dem Startdatum gefüllt wird, wenn noch der Default-String drinsteht
         startDate.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

@@ -60,7 +60,7 @@ public class DayView extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        mViewPager.setCurrentItem(getIntent().getExtras().getInt("page", 1));
+        //mViewPager.setCurrentItem(getIntent().getExtras().getInt("page", 1));
         recreate();
     }
 
@@ -120,6 +120,10 @@ public class DayView extends AppCompatActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    final int page = Integer.valueOf(((View) view.getParent().getParent()).findViewById(R.id.section_label).getContentDescription().toString());
+                    getActivity().getIntent().putExtra("page", page - 1);
+
                     int terminID = ((Termin) parent.getItemAtPosition(position)).getId();
                     Intent i = new Intent("de.hsmw.semestermanager.TerminView");
                     i.putExtra("ID", terminID);
@@ -136,7 +140,8 @@ public class DayView extends AppCompatActivity {
                 //getTermineByDate gibt null zurück, wenn es keine Termine an dem Tag gibt...
                 termine.addAll(Arrays.asList(di.getTermineByDate(date, semesterID, true)));
             } catch (NullPointerException e) {
-                e.printStackTrace();
+                //Kein Stacktrace - kein Problem.
+                //e.printStackTrace();
             }
             terminListAdapter.notifyDataSetChanged();
             registerForContextMenu(listView);
@@ -154,8 +159,6 @@ public class DayView extends AppCompatActivity {
                 menu.add("bearbeiten");
                 if(t.getPeriode() > 0 && t.getIsException() == 0){
                     menu.add("erstelle Ausnahme");
-                }else if(t.getIsException() != 0){
-                    menu.add("bearbeite Ausnahme");
                 }
                 menu.add("löschen");
             }
@@ -196,7 +199,7 @@ public class DayView extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         t.delete(info.targetView.getContext());
-                        //Nachdem ich 3 Stunden probiert habe den FragmentManager zu aktualisieren, habe ich entschlossen die ganze Activity neu zu starten!
+                        //Da sich der FragmentManager nicht aktualisieren lässt, habe ich entschlossen die ganze Activity neu zu starten!
                         getActivity().getIntent().putExtra("page", page - 1);
                         getActivity().recreate();
                         dialog.dismiss();
@@ -224,10 +227,6 @@ public class DayView extends AppCompatActivity {
                 Termin terminwiederholung = t.getTerminAtDate(Date.valueOf(Helper.dateToSQL(titleString.split(" ")[2])));
                 getActivity().getIntent().putExtra("page", page - 1);
                 terminwiederholung.createException(getContext());
-                return true;
-            }else if(item.getTitle() == "bearbeite Ausnahme"){
-                getActivity().getIntent().putExtra("page", page - 1);
-                t.edit(getContext());
                 return true;
             }else{
                 return false;

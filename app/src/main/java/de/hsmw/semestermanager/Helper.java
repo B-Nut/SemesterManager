@@ -14,9 +14,15 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.sql.Time;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.FieldPosition;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -78,25 +84,34 @@ public class Helper {
     }
 
     /**
-     * Im Rückblick wäre eine DateFormat-Instanz sauberer, aber so gehts auch.
-     *
      * @param germanDate Einen DateString im Format DD.MM.YYYY
-     * @return Einen DateString im Format YYYY-MM-DD zur sicheren Verwendung von Date.valueOf().
+     * @return Einen DateString im Format YYYY-MM-DD zur sicheren Verwendung von java.sql.Date.valueOf().
+     *
+     * @throws IllegalArgumentException Wenn der gegebene String nicht zu einem gültigen SQL-String formatiert werden kann.
      */
-    public static String dateToSQL(String germanDate) {
-        String[] values = germanDate.split("[.]");
-        return values[2] + "-" + values[1] + "-" + values[0];
+    public static String dateToSQL(String germanDate) throws IllegalArgumentException{
+
+        final SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        try {
+            return df.parse(germanDate).toString();
+        }catch (ParseException pe){
+            throw new IllegalArgumentException(pe.getMessage());
+        }
     }
 
     /**
-     * Im Rückblick wäre eine DateFormat-Instanz sauberer, aber so gehts auch.
-     *
      * @param sqlDate Einen DateString im Format YYYY-MM-DD
      * @return Einen DateString im Format DD.MM.YYYY
+     *
+     * @throws IllegalArgumentException Wenn der gegebene String nicht zu einem gültigen String formatiert werden kann.
      * */
-    public static String sqlToGermanDate(String sqlDate) {
-        String[] vaiues = sqlDate.split("-");
-        return vaiues[2] + "." + vaiues[1] + "." + vaiues[0];
+    public static String sqlToGermanDate(String sqlDate) throws IllegalArgumentException {
+        final SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        try {
+            return df.format(java.sql.Date.valueOf(sqlDate));
+        }catch (IllegalArgumentException e){
+            throw e;
+        }
     }
 
     /**

@@ -261,7 +261,6 @@ public class DatabaseInterface {
     public Plan getPlanByID(int id) {
         String[] columns = {"*"};
         String query = SQLiteQueryBuilder.buildQueryString(false, "plans", columns, "ID = " + id, "", "", "", "");
-        Log.d("database", query);
         Cursor c = db.rawQuery(query, null);
         boolean b = c.moveToNext();
         if (b == true) {
@@ -283,7 +282,6 @@ public class DatabaseInterface {
     public Module getModuleByID(int id) {
         String[] columns = {"*"};
         String query = SQLiteQueryBuilder.buildQueryString(false, "modules", columns, "ID = " + id, "", "", "", "");
-        Log.d("database", query);
         Cursor c = db.rawQuery(query, null);
         boolean b = c.moveToNext();
         if (b == true) {
@@ -305,7 +303,6 @@ public class DatabaseInterface {
     public Termin getTerminByID(int id) {
         String[] columns = {"*"};
         String query = SQLiteQueryBuilder.buildQueryString(false, "Termine", columns, "ID = " + id, "", "", "", "");
-        Log.d("database", query);
         Cursor c = db.rawQuery(query, null);
         boolean b = c.moveToNext();
         if (b == true) {
