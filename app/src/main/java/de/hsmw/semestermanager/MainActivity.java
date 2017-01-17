@@ -56,36 +56,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
         registerForContextMenu(listView);
-        /*listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
-
-                final Plan p = (Plan) parent.getItemAtPosition(position);
-                String question;
-                question = "Are you sure you want to delete this semester? All appointments and modules associated with it are going to be deleted too.";
-
-                android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(listView.getContext());
-                alert.setMessage(question);
-                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        p.delete(parent.getContext());
-                        updateList();
-                        dialog.dismiss();
-                    }
-                });
-                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-                alert.show();
-                return true;
-            }
-        });*/
     }
 
     @Override

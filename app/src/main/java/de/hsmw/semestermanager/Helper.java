@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -86,8 +87,9 @@ public class Helper {
     public static String dateToSQL(String germanDate) throws IllegalArgumentException {
 
         final SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        final SimpleDateFormat sqlf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            return df.parse(germanDate).toString();
+            return sqlf.format(df.parse(germanDate));
         } catch (ParseException pe) {
             throw new IllegalArgumentException(pe.getMessage());
         }
