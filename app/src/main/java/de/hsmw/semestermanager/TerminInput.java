@@ -1,12 +1,11 @@
 package de.hsmw.semestermanager;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -57,7 +56,7 @@ public class TerminInput extends AppCompatActivity {
         startTime = (TextView) findViewById(R.id.new_termin_time_start);
         endTime = (TextView) findViewById(R.id.new_termin_time_end);
         periode = (Spinner) findViewById(R.id.new_termin_periodisch);
-        semester = (Spinner) findViewById(R.id.new_termin_semesterzugehörigkeit);
+        semester = (Spinner) findViewById(R.id.new_termin_semesterzugehoerigkeit);
         modul = (Spinner) findViewById(R.id.new_termin_modulauswahl);
         typ = (Spinner) findViewById(R.id.new_termin_termintypauswahl);
         priorität = (Spinner) findViewById(R.id.new_termin_priorityauswahl);
@@ -88,6 +87,23 @@ public class TerminInput extends AppCompatActivity {
                 }
             }
         });
+
+        //Verhindert, dass der Fokus auf dem obersten TextFeld bleibt.
+        View.OnTouchListener tl = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //Der Parent der View ist die gesamte View an sich, dieser nimmt den Fokus nur deshalb an, weil focusable und focusableInTouchMode in activity_termin_input wahr gesetzt wurde.
+                ((View) v.getParent()).requestFocus();
+                //Gibt zurück, dass das TouchEvent noch nicht vollständig abgefangen wurde. True würde dazu führen, dass das Dropdownmenü nicht mehr aufklappt.
+                return false;
+            }
+        };
+        periode.setOnTouchListener(tl);
+        semester.setOnTouchListener(tl);
+        modul.setOnTouchListener(tl);
+        typ.setOnTouchListener(tl);
+        priorität.setOnTouchListener(tl);
+
 
         String[] perioden = {"keine Wiederholung", "Wöchentlich", "Zweiwöchentlich", "Vierwöchentlich"};
         Helper.fillSpinner(this, perioden, periode);
@@ -126,7 +142,7 @@ public class TerminInput extends AppCompatActivity {
         });
 
         refreshModuleSpinner(di.getAllModules());
-
+        terminName.requestFocus();
         int editID = -1;
         if (getIntent().getExtras() != null) {
             editID = getIntent().getExtras().getInt("ID", -1);

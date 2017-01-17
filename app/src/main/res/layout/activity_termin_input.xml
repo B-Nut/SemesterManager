@@ -14,7 +14,9 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:scrollbars="vertical"
-        tools:context="de.hsmw.semestermanager.TerminInput">
+        tools:context="de.hsmw.semestermanager.TerminInput"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <TextView
             android:layout_width="match_parent"
@@ -178,7 +180,7 @@
             android:textStyle="bold" />
 
         <Spinner
-            android:id="@+id/new_termin_semesterzugehörigkeit"
+            android:id="@+id/new_termin_semesterzugehoerigkeit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Periodisch"

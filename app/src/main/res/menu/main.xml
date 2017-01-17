@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-    android:id="@+id/action_add_new_semester"
-    android:orderInCategory="100"
-    android:title="Neues Semester"
-    app:showAsAction="never" />
+        android:id="@+id/action_add_new_semester"
+        android:orderInCategory="100"
+        android:title="Neues Semester"
+        app:showAsAction="never" />
 </menu>
