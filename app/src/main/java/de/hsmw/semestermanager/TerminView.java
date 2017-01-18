@@ -3,6 +3,7 @@ package de.hsmw.semestermanager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -122,9 +123,12 @@ public class TerminView extends AppCompatActivity {
         typ.setText(selectedTermin.getTyp());
         dozent.setText(selectedTermin.getDozent());
         ort.setText(selectedTermin.getOrt());
-        if (selectedTermin.getPeriode() > 0) {
+        if (selectedTermin.getPeriode() > 0 && selectedTermin.getIsException() == 0) {
             ausnahmenzaehler.setText(Long.toString(di.getCountExceptionsByID(selectedTermin.getId())));
-        } else {
+        } else if (selectedTermin.getIsException() != 0) {
+            ausnahmenzaehler.setText("");
+            ((TextView) findViewById(R.id.terminview_ausnahmen)).setText("Ersetzt " + di.getTerminByID(selectedTermin.getExceptionContextID()).getName() + " am "+ Helper.sqlToGermanDate(selectedTermin.getExceptionTargetDay().toString()));
+        }else {
             ausnahmenzaehler.setText("");
             ((TextView) findViewById(R.id.terminview_ausnahmen)).setText("");
             findViewById(R.id.strich5).setAlpha(0);

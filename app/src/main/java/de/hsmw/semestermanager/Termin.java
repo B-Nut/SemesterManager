@@ -1,7 +1,10 @@
 package de.hsmw.semestermanager;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.widget.Toast;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -207,6 +210,7 @@ public class Termin implements DatabaseObject, Comparable<Termin>, Cloneable {
     }
 
     /**
+     * Ermöglicht das Sortieren von Terminen innerhalb eines Tages.
      * Vergleicht nur die Startzeit der Termine.
      */
     @Override
@@ -320,14 +324,60 @@ public class Termin implements DatabaseObject, Comparable<Termin>, Cloneable {
      *
      * @param c Context für Datenbankzugriffe.
      */
-    public void edit(Context c) {
-        if (periode < 1 || isException < 1) {
+    public void edit(final Context c) {
+
+        final DatabaseInterface di = DatabaseInterface.getInstance(c);
+        if (periode > 0 && di.getCountExceptionsByID(id) > 0){
+            /*
+            * Terminwiederholungen bearbeiten.... EIGENTLICH müsste in der TerminInput-Klasse dafür nochmal 500 Zeilen Code stehen.
+            * Um die Interaktion von Wiederholungen und Ausnahmen komfortabel zu gestalten müssten einige Fälle abgehandelt werden:
+            *
+            *    * Konsistente Warnung, wenn das bearbeiten der Wiederholung Ausnahmen löscht.
+            *    * Prüfung inwieweit und welche Ausnahmen gelöscht werden müssen, wenn der Zeitraum der Wiederholung geändert wird.
+            *    * Prüfung, welche Termine gelöscht werden können, sollen, wenn der Wiederholungsintervall geändert wird.
+            *    * Editieren aller betroffenen Ausnahmen, wenn die Wiederholung in ein anderes Semester oder Modul geschoben wird.
+            *    * Was passiert mit Änderungen bei Dozent oder Ort, wenn die Ausnahme diese Werte nicht geändert hat?
+            *    * Was passiert eigentlich, wenn die Ausnahme auf einen anderen Tag geschoben wird? Referenztag der Ausnahme ändern oder direkt die Ausnahme löschen?
+            *
+            * Statdessen könnte man die Wiederholung nur ab einem Bestimmten Zeitpunkt ändern können. Unter der Haube würde dann der Zeitraum der alten Wiederholung auf den gewünschten Tag gelegt
+            * und eine neue Wiederholung für den Restzeitraum. Verständlicherweise würde das nur gehen, wenn es keine Zukünftigen Ausnahmen mehr gibt.
+            *
+            * Ein Funktionierender Workaround hierfür ist es, manuell eine komplett neue Wiederholung zu erzeugen und die übriggebliebenen Termine der alten  Wiederholung zu löschen.
+            * Mit dem Workaround im Hinterkopf lasse ich der Einfachheit halber - und auch aus Zeitgründen - alle Ausnahme löschen, bevor die Wiederholung, bearbeitet werden kann.
+             */
+            AlertDialog.Builder alert = new AlertDialog.Builder(c);
+            alert.setMessage("Bevor die Ausnahme bearbeitet werden kann, müssen alle " + di.getCountExceptionsByID(id) + " Ausnahmen dafür gelöscht werden. Möchten Sie diese löschen?");
+            alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    for (Termin t : di.getExceptionsByWiederholungsID(id)){
+                        t.delete(c);
+                    }
+                    Intent i = new Intent("de.hsmw.semestermanager.TerminInput");
+                    i.putExtra("ID", getId());
+                    c.startActivity(i);
+                    dialog.dismiss();
+                }
+            });
+            alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alert.show();
+            return;
+        }
+
+        if (isException == 0) {
+            //Wir haben einen normalen Termin oder eine Terminwiederholung (ohne Ausnahmen)...
             Intent i = new Intent("de.hsmw.semestermanager.TerminInput");
             i.putExtra("ID", getId());
             c.startActivity(i);
             return;
         }
 
+        //Die Editfunktion gilt eine Ausnahme...
         Intent i = new Intent("de.hsmw.semestermanager.ExceptionInput");
         i.putExtra("ID", getId());
 

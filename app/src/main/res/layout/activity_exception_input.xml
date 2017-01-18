@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
-            android:text="Ausnahme löscht Termin"
+            android:text="Nur den Wiederholungstermin löschen. (permanent)"
             android:textSize="20sp"
             android:textStyle="bold" />
 

@@ -60,7 +60,6 @@ public class DayView extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        //mViewPager.setCurrentItem(getIntent().getExtras().getInt("page", 1));
         recreate();
     }
 
