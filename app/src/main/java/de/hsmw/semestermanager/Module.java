@@ -63,7 +63,7 @@ public class Module implements DatabaseObject {
 
     public void delete(Context c) {
         DatabaseInterface di = DatabaseInterface.getInstance(c);
-        di.deleteMudulByID(id);
+        di.deleteModulByID(id);
         Termin[] termine = di.getTermineByModulID(id);
         if (termine != null) {
             for (Termin t : termine) {

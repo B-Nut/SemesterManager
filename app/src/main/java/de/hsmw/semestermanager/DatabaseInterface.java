@@ -235,7 +235,7 @@ public class DatabaseInterface {
      * @return Termin[], oder null bei keinem vorhandenen Termin.
      */
     public Termin[] getAllTermine() {
-        Cursor c = db.rawQuery("select * from termine ORDER BY STARTTIME, STARTTIME, ENDDATA, ENDTIME ", null);
+        Cursor c = db.rawQuery("select * from termine ORDER BY STARTTIME, STARTTIME, ENDTIME, ENDTIME ", null);
         //Cursor c = db.rawQuery("select * from termine", null);
         Termin[] returnTermin = new Termin[c.getCount()];
         boolean b = c.moveToNext();
@@ -691,7 +691,7 @@ public class DatabaseInterface {
      *
      * @param ID ID der zuloeschende Zeile.
      */
-    public void deleteMudulByID(int ID) {
+    public void deleteModulByID(int ID) {
         db.delete("MODULES", "ID =  \"" + ID + "\" ", null);
         Log.d("DatabaseInterface", "Modul_geloescht: " + ID);
     }
