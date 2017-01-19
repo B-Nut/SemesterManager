@@ -32,6 +32,7 @@ public class TerminInput extends AppCompatActivity {
     Button submit;
 
     Module[] currentModuleSelection;
+    Plan[] currentSemesterSelection;
 
     /**
      * Der Modulspinner ist dahingehend besonders, weil dieser anhand des Semesters aktualisiert werden muss.
@@ -49,6 +50,14 @@ public class TerminInput extends AppCompatActivity {
         Helper.fillSpinner(this, currentModuleSelection, modul);
     }
 
+    private void refreshSemesterSpinner(Plan[] m) {
+        ArrayList<Plan> am = new ArrayList<>();
+        if (m != null) {
+            am.addAll(Arrays.asList(m));
+        }
+        currentSemesterSelection = am.toArray(new Plan[am.size()]);
+        Helper.fillSpinner(this, currentSemesterSelection, semester);
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,13 +133,13 @@ public class TerminInput extends AppCompatActivity {
         priorität.setSelection(1);
 
         final Plan[] allPlans = di.getAllPlans();
-        Helper.fillSpinner(this, allPlans, semester);
+        refreshSemesterSpinner(allPlans);
         semester.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int s = modul.getSelectedItemPosition();
                 Module[] oldModuleSelection = currentModuleSelection;
-                refreshModuleSpinner(di.getModulesByPlanID(position + 1));
+                refreshModuleSpinner(di.getModulesByPlanID(currentSemesterSelection[position].getId()));
                 boolean isthesame = true;
                 if (oldModuleSelection.length == currentModuleSelection.length) {
                     for (int i = 0; i < oldModuleSelection.length; i++) {
@@ -162,7 +171,7 @@ public class TerminInput extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        di.insertDataTermine(terminName.getText().toString(), Helper.dateToSQL(startDate.getText().toString()), Helper.dateToSQL(endDate.getText().toString()), startTime.getText().toString() + ":00", endTime.getText().toString() + ":00", ort.getText().toString(), typen[typ.getSelectedItemPosition()], priorität.getSelectedItemPosition(), semester.getSelectedItemPosition() + 1, currentModuleSelection[modul.getSelectedItemPosition()].getId(), ganztagstermin.isChecked() ? 1 : 0, dozent.getText().toString(), periodenSelectiontToPeriode(periode.getSelectedItemPosition()), 0, 0, "2016-01-01", 0);
+                        di.insertDataTermine(terminName.getText().toString(), Helper.dateToSQL(startDate.getText().toString()), Helper.dateToSQL(endDate.getText().toString()), startTime.getText().toString() + ":00", endTime.getText().toString() + ":00", ort.getText().toString(), typen[typ.getSelectedItemPosition()], priorität.getSelectedItemPosition(), currentSemesterSelection[semester.getSelectedItemPosition()].getId(), currentModuleSelection[modul.getSelectedItemPosition()].getId(), ganztagstermin.isChecked() ? 1 : 0, dozent.getText().toString(), periodenSelectiontToPeriode(periode.getSelectedItemPosition()), 0, 0, "2016-01-01", 0);
                     } catch (IllegalArgumentException iae) {
                         Toast.makeText(getApplicationContext(), iae.getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -247,7 +256,7 @@ public class TerminInput extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        di.updateDataTermine(editTermin.getId(), terminName.getText().toString(), Helper.dateToSQL(startDate.getText().toString()), Helper.dateToSQL(endDate.getText().toString()), startTime.getText().toString() + ":00", endTime.getText().toString() + ":00", ort.getText().toString(), typen[typ.getSelectedItemPosition()], priorität.getSelectedItemPosition(), semester.getSelectedItemPosition() + 1, currentModuleSelection[modul.getSelectedItemPosition()].getId(), ganztagstermin.isChecked() ? 1 : 0, dozent.getText().toString(), periodenSelectiontToPeriode(periode.getSelectedItemPosition()), 0, 0, "2016-01-01", 0);
+                        di.updateDataTermine(editTermin.getId(), terminName.getText().toString(), Helper.dateToSQL(startDate.getText().toString()), Helper.dateToSQL(endDate.getText().toString()), startTime.getText().toString() + ":00", endTime.getText().toString() + ":00", ort.getText().toString(), typen[typ.getSelectedItemPosition()], priorität.getSelectedItemPosition(), currentSemesterSelection[semester.getSelectedItemPosition()].getId(), currentModuleSelection[modul.getSelectedItemPosition()].getId(), ganztagstermin.isChecked() ? 1 : 0, dozent.getText().toString(), periodenSelectiontToPeriode(periode.getSelectedItemPosition()), 0, 0, "2016-01-01", 0);
                     } catch (IllegalArgumentException iae) {
                         Toast.makeText(getApplicationContext(), iae.getMessage(), Toast.LENGTH_LONG).show();
                     }

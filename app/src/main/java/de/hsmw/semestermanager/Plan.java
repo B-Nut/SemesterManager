@@ -49,12 +49,16 @@ public class Plan implements DatabaseObject {
         DatabaseInterface di = DatabaseInterface.getInstance(c);
         di.deletePlanByID(id);
         Termin[] termine = di.getTermineByPlanID(id);
-        for (Termin t : termine) {
-            t.delete(c);
+        if (termine != null) {
+            for (Termin t : termine) {
+                t.delete(c);
+            }
         }
         Module[] module = di.getModulesByPlanID(id);
-        for (Module m : module) {
-            m.delete(c);
+        if (module != null){
+            for (Module m : module) {
+                m.delete(c);
+            }
         }
     }
 

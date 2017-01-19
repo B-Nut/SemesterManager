@@ -34,7 +34,7 @@ public class ModulInput extends AppCompatActivity {
 
         di = DatabaseInterface.getInstance(this);
         // you need to have a list of data that you want the spinner to display
-        plans = di.getAllPlans();
+        plans = di.getAllPlans(); //Die Liste (kann) nicht null sein, weil man Module nur dann setzen kann, wenn es auch einen Plan gibt. :)
 
         List<String> planNames = new ArrayList();
         List<Integer> planIDs = new ArrayList();
